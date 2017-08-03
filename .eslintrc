@@ -11,6 +11,7 @@
     "node": true
   },
   "rules": {
-    "react/prefer-stateless-function": 0
+    "react/prefer-stateless-function": 0,
+    "react/no-find-dom-node": 0
   }
 }

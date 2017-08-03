@@ -1,26 +1,25 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import invariant from 'invariant';
+import PropTypes from 'prop-types';
 
-function ContextMenuConnect(buildMenu) {
-  return (WrappedComponent) => {
-
-    return class ContextMenuConnect extends Component {
-
+function makeComponentWrapper(buildMenu) {
+  return WrappedComponent => (
+    class ContextMenuConnect extends Component {
       static contextTypes = {
-        contextMenuContext: React.PropTypes.object
+        contextMenuContext: PropTypes.shape({
+          addMenuItems: PropTypes.func,
+        }),
       }
 
       appendContextMenu() {
-        let localItems = buildMenu(this.props);
-        // Set default type of item to 'button'
-        localItems = localItems.map(item => (item.type ? item : {...item, type: 'button'}));
+        const localItems = buildMenu(this.props);
         const context = this.context.contextMenuContext;
         context.addMenuItems(localItems);
       }
 
       componentDidMount() {
-        this.nearestNode = ReactDOM.findDOMNode(this.refs.innerNode);
+        this.nearestNode = ReactDOM.findDOMNode(this.innerNode);
         invariant(this.nearestNode, 'Could not find a DOM node to attach contextMenu to');
         this.nearestNode.addEventListener('contextmenu', this.onContextMenu);
       }
@@ -36,11 +35,16 @@ function ContextMenuConnect(buildMenu) {
       }
 
       render() {
-        return <WrappedComponent ref="innerNode" {...this.props} {...this.state} />;
+        return (
+          <WrappedComponent
+            ref={(el) => { this.innerNode = el; }}
+            {...this.props}
+            {...this.state}
+          />
+        );
       }
-
-    };
-  };
+    }
+  );
 }
 
-export default ContextMenuConnect;
+export default makeComponentWrapper;

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 class ContextMenu extends Component {
   static propTypes = {
     onClick: PropTypes.func,
-    style: PropTypes.object, // eslint-ignore-line react/forbid-prop-types
+    style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     children: PropTypes.arrayOf(PropTypes.node),
   }
 
@@ -16,9 +16,9 @@ class ContextMenu extends Component {
 
   render() {
     return (
-      <div style={this.props.style} role="menu" onClick={this.props.onClick}>
+      <ul style={this.props.style} role="menu" onClick={this.props.onClick}>
         {this.props.children}
-      </div>
+      </ul>
     );
   }
 }
