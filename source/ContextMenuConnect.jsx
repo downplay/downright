@@ -31,7 +31,9 @@ function makeComponentWrapper(buildMenu) {
       }
 
       componentWillUnmount() {
-        this.nearestNode.removeEventListener('contextmenu', this.onContextMenu);
+        if (this.nearestNode) {
+          this.nearestNode.removeEventListener('contextmenu', this.onContextMenu);
+        }
       }
 
       render() {

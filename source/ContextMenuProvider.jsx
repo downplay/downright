@@ -47,8 +47,10 @@ class ContextMenuProvider extends Component {
   }
 
   componentWillUnmount() {
-    this.nearestNode.removeEventListener('contextmenu', this.onContextMenu);
-    this.nearestNode.removeEventListener('contextmenu', this.onContextMenuCapture, true);
+    if (this.nearestNode) {
+      this.nearestNode.removeEventListener('contextmenu', this.onContextMenu);
+      this.nearestNode.removeEventListener('contextmenu', this.onContextMenuCapture, true);
+    }
   }
 
   onContextMenuCapture = () => {
