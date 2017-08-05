@@ -73,12 +73,12 @@ which will be invoked when the user triggers a context menu.
 ```
 import { contextMenu } from 'downright';
 
-@contextMenu((props, state, menuContext, component) => (
+@contextMenu((props) => (
   [
     {...menuItem1},
     {...menuItem2},
   ]
-)
+), options)
 ```
 
 #### props
@@ -89,29 +89,69 @@ Can be used both to create your menu from store data (and outside params), as we
 
 DownRight is designed for the simplest cast to work nicely with Redux, but it's completely optional, the menu is generic enough to use alongside any React setup.
 
-#### state
-
-Local state is available as the 2nd parameter, also to help with menu creation.
-
-#### menuContext
-
-This context object is provided by the ContextMenuProvider. It exposes the following API:
-
-##### menuContext.closeMenu()
-
-If called, closes the currently open context menu.
-
 #### return value
 
 Your configuration callback must return an array of menu items (or null or undefined if no menu needs opening).
 
-Menu items themselves can be defined in four forms:
+Menu items themselves can be defined in three forms:
 
  - A vanilla string, this will produce a menu label
  - An array of two elements, the first is a string label, the 2nd is either a link destination or callback onClick function
+ - A plain JavaScript object with the following properties:
+
+`type: string`
+ 
+ One of: label, caption, button, link, submenu, separator.
+
+`content: string|node`
+
+Content will be rendered inside the menu. Can be a plain string, or a React node. Does not apply for separator.
+
+`onClick: function`
+
+A handler to be called when the button is clicked. Will be passed the Synthetic Event object provided by React when the button is clicked.
+
+`to: string`
+
+URL to navigate to when clicking on the link. The Link component from `react-router-dom` will be used.
+
+`menu: array|function`
+
+Menu to be rendered when the submenu is open. If a function is provided the menu will be rendered on-demand. The function will receive the same parameters as the configuration callback.
+
+#### options
+
+Configures this instance of a context menu. Pass in a plain object with any of these properties:
+
+`stopPropagation: bool (default: false)`
+
+If true, this will prevent the event from collecting further menus from higher-level components as it bubbles up the component hierarchy.
 
 ### Nested Menu Components
 
 It's entirely possible to create nested components that each have the contextMenu wrapper. In this case, as the click event bubbles up through the DOM tree, the Provider will gather all of the menus emitted by each component on the way, and produce a composite menu by concatenating each menu (with a separator in between).
 
 If this is not desirable, the behaviour can be altered by setting `gatherMenus={false}` on the ContextMenuProvider. When this is the case, only the *closest* menu to the mouse click will be utilised. This is demonstrated in this example: (TODO)
+
+## Examples
+
+Examples are found in the /examples folder. To run them, clone the repository and run:
+
+```
+npm run examples
+```
+
+or
+
+```
+yarn examples
+```
+
+Then navigation to `http://127.0.0.1:3311/`
+
+&copy;2017 Downplay Ltd
+
+Distributed under MIT license. See LICENSE for full details.
+
+Please report any bugs or other issues on GitHub: https://github.com/downplay/downright
+
