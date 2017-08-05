@@ -4,17 +4,25 @@ import BigBox from "../layout/BigBox";
 
 @contextMenu(props => (
     [
-        "Simple menu",
-        ["Item #1", () => props.onClickItem(1)],
-        ["Item #2", () => props.onClickItem(2)],
+        "Submenu demo",
+        ["Cats", [
+            ["Garfield", props.onCat],
+            ["Macavity", props.onCat],
+            ["Fritz", props.onCat],
+        ]],
+        ["Dogs", [
+            ["Snoopy", props.onDog],
+            ["Scooby Doo", props.onDog],
+            ["The Hound", props.onDog],
+        ]],
         ["Back to home", "/"],
         ["Close", () => { /* Noop - just close the menu */ }],
     ]
 ))
-export default class SimpleComponentWithMenu extends Component {
+export default class SimpleSubmenu extends Component {
 
     render = () => (
-        <BigBox>
+        <BigBox blue>
             <div>
                 { this.props.item
                     ? `You chose item ${this.props.item}!`

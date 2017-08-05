@@ -10,7 +10,7 @@ const webpackConfig = {
         bundle: [
             "babel-polyfill",
             "react-hot-loader/patch",
-            "./examples/source/client.js",
+            "./examples/source/client.jsx",
             "webpack-hot-middleware/client?path=/__what",
         ],
     },

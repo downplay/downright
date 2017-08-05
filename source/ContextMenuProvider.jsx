@@ -33,24 +33,7 @@ class ContextMenuProvider extends Component {
             // TODO: Horrible pyramid approaching, refactor this
             contextMenuContext: {
                 addMenuItems: (rawItems) => {
-                    const items = rawItems.map((item) => {
-                        if (item.constructor === Array) {
-                            if (item.length === 1) {
-                                return { type: "label", content: item[0] };
-                            } else if (item.length === 2) {
-                                if ((typeof item[1]) === "string") {
-                                    return { type: "link", content: item[0], to: item[1] };
-                                } else if (typeof item[1] === "function") {
-                                    return { type: "button", content: item[0], onClick: item[1] };
-                                }
-                                invariant(false, `Second element of menu item array should be a string or function, got: ${item[1]}`);
-                            } else {
-                                invariant(false, `Menu item array can have 1 or 2 elements, this one had ${item.length}`);
-                            }
-                        }
-                        // TODO: Validate this item
-                        return item;
-                    });
+                    const items = this.normalizeMenuItems(rawItems);
                     // Items further down the DOM tree get inserted in front
                     this.setState({
                         menu: (this.state.menu.length) ? [...this.state.menu, { type: "separator" }, ...items] : items,
@@ -62,9 +45,6 @@ class ContextMenuProvider extends Component {
     }
 
     componentDidMount() {
-        // this.nearestNode = ReactDOM.findDOMNode(this.innerNode);
-        // invariant(this.nearestNode, 'Could not find a DOM node to attach
-        // ContextMenuProvider to');
         // Capture the event at the highest level to initialise the array
         this.nearestNode.addEventListener("contextmenu", this.onContextMenuCapture, true);
         // Catch the event again on the way back up once the context is populated
@@ -106,6 +86,31 @@ class ContextMenuProvider extends Component {
         // Prevent clicks from the menu propagating up to the onClick handler, so they don't
         // automatically trigger the menu closing
         event.stopPropagation();
+    }
+
+    normalizeMenuItems(rawItems) {
+        return rawItems.map((item) => {
+            if (typeof item === "string") {
+                return { type: "label", content: item[0] };
+            } else if (item.constructor === Array) {
+                if (item.length === 1) {
+                    return { type: "label", content: item[0] };
+                } else if (item.length === 2) {
+                    if ((typeof item[1]) === "string") {
+                        return { type: "link", content: item[0], to: item[1] };
+                    } else if (typeof item[1] === "function") {
+                        return { type: "button", content: item[0], onClick: item[1] };
+                    } else if (item.constructor === Array) {
+                        return { type: "submenu", content: item[0], menu: this.normalizeMenuItems(item[1]) };
+                    }
+                    invariant(false, `Second element of menu item array should be one of string, function, array; got: ${item[1]}`);
+                } else {
+                    invariant(false, `Menu item array can have 1 or 2 elements, this one had ${item.length}`);
+                }
+            }
+            // TODO: Should be a plain object, need to validate it
+            return item;
+        });
     }
 
     closeMenu = () => {

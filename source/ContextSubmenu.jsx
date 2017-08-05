@@ -6,10 +6,17 @@ import ContextMenu from "./ContextMenu";
 
 class ContextSubmenu extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            submenuVisible: false,
+        };
+    }
+
     render() {
-        const { menu, onMenuClick } = this.props;
+        const { menu, onMenuClick, ...others } = this.props;
         return (
-            <SubmenuElement>
+            <SubmenuElement {...others}>
                 {this.props.content}
                 {this.state.submenuVisible ? (
                     <OuterContainer position={this.props.position}>
@@ -19,11 +26,6 @@ class ContextSubmenu extends Component {
             </SubmenuElement>
         );
     }
-    /*
-        <div onMouseEnter={this.onSubmenuMouseEnter}
-         onMouseLeave={this.onSubmenuMouseLeave} style={{ position: 'relative' }}>
-        </div>
-    */
 
 }
 

@@ -75,6 +75,8 @@ class ContextMenuItem extends Component {
                 <ContextSubmenu
                     menu={menu}
                     onMenuClick={onMenuClick}
+                    onMouseEnter={this.onSubmenuMouseEnter}
+                    onMouseLeave={this.onSubmenuMouseLeave}
                     {...others}
                 >
                     {content}
