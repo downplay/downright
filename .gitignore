@@ -5,6 +5,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Babel runtime cache
+babel-cache
+
 # Runtime data
 pids
 *.pid

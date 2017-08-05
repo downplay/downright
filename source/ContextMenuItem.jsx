@@ -6,7 +6,7 @@ import ContextMenu from './ContextMenu';
 class ContextMenuItem extends Component {
 
   static propTypes = {
-    type: PropTypes.oneOf(['header', 'button', 'separator', 'submenu']),
+    type: PropTypes.oneOf(['label', 'button', 'link', 'separator', 'submenu']),
     caption: PropTypes.node,
     tooltip: PropTypes.string,
     onClick: PropTypes.func,
@@ -54,8 +54,8 @@ class ContextMenuItem extends Component {
 
   innerElement() {
     switch (this.props.type) {
-      case 'header':
-        return <header>{this.props.caption}</header>;
+      case 'label':
+        return <h2>{this.props.content}</h2>;
       case 'separator':
         return <hr/>;
       case 'submenu':
@@ -66,11 +66,12 @@ class ContextMenuItem extends Component {
         };
         return (
           <div onMouseEnter={this.onSubmenuMouseEnter} onMouseLeave={this.onSubmenuMouseLeave} style={{position: 'relative' }}>
-            <span>{this.props.caption}</span>
+            <span>{this.props.content}</span>
             { this.state.submenuVisible ? (
               // TODO: Move into subcomponent
               <ContextMenu style={submenuStyle}>
                 {this.props.menu.map((menuItem, index) => (
+                  // TODO: Not really anything better to use for a key, but could allow key as an optional prop, not a lot of point in this case though....
                   // eslint-disable-next-line react/no-array-index-key
                   <ContextMenuItem key={index} {...menuItem} onCloseMenu={this.props.onCloseMenu} />
                 ))}
@@ -78,15 +79,17 @@ class ContextMenuItem extends Component {
             ) : null}
           </div>
         );
+      case 'link':
+        return <Link to={this.props.to}>{this.props.content}</Link>;
       case 'button':
       default:
-        return <button onClick={this.onButtonClick}>{this.props.caption}</button>;
+        return <button onClick={this.onButtonClick}>{this.props.content}</button>;
     }
   }
 
   render() {
     return (
-      <div title={this.props.tooltip} style={{cursor: 'pointer'}}>
+      <div title={this.props.tooltip}>
         {this.innerElement()}
       </div>
     );

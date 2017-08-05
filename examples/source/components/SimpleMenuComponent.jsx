@@ -3,7 +3,9 @@ import { contextMenu } from 'downright';
 
 @contextMenu((props, state, menuContext) => (
   [
-    ['Item1', () => alert('clicked item 1')], // eslint-disable-line no-alert
+    ['Menu label'],
+    ['Item #1', () => alert('clicked item 1')],
+    ['Home link', '/'],
     ['X', () => { /* Noop - just close the menu */ }],
   ]
 ))

@@ -24,8 +24,29 @@ class ContextMenuProvider extends Component {
 
   getChildContext() {
     return {
+      // TODO: Horrible pyramid approaching, refactor this
       contextMenuContext: {
         addMenuItems: (items) => {
+          items = items.map(item=>{
+            if (item.constructor === Array) {
+              if (item.length === 1) {
+                return {type: 'label', content: item[0]};
+              } else if (item.length === 2) {
+                if ((typeof item[1]) === 'string') {
+                  return {type: 'link', content: item[0], to: item[1]};
+                } else if (typeof item[1] === 'function') {
+                  return {type: 'button', content: item[0], onClick: item[1]};
+                } else {
+                  invariant(false, "Second element of menu item array should be a string or function, got: " + item[1]);
+                }
+              } else {
+                invariant(false, "Menu item array can have 1 or 2 elements, this one had " + item.length);
+              }
+            } else {
+              // TODO: Validate this item
+              return item;
+            }
+          });
           // Items further down the DOM tree get inserted in front
           this.setState({
             menu: (this.state.menu.length) ? [...this.state.menu, { type: 'separator' }, ...items] : items,
@@ -36,10 +57,9 @@ class ContextMenuProvider extends Component {
     };
   }
 
-
   componentDidMount() {
-    this.nearestNode = ReactDOM.findDOMNode(this.innerNode);
-    invariant(this.nearestNode, 'Could not find a DOM node to attach ContextMenuProvider to');
+    //this.nearestNode = ReactDOM.findDOMNode(this.innerNode);
+    //invariant(this.nearestNode, 'Could not find a DOM node to attach ContextMenuProvider to');
     // Capture the event at the highest level to initialise the array
     this.nearestNode.addEventListener('contextmenu', this.onContextMenuCapture, true);
     // Catch the event again on the way back up once the context is populated
@@ -117,7 +137,7 @@ class ContextMenuProvider extends Component {
 
   render() {
     return (
-      <div ref="innerNode" onClick={this.onClick}>
+      <div ref={ref => this.nearestNode = ref} onClick={this.onClick}>
         {this.props.children}
         {this.state.menuIsOpen ? this.renderMenu() : null}
       </div>
