@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { ContextMenuProvider } from "downright";
 import SimpleComponentWithMenu from "../components/SimpleComponentWithMenu";
-import StretchWidthHeight from "../styles/stretchWidthHeight";
+import FullWidthFullHeight from "../layout/FullWidthFullHeight";
 
 export default class Simple extends Component {
 
@@ -16,12 +16,12 @@ export default class Simple extends Component {
 
     render = () => (
         <ContextMenuProvider>
-            <StretchWidthHeight>
+            <FullWidthFullHeight>
                 <SimpleComponentWithMenu
                     onClickItem={this.onClickItem}
                     item={this.state.itemChosen}
                 />
-            </StretchWidthHeight>
+            </FullWidthFullHeight>
         </ContextMenuProvider>
     )
 

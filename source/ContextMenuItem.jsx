@@ -2,12 +2,13 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 import ContextSubmenu from "./ContextSubmenu";
-
 import ButtonElement from "./ButtonElement";
 import LabelElement from "./LabelElement";
 import LinkElement from "./LinkElement";
 import SeparatorElement from "./SeparatorElement";
 import ItemWrapper from "./ItemWrapper";
+
+import styles from "./styles/menu.css";
 
 class ContextMenuItem extends Component {
 
@@ -60,7 +61,9 @@ class ContextMenuItem extends Component {
     }
 
     renderInnerElement() {
-        const { type, content, onClick, onMenuClick, menu, ...others } = this.props;
+        const { type, content, onClick, onMenuClick, menu, item, className,
+            ...others } = this.props;
+        others.className = `${styles[this.props.type] || ""} ${this.props.className}`;
         switch (this.props.type) {
         case "label":
             return <LabelElement {...others}>{content}</LabelElement>;
@@ -69,7 +72,11 @@ class ContextMenuItem extends Component {
         case "submenu":
             // A bit of a special case
             return (
-                <ContextSubmenu menu={menu} onMenuClick={onMenuClick} {...others}>
+                <ContextSubmenu
+                    menu={menu}
+                    onMenuClick={onMenuClick}
+                    {...others}
+                >
                     {content}
                 </ContextSubmenu>
             );
@@ -89,8 +96,10 @@ class ContextMenuItem extends Component {
     }
 
     render() {
+        // .item .thing .custom
+        const className = `${styles.item} ${styles[this.props.type]} ${this.props.className}`;
         return (
-            <ItemWrapper>
+            <ItemWrapper className={className}>
                 {this.renderInnerElement()}
             </ItemWrapper>
         );

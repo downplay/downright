@@ -13,7 +13,7 @@ const BigBox = styled.div`
 
 @contextMenu(props => (
     [
-        ["Menu label"],
+        ["Simple menu"],
         ["Item #1", () => props.onClickItem(1)],
         ["Item #2", () => props.onClickItem(2)],
         ["Back to home", "/"],
