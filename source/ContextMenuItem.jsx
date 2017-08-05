@@ -15,7 +15,7 @@ class ContextMenuItem extends Component {
         type: PropTypes.oneOf(["label", "button", "link", "separator", "submenu"]),
         content: PropTypes.node,
         onClick: PropTypes.func,
-        onCloseMenu: PropTypes.func,
+        onMenuClick: PropTypes.func,
         menu: PropTypes.arrayOf(PropTypes.object),
     }
 
@@ -23,7 +23,7 @@ class ContextMenuItem extends Component {
         type: "label",
         content: null,
         onClick: null,
-        onCloseMenu: null,
+        onMenuClick: null,
         menu: [],
     }
 
@@ -49,6 +49,7 @@ class ContextMenuItem extends Component {
     }
 
     onButtonClick = (event) => {
+        console.log(this);
         // For links there is no button handler (although consumers
         // can still provide one, e.g. to preventDefault or whatever)
         if (this.props.onClick) {
@@ -56,11 +57,11 @@ class ContextMenuItem extends Component {
             this.props.onClick(event);
         }
         // Trigger provider to close the menu
-        this.props.onCloseMenu();
+        this.props.onMenuClick(event);
     }
 
     renderInnerElement() {
-        const { type, content, onClick, onCloseMenu, menu, ...others } = this.props;
+        const { type, content, onClick, onMenuClick, menu, ...others } = this.props;
         switch (this.props.type) {
         case "label":
             return <LabelElement {...others}>{content}</LabelElement>;
@@ -69,7 +70,7 @@ class ContextMenuItem extends Component {
         case "submenu":
             // A bit of a special case
             return (
-                <ContextSubmenu menu={menu} onCloseMenu={onCloseMenu} {...others}>
+                <ContextSubmenu menu={menu} onMenuClick={onMenuClick} {...others}>
                     {content}
                 </ContextSubmenu>
             );

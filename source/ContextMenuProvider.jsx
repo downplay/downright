@@ -109,25 +109,21 @@ class ContextMenuProvider extends Component {
         event.stopPropagation();
     }
 
-    onClick = () => {
+    closeMenu = () => {
         // An ordinary click that wasn't on our menu or a right-click should just close the menu
         if (this.state.menuIsOpen) {
-            this.closeMenu();
+            this.setState({
+                menuIsOpen: false,
+                menu: [],
+                menuPosition: null,
+            });
         }
-    }
-
-    closeMenu = () => {
-        this.setState({
-            menuIsOpen: false,
-            menu: [],
-            menuPosition: null,
-        });
     }
 
     renderMenu() {
         return (
             <OuterContainer position={this.state.menuPosition}>
-                <ContextMenu onClick={this.onMenuClick} menu={this.state.menu} />
+                <ContextMenu onMenuClick={this.onMenuClick} menu={this.state.menu} />
             </OuterContainer>
         );
     }

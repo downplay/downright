@@ -20,13 +20,13 @@ const BigBox = styled.div`
         ["Close", () => { /* Noop - just close the menu */ }],
     ]
 ))
-export default class SimpleMenuComponent extends Component {
+export default class SimpleComponentWithMenu extends Component {
 
     render = () => (
         <BigBox>
             <div>
                 { this.props.item
-                    ? "You chose item 1!"
+                    ? `You chose item ${this.props.item}!`
                     : "Right-click anywhere here for a menu!" }
             </div>
         </BigBox>

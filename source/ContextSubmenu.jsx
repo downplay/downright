@@ -7,13 +7,13 @@ import ContextMenu from "./ContextMenu";
 class ContextSubmenu extends Component {
 
     render() {
-        const { menu, onClick } = this.props;
+        const { menu, onMenuClick } = this.props;
         return (
             <SubmenuElement>
                 {this.props.content}
                 {this.state.submenuVisible ? (
                     <OuterContainer position={this.props.position}>
-                        <ContextMenu menu={menu} onClick={onClick} />
+                        <ContextMenu menu={menu} onMenuClick={onMenuClick} />
                     </OuterContainer>
                 ) : null}
             </SubmenuElement>

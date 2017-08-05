@@ -1,18 +1,26 @@
 import React, { Component } from "react";
 import { ContextMenuProvider } from "downright";
-import SimpleMenuComponent from "../components/SimpleMenuComponent";
+import SimpleComponentWithMenu from "../components/SimpleComponentWithMenu";
 import StretchWidthHeight from "../styles/stretchWidthHeight";
 
 export default class Simple extends Component {
 
-    onClickItem(item) {
+    constructor(props) {
+        super(props);
+        this.state = { itemChosen: null };
+    }
+
+    onClickItem = (item) => {
         this.setState({ itemChosen: item });
     }
 
     render = () => (
         <ContextMenuProvider>
             <StretchWidthHeight>
-                <SimpleMenuComponent onClickItem={this.onClickItem} />
+                <SimpleComponentWithMenu
+                    onClickItem={this.onClickItem}
+                    item={this.state.itemChosen}
+                />
             </StretchWidthHeight>
         </ContextMenuProvider>
     )
