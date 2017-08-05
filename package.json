@@ -6,7 +6,12 @@
     "type": "git",
     "url": "https://github.com/downplay/downright.git"
   },
+  "main": "dist/main.js",
+  "files": [
+    "dist/main.js"
+  ],
   "scripts": {
+    "build": "cross-env NODE_ENV=production node build/entry.js",
     "dev": "node examples/entry.js",
     "dev-mon": "nodemon examples/entry.js"
   },
@@ -26,6 +31,11 @@
     "react-dom": "^15.6.1",
     "react-router-dom": "^4.1.2"
   },
+  "dependencies": {
+    "hoist-non-react-statics": "^2.2.1",
+    "invariant": "^2.2.2",
+    "prop-types": "^15.5.10"
+  },
   "devDependencies": {
     "babel-core": "^6.25.0",
     "babel-eslint": "^7.2.3",
@@ -42,6 +52,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-register": "^6.24.1",
     "babel-runtime": "^6.25.0",
+    "cross-env": "^5.0.3",
     "css-loader": "^0.28.4",
     "eslint": "4.3.0",
     "eslint-config-airbnb": "^15.1.0",
@@ -58,11 +69,7 @@
     "style-loader": "^0.18.2",
     "webpack": "^3.4.1",
     "webpack-dev-middleware": "^1.12.0",
-    "webpack-hot-middleware": "^2.18.2"
-  },
-  "dependencies": {
-    "hoist-non-react-statics": "^2.2.1",
-    "invariant": "^2.2.2",
-    "prop-types": "^15.5.10"
+    "webpack-hot-middleware": "^2.18.2",
+    "webpack-node-externals": "^1.6.0"
   }
 }
