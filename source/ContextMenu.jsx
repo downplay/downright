@@ -1,26 +1,25 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
+
+import MenuWrapper from "./MenuWrapper";
+import ContextMenuItem from "./ContextMenuItem";
 
 class ContextMenu extends Component {
-  static propTypes = {
-    onClick: PropTypes.func,
-    style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-    children: PropTypes.arrayOf(PropTypes.node),
-  }
 
-  static defaultProps = {
-    onClick: () => {},
-    style: {},
-    children: null,
-  }
+    render() {
+        const { menu, ...others } = this.props;
+        return (
+            <MenuWrapper {...others}>
+                {this.props.menu.map((menuItem, index) => (
+                    // TODO: Not really anything better to use for a key,
+                    // but could allow key as an optional prop, not a lot of
+                    // point in this case though....
+                    // eslint-disable-next-line react/no-array-index-key
+                    <ContextMenuItem key={index} {...menuItem} />
+                ))}
+            </MenuWrapper>
+        );
+    }
 
-  render() {
-    return (
-      <ul style={this.props.style} role="menu" onClick={this.props.onClick}>
-        {this.props.children}
-      </ul>
-    );
-  }
 }
 
 export default ContextMenu;

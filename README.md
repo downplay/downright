@@ -84,7 +84,7 @@ import { contextMenu } from 'downright';
 ), options)
 ```
 
-#### props
+#### ownProps
 
 These are the props as passed through from the parent component. If using Redux, you'll want to `@connect()` *before* `@contextMenu()`, so you receive the props injected by Redux.
 

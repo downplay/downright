@@ -1,4 +1,5 @@
-require('babel-register');
-require('babel-polyfill');
+require("babel-register");
+require("babel-polyfill");
 
-require('./build');
+// require('./build');
+module.exports = require("./webpack.config.js");

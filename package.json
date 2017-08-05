@@ -1,7 +1,7 @@
 {
   "name": "downright",
   "description": "Right-click context menu for React, done right.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/downplay/downright.git"
@@ -11,7 +11,8 @@
     "dist/main.js"
   ],
   "scripts": {
-    "build": "cross-env NODE_ENV=production node build/entry.js",
+    "build": "cross-env NODE_ENV=production webpack --config ./build/entry.js",
+    "build-watch": "cross-env NODE_ENV=development webpack --config ./build/entry.js --watch",
     "dev": "node examples/entry.js",
     "dev-mon": "nodemon examples/entry.js"
   },
@@ -37,6 +38,7 @@
     "prop-types": "^15.5.10"
   },
   "devDependencies": {
+    "autoprefixer": "^7.1.2",
     "babel-core": "^6.25.0",
     "babel-eslint": "^7.2.3",
     "babel-loader": "^7.1.1",
@@ -54,19 +56,27 @@
     "babel-runtime": "^6.25.0",
     "cross-env": "^5.0.3",
     "css-loader": "^0.28.4",
+    "css-object-loader": "^0.0.7",
     "eslint": "4.3.0",
     "eslint-config-airbnb": "^15.1.0",
+    "eslint-loader": "^1.9.0",
     "eslint-plugin-import": "2.7.0",
     "eslint-plugin-jsx-a11y": "5.1.1",
     "eslint-plugin-react": "7.1.0",
     "express": "^4.15.3",
+    "install": "^0.10.1",
     "nodemon": "^1.11.0",
+    "postcss-calc": "^6.0.0",
+    "postcss-custom-properties": "^6.1.0",
+    "postcss-import": "^10.0.0",
     "postcss-loader": "^2.0.6",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-hot-loader": "^3.0.0-beta.7",
     "react-router-dom": "^4.1.2",
+    "reset-css": "^2.2.1",
     "style-loader": "^0.18.2",
+    "styled-components": "^2.1.2",
     "webpack": "^3.4.1",
     "webpack-dev-middleware": "^1.12.0",
     "webpack-hot-middleware": "^2.18.2",

@@ -1,6 +1,18 @@
-import App from "./App.jsx";
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
 
-const rootNode = document.getElementById("root");
-ReactDOM.render(<App/>, rootNode);
+import App from "./App";
+
+const render = () => {
+    const rootNode = document.getElementById("root");
+    // eslint-disable-next-line react/jsx-filename-extension
+    ReactDOM.render(<App />, rootNode);
+};
+
+render();
+
+if (module.hot) {
+    module.hot.accept(["./client", "./App"], () => {
+        render();
+    });
+}

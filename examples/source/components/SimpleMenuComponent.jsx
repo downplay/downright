@@ -1,18 +1,35 @@
-import React, { Component } from 'react';
-import { contextMenu } from 'downright';
+import React, { Component } from "react";
+import { contextMenu } from "downright";
+import styled from "styled-components";
 
-@contextMenu((props, state, menuContext) => (
-  [
-    ['Menu label'],
-    ['Item #1', () => alert('clicked item 1')],
-    ['Home link', '/'],
-    ['X', () => { /* Noop - just close the menu */ }],
-  ]
+const BigBox = styled.div`
+    width: 300px;
+    height: 400px;
+    background-color: #f99;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
+@contextMenu(props => (
+    [
+        ["Menu label"],
+        ["Item #1", () => props.onClickItem(1)],
+        ["Item #2", () => props.onClickItem(2)],
+        ["Back to home", "/"],
+        ["Close", () => { /* Noop - just close the menu */ }],
+    ]
 ))
 export default class SimpleMenuComponent extends Component {
-  render = () => (
-    <div style={{ background: '#f00', width: '200px', height: '200px' }}>
-      Right-click anywhere here for a menu!
-    </div>
-  )
+
+    render = () => (
+        <BigBox>
+            <div>
+                { this.props.item
+                    ? "You chose item 1!"
+                    : "Right-click anywhere here for a menu!" }
+            </div>
+        </BigBox>
+    )
+
 }
