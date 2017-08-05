@@ -104,7 +104,7 @@ Menu items themselves can be defined in three forms:
 
 `type: string`
  
- One of: label, caption, button, link, submenu, separator.
+ One of: label, button, link, submenu, separator.
 
 `content: string|node`
 

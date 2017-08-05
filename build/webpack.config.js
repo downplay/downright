@@ -20,7 +20,7 @@ const webpackConfig = {
         libraryTarget: "umd",
     },
     cache: true,
-    devtool: "source-map",
+    devtool: __DEV__ ? "inline-source-map" : "source-map",
 
     stats: {
         colors: true,

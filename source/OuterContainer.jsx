@@ -4,8 +4,8 @@ import styles from "./styles/menu.css";
 export default ({ children, position, ...others }) => {
     const style = {
         ...styles.container,
-        left: `${this.state.menuPosition.x}px`,
-        top: `${this.state.menuPosition.y}px`,
+        left: `${position.x}px`,
+        top: `${position.y}px`,
     };
 
     return (

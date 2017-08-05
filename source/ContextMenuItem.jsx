@@ -13,7 +13,7 @@ class ContextMenuItem extends Component {
 
     static propTypes = {
         type: PropTypes.oneOf(["label", "button", "link", "separator", "submenu"]),
-        caption: PropTypes.node,
+        content: PropTypes.node,
         onClick: PropTypes.func,
         onCloseMenu: PropTypes.func,
         menu: PropTypes.arrayOf(PropTypes.object),
@@ -21,7 +21,7 @@ class ContextMenuItem extends Component {
 
     static defaultProps = {
         type: "label",
-        caption: null,
+        content: null,
         onClick: null,
         onCloseMenu: null,
         menu: [],
@@ -60,7 +60,7 @@ class ContextMenuItem extends Component {
     }
 
     renderInnerElement() {
-        const { type, content, ...others } = this.props;
+        const { type, content, onClick, onCloseMenu, menu, ...others } = this.props;
         switch (this.props.type) {
         case "label":
             return <LabelElement {...others}>{content}</LabelElement>;
@@ -69,7 +69,7 @@ class ContextMenuItem extends Component {
         case "submenu":
             // A bit of a special case
             return (
-                <ContextSubmenu {...others}>
+                <ContextSubmenu menu={menu} onCloseMenu={onCloseMenu} {...others}>
                     {content}
                 </ContextSubmenu>
             );

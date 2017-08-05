@@ -1,7 +1,8 @@
 import webpack from "webpack";
 import path from "path";
 
-const downrightSource = path.resolve(__dirname, "../dist/main.js");
+// const downrightSource = path.resolve(__dirname, "../dist/main.js");
+const downrightSource = path.resolve(__dirname, "../source/index.js");
 
 const webpackConfig = {
     context: path.resolve(__dirname, ".."),
@@ -33,7 +34,7 @@ const webpackConfig = {
     ],
 
     resolve: {
-        extensions: ["*", ".js", ".jsx", ".json"],
+        extensions: [".css", ".js", ".jsx", ".json"],
         alias: {
             downright: downrightSource,
         },
@@ -42,14 +43,17 @@ const webpackConfig = {
         rules: [
             {
                 test: /\.jsx?$/,
-                exclude: /node_modules/,
+                exclude: [
+                    /node_modules/,
+                    /dist/,
+                ],
                 loaders: [
                     {
                         loader: "babel-loader",
                         query: {
                             babelrc: false,
                             cacheDirectory: path.resolve(__dirname, "../babel-cache"),
-                            ignore: "node_modules/**/*",
+                            ignore: ["dist", "node_modules/**/*"],
                             plugins: [
                                 "react-hot-loader/babel",
                                 "babel-plugin-transform-class-properties",

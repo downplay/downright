@@ -16,6 +16,7 @@ function makeComponentWrapper(buildMenu) {
             appendContextMenu() {
                 const localItems = buildMenu(this.props);
                 const context = this.context.contextMenuContext;
+                console.log(localItems);
                 context.addMenuItems(localItems);
             }
 
