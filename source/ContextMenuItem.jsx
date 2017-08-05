@@ -49,7 +49,6 @@ class ContextMenuItem extends Component {
     }
 
     onButtonClick = (event) => {
-        console.log(this);
         // For links there is no button handler (although consumers
         // can still provide one, e.g. to preventDefault or whatever)
         if (this.props.onClick) {

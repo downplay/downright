@@ -83,8 +83,8 @@ const webpackConfig = {
                     "eslint-loader",
                 ],
             }, {
-                test: /\.(css)$/,
-                loaders: ["style-loader", "postcss-loader"],
+                test: /\.css$/,
+                loader: "style-loader!css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader",
             },
         ],
     },

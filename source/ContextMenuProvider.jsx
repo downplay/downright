@@ -52,7 +52,6 @@ class ContextMenuProvider extends Component {
                         return item;
                     });
                     // Items further down the DOM tree get inserted in front
-                    console.log(this.state.menu);
                     this.setState({
                         menu: (this.state.menu.length) ? [...this.state.menu, { type: "separator" }, ...items] : items,
                     });
@@ -131,7 +130,7 @@ class ContextMenuProvider extends Component {
     render() {
         return (
             <div
-                style={styles.layer}
+                className={styles.layer}
                 ref={(ref) => { this.nearestNode = ref; }}
                 onClick={this.onClick}
             >

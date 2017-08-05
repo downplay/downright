@@ -7,4 +7,5 @@ import styles from "./styles/menu.css";
 // Link if they want. Could export the default styles to use them on react-dom-router?
 // Or pass them all in from the top?
 
-export default ({ children, ...others }) => <Link style={styles.link} {...others}>{children}</Link>;
+export default ({ children, ...others }) =>
+    <Link className={styles.link} {...others}>{children}</Link>;
