@@ -1,8 +1,8 @@
 import webpack from "webpack";
 import path from "path";
 
-// const downrightSource = path.resolve(__dirname, "../dist/main.js");
-const downrightSource = path.resolve(__dirname, "../source/index.js");
+const downrightSource = path.resolve(__dirname, "../dist/main.js");
+// const downrightSource = path.resolve(__dirname, "../source/index.js");
 
 const webpackConfig = {
     context: path.resolve(__dirname, ".."),

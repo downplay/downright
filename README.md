@@ -2,11 +2,15 @@
 
 Right-click context menu for React, done right.
 
+## Version 0.2.0
+
+Almost complete rewrite, added reasonable default styles. Rewrite paves the way for making rendering fully customisable in 0.3.0. Submenus now supported but could do with more love.
+
 ## Sample Code
 
-Downright is designed to be extremely simple to setup and use in your React app. The primary use case is that your menu will be dispatching Redux actions, which have been injected into props using Redux.
+Downright is designed with a minimal API to setup and use in your React app. It provides a HOC to wrap your component to make it emit a context menu. You have access to props The primary use case is that your menu will be dispatching Redux actions, which have been injected into props using Redux. (Downright can be used with )
 
-```
+```javascript
 import { contextMenu } from 'downright';
 
 @connect(null, props => ...)
@@ -14,6 +18,7 @@ import { contextMenu } from 'downright';
     const {t} = props;
     return [
         ['Context menu'],                                             // A label or heading
+        ['Badger', ()=>props.onClickedBadger()],                      // Calling a handler in the parent
         ['Click me', ()=>props.reduxInjectedAction()],                // A button dispatching an action
         ['Fork me', 'https://https://github.com/downplay/downright']  // Renders a <Link/>
     ];
@@ -46,7 +51,7 @@ Depending on your flavour.
 
 DownRight follows the provider pattern used by libraries by React. This means you need to wrap the DownRightProvider component somewhere at the base of your app tree, usually around where you would put other providers e.g.:
 
-```
+```jsx
 <ReduxProvider store={store}>
     <ContextMenuProvider>
         <App />
@@ -73,7 +78,7 @@ You must use a wrapped component to
 
 The HOC can be used as a class decorator, or just wrap programmatically. Its setup is a single callback, which will be invoked when the user triggers a context menu. (And an optional object, which is not implemented yet.)
 
-```
+```javascript
 import { contextMenu } from 'downright';
 
 @contextMenu((props) => (
@@ -124,43 +129,64 @@ Menu to be rendered when the submenu is open. If a function is provided the menu
 
 #### options
 
+Note: Currently (0.2.0) the options object has no effect. 0.3.0 will bring configuration and style customisation.
+
+/*
 Configures this instance of a context menu. Pass in a plain object with any of these properties:
 
 `stopPropagation: bool (default: false)`
 
 If true, this will prevent the event from collecting further menus from higher-level components as it bubbles up the component hierarchy.
+*/
 
 ### Nested Menu Components
 
 It's entirely possible to create nested components that each have the contextMenu wrapper. In this case, as the click event bubbles up through the DOM tree, the Provider will gather all of the menus emitted by each component on the way, and produce a composite menu by concatenating each menu (with a separator in between).
 
+/*
 If this is not desirable, the behaviour can be altered by setting `gatherMenus={false}` on the ContextMenuProvider. When this is the case, only the *closest* menu to the mouse click will be utilised. 
+*/
 
 ## Examples
 
-Examples are found in the /examples folder. To run them, clone the repository and run:
+Examples are found in https://github.com/downplay/downright/tree/master/examples. To run them, clone the repository and execute:
 
 ```
+npm run build
 npm run dev
 ```
 
 or
 
 ```
+yarn build
 yarn dev
 ```
 
 Then navigate to `http://127.0.0.1:3311/`
+
+The dev server is hot module enabled so tweak at will.
+
+## Version History
+
+### 0.2.0
+
+Almost complete rewrite, and reasonable default styles. Rewrite paves the way for making rendering fully customisable in 0.3.0. Submenus now supported but could do with more love.
+
+### 0.1.0
+
+First release, basic prototype / proof of concept.
 
 ## Bugs and Issues
 
 There are lots right now! I will address many very soon, particularly:
 
 - Some of the documentation refers to features which aren't implemented yet
-- Ensuring good cross-browser support
-- Bugginess with the menu opening, and positioning on the screen
+- Ensuring good cross-browser support (should be great, but needs testing)
+- Bugginess with positioning on the screen
 - Removing the outer <div> added by the provider
-- Making the default styles look nice! (And allowing the styles to be customised flexibly)
+- Allowing the styles to be customised flexibly
+- Additional entities - checkbox, etc.
 
 Please report any other bugs or issues on GitHub: https://github.com/downplay/downright
 
