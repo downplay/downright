@@ -33,14 +33,24 @@ export default class Styling extends Component {
     }
 
     render = () => (
-        <ContextMenuProvider>
+        <div>
+            <h1>(Two menus operating independently with different providers)</h1>
             <FullWidthFullHeight>
-                <SimpleComponentWithMenu
-                    onClickItem={this.onClickItem}
-                    item={this.state.itemChosen}
-                />
+                <ContextMenuProvider>
+                    <SimpleComponentWithMenu
+                        onClickItem={this.onClickItem}
+                        item={this.state.itemChosen}
+                    />
+                </ContextMenuProvider>
+                <ContextMenuProvider className="green">
+                    <SimpleComponentWithMenu
+                        onClickItem={this.onClickItem}
+                        item={this.state.itemChosen}
+                        green
+                    />
+                </ContextMenuProvider>
             </FullWidthFullHeight>
-        </ContextMenuProvider>
+        </div>
     )
 
 }

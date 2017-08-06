@@ -14,7 +14,7 @@
     font-family: "Lucida Sans", "Courier New", monospace;
 }
 
-/* Override items to use a different background */
+/* Change the background colours */
 :global .downright__contextmenu__item {
     background: linear-gradient(to bottom, #511 0%, #330808 100%);
 }
@@ -22,6 +22,14 @@
 :global .downright__contextmenu__item--selected {
     background: linear-gradient(to bottom, #733 0%,#933 100%);
 }
+
+:global .downright__contextmenu__item.downright__contextmenu__label,
+:global .downright__contextmenu__item.downright__contextmenu__label:hover,
+:global .downright__contextmenu__item.downright__contextmenu__label.downright__contextmenu__item--selected {
+    background: #311;
+}
+
+/* Make text stand out */
 
 :global .downright__contextmenu__label,
 :global .downright__contextmenu__button,
@@ -41,8 +49,17 @@
     text-shadow: 0 0 10px #ff0;
 }
 
-:global .downright__contextmenu__item.downright__contextmenu__label,
-:global .downright__contextmenu__item.downright__contextmenu__label:hover,
-:global .downright__contextmenu__item.downright__contextmenu__label.downright__contextmenu__item--selected {
-    background: #311;
+/* Green override */
+:global .green.downright__contextmenu__item {
+    background: linear-gradient(to bottom, #151 0%, #083308 100%);
+}
+:global .green.downright__contextmenu__item:hover,
+:global .green.downright__contextmenu__item--selected {
+    background: linear-gradient(to bottom, #373 0%,#393 100%);
+}
+
+:global .green.downright__contextmenu__item.downright__contextmenu__label,
+:global .green.downright__contextmenu__item.downright__contextmenu__label:hover,
+:global .green.downright__contextmenu__item.downright__contextmenu__label.downright__contextmenu__item--selected {
+    background: #131;
 }

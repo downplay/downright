@@ -14,7 +14,7 @@ import BigBox from "../layout/BigBox";
 export default class SimpleComponentWithMenu extends Component {
 
     render = () => (
-        <BigBox>
+        <BigBox green={this.props.green}>
             <div>
                 { this.props.item
                     ? `You chose item ${this.props.item}!`
