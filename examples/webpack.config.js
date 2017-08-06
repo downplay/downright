@@ -34,9 +34,11 @@ const webpackConfig = {
     ],
 
     resolve: {
-        extensions: [".css", ".js", ".jsx", ".json"],
+        extensions: [".js", ".jsx", ".json", ".css"],
         alias: {
+            "downright/dist/bem/main.js": path.resolve(__dirname, "../dist/bem/main.js"),
             "downright/dist/theme.css": path.resolve(__dirname, "../dist/theme.css"),
+            "downright/dist/bem/theme.css": path.resolve(__dirname, "../dist/bem/theme.css"),
             downright: downrightSource,
         },
     },
@@ -101,7 +103,7 @@ const webpackConfig = {
                     /node_modules/,
                     /dist/,
                 ],
-                loader: "style-loader!css-loader",
+                loader: "style-loader!css-loader!postcss-loader",
             },
         ],
     },

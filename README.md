@@ -76,9 +76,31 @@ Downright ships with default stylings. How you want to include them depends on y
 import 'downright/dist/theme.css';
 ```
 
-The styles use collision-free naming. Currently there is no real way to customise styling, this will be addressed in future releases.
+The styles use collision-free naming. There is an alternative build of Downwrite that uses BEM-style naming classes instead. You have to use a different version of both theme.css and the main import:
 
-If there are issues with loading the styles, please submit a ticket, also see /examples/webpack.config.js for the loader config to see how this can be used alongside your own CSS modules.
+```javascript
+import { ContextMenuProvider } from 'downright/dist/bem/main.js';
+
+import 'downright/dist/theme.css';
+```
+
+This may be bundled as a separate package in teh future.
+
+With any issues loading the styles, see /examples/webpack.config.js for the loader config to see how this can be used alongside your own CSS modules.
+
+To see what classes are available, you can see the default stylesheet in this file, except that every class must be appended with: `downwrite__contextmenu__`
+
+Default styles are here:
+
+https://github.com/downplay/downright/tree/master/source/styles/menu.css
+
+You can see an example of overriding classes here:
+
+https://github.com/downplay/downright/tree/master/examples/source/examples/Styling.css
+
+It produces a dark red menu like this:
+
+<img src="docs/themedMenu.png" width="320" title="Restyled menu demo">
 
 ### Menu Decorator
 
@@ -178,6 +200,10 @@ The dev server is hot module enabled so tweak at will.
 
 ## Version History
 
+### 0.2.3
+
+- Added alternate BEM build to enable styling by global CSS
+
 ### 0.2.2
 
 - Don't use style-loader for building package; use extract-text-webpack-plugin and provide an optional stylesheet that can be included by the developer. Added some guidance for this.
@@ -202,8 +228,8 @@ There are lots right now! I will address many very soon, particularly:
 - Ensuring good cross-browser support (should be great, but needs testing)
 - Bugginess with positioning on the screen
 - Removing the outer <div> added by the provider
-- Allowing the styles to be customised flexibly
 - Additional entities - checkbox, etc.
+- More rendering customisation
 
 Please report any other bugs or issues on GitHub: https://github.com/downplay/downright
 

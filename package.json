@@ -1,7 +1,7 @@
 {
   "name": "downright",
   "description": "Right-click context menu for React, done right.",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/downplay/downright.git"
@@ -16,7 +16,9 @@
   ],
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack --config ./build/entry.js",
+    "build-bem": "cross-env NODE_ENV=production DOWNRIGHT_BUILD=bem webpack --config ./build/entry.js",
     "build-dev": "cross-env NODE_ENV=development webpack --config ./build/entry.js --watch",
+    "build-bem-dev": "cross-env NODE_ENV=development DOWNRIGHT_BUILD=bem webpack --config ./build/entry.js --watch",
     "dev": "node examples/entry.js",
     "dev-mon": "nodemon examples/entry.js"
   },

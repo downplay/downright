@@ -5,6 +5,13 @@ import ExtractTextPlugin from "extract-text-webpack-plugin";
 
 const downrightSource = path.resolve(__dirname, "../source/index.js");
 const __DEV__ = process.env.NODE_ENV === "development";
+const __BEM__ = process.env.DOWNRIGHT_BUILD === "bem";
+
+// Random hashed CSS classes
+let cssIdent = "[name]__[local]___[hash:base64:5]";
+if (__BEM__) {
+    cssIdent = "downright__contextmenu__[local]";
+}
 
 const webpackConfig = {
     context: path.resolve(__dirname, ".."),
@@ -16,7 +23,7 @@ const webpackConfig = {
         ],
     },
     output: {
-        filename: "main.js",
+        filename: (__BEM__ ? "bem/" : "") + "main.js",
         path: path.resolve(__dirname, "../dist"),
         libraryTarget: "umd",
     },
@@ -29,7 +36,7 @@ const webpackConfig = {
     },
 
     plugins: __DEV__ ? [] : [
-        new ExtractTextPlugin("theme.css"),
+        new ExtractTextPlugin((__BEM__ ? "bem/" : "") + "theme.css"),
         new webpack.optimize.UglifyJsPlugin({
             sourceMap: true,
         }),
@@ -82,12 +89,12 @@ const webpackConfig = {
             },
             __DEV__ ? {
                 test: /\.css$/,
-                loader: "style-loader!css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader",
+                loader: `style-loader!css-loader?modules&importLoaders=1&localIdentName=${cssIdent}!postcss-loader`,
             } : {
                 test: /\.css$/,
                 use: ExtractTextPlugin.extract({
                     fallback: "style-loader",
-                    use: "css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader",
+                    use: `css-loader?modules&importLoaders=1&localIdentName=${cssIdent}!postcss-loader`,
                 }),
             },
         ],

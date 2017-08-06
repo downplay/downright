@@ -6,6 +6,7 @@ import "downright/dist/theme.css";
 import Index from "./Index";
 import Simple from "./examples/Simple";
 import Submenus from "./examples/Submenus";
+import Styling from "./examples/Styling";
 
 import "./styles/main.css";
 
@@ -15,6 +16,7 @@ export default () => (
             <Route exact path="/" component={Index} />
             <Route path="/simple" component={Simple} />
             <Route path="/submenus" component={Submenus} />
+            <Route path="/styling" component={Styling} />
         </Switch>
     </HashRouter>
 );

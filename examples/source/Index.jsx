@@ -31,7 +31,8 @@ export default () => (
         <Header>Downright Fantastic Examples</Header>
         <Menu>
             <Item to="/simple">Simplest example</Item>
-            <Item to="/submenus">Submenu examples</Item>
+            <Item to="/submenus">Submenus and Callbacks</Item>
+            <Item to="/styling">Styles and Themeing</Item>
         </Menu>
     </Page>
 );

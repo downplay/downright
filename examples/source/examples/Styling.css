@@ -1,0 +1,48 @@
+/*
+    Global style overrides
+
+    Since I am using CSS modules in this site, I need to use :global rules
+    so these classes don't also get rewritten.
+
+    If you are using e.g. SASS or postcss-nested, nesting will make this
+    file look a bit nicer. (TODO)
+
+    See dist/bem/theme.css to see all the classes that can be overridden
+*/
+
+:global .downright__contextmenu {
+    font-family: "Lucida Sans", "Courier New", monospace;
+}
+
+/* Override items to use a different background */
+:global .downright__contextmenu__item {
+    background: linear-gradient(to bottom, #511 0%, #330808 100%);
+}
+:global .downright__contextmenu__item:hover,
+:global .downright__contextmenu__item--selected {
+    background: linear-gradient(to bottom, #733 0%,#933 100%);
+}
+
+:global .downright__contextmenu__label,
+:global .downright__contextmenu__button,
+:global .downright__contextmenu__link,
+:global .downright__contextmenu__submenu {
+    color: #ff9;
+}
+
+:global .downright__contextmenu__link:visited,
+:global .downright__contextmenu__link:active {
+    color: #ff9;
+}
+
+:global .downright__contextmenu__button:hover,
+:global .downright__contextmenu__link:hover,
+:global .downright__contextmenu__submenu:hover {
+    text-shadow: 0 0 10px #ff0;
+}
+
+:global .downright__contextmenu__item.downright__contextmenu__label,
+:global .downright__contextmenu__item.downright__contextmenu__label:hover,
+:global .downright__contextmenu__item.downright__contextmenu__label.downright__contextmenu__item--selected {
+    background: #311;
+}

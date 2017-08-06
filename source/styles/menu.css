@@ -42,7 +42,8 @@
 .label,
 .button,
 .link,
-.submenu {
+.submenu,
+.separator {
     padding: 0.2rem;
     text-align: left;
     color: #000;
