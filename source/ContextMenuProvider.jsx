@@ -82,16 +82,10 @@ class ContextMenuProvider extends Component {
         }
     }
 
-    onMenuClick = (event) => {
-        // Prevent clicks from the menu propagating up to the onClick handler, so they don't
-        // automatically trigger the menu closing
-        event.stopPropagation();
-    }
-
     normalizeMenuItems(rawItems) {
         return rawItems.map((item) => {
             if (typeof item === "string") {
-                return { type: "label", content: item[0] };
+                return { type: "label", content: item };
             } else if (item.constructor === Array) {
                 if (item.length === 1) {
                     return { type: "label", content: item[0] };
@@ -127,7 +121,10 @@ class ContextMenuProvider extends Component {
     renderMenu() {
         return (
             <OuterContainer position={this.state.menuPosition}>
-                <ContextMenu onMenuClick={this.onMenuClick} menu={this.state.menu} />
+                <ContextMenu
+                    onMenuClick={this.closeMenu}
+                    menu={this.state.menu}
+                />
             </OuterContainer>
         );
     }
@@ -137,7 +134,6 @@ class ContextMenuProvider extends Component {
             <div
                 className={styles.layer}
                 ref={(ref) => { this.nearestNode = ref; }}
-                onClick={this.onClick}
             >
                 {this.props.children}
                 {this.state.menuIsOpen ? this.renderMenu() : null}

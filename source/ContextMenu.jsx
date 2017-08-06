@@ -1,9 +1,15 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 import MenuWrapper from "./MenuWrapper";
 import ContextMenuItem from "./ContextMenuItem";
 
 class ContextMenu extends Component {
+
+    static propTypes = {
+        menu: PropTypes.arrayOf(PropTypes.object).isRequired,
+        onMenuClick: PropTypes.func.isRequired,
+    }
 
     render() {
         const { menu, onMenuClick, ...others } = this.props;
@@ -13,8 +19,13 @@ class ContextMenu extends Component {
                     // TODO: Not really anything better to use for a key,
                     // but could allow key as an optional prop, not a lot of
                     // point in this case though....
-                    // eslint-disable-next-line react/no-array-index-key
-                    <ContextMenuItem key={index} onMenuClick={onMenuClick} {...menuItem} />
+                    <ContextMenuItem
+                        // eslint-disable-next-line react/no-array-index-key
+                        key={index}
+                        onMenuClick={onMenuClick}
+                        item={menuItem}
+                        {...menuItem}
+                    />
                 ))}
             </MenuWrapper>
         );

@@ -1,27 +1,25 @@
 import React, { Component } from "react";
 
 import SubmenuElement from "./SubmenuElement";
-import OuterContainer from "./OuterContainer";
+import SubmenuContainer from "./SubmenuContainer";
 import ContextMenu from "./ContextMenu";
 
 class ContextSubmenu extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            submenuVisible: false,
-        };
+    // eslint-disable-next-line class-methods-use-this
+    getContainerPosition() {
+        return { x: 0, y: 0 };
     }
 
     render() {
-        const { menu, onMenuClick, ...others } = this.props;
+        const { menu, onMenuClick, visible, children, ...others } = this.props;
         return (
             <SubmenuElement {...others}>
-                {this.props.content}
-                {this.state.submenuVisible ? (
-                    <OuterContainer position={this.props.position}>
+                {children}
+                {visible ? (
+                    <SubmenuContainer position={this.getContainerPosition()}>
                         <ContextMenu menu={menu} onMenuClick={onMenuClick} />
-                    </OuterContainer>
+                    </SubmenuContainer>
                 ) : null}
             </SubmenuElement>
         );

@@ -30,7 +30,7 @@ export default class Submenus extends Component {
     render = () => (
         <ContextMenuProvider>
             <FullWidthFullHeight>
-                <SimpleSubmenu onCat={this.onCat} onDog={this.onDog} />
+                <SimpleSubmenu onCat={this.onCat} onDog={this.onDog} item={this.state.animalName} />
             </FullWidthFullHeight>
         </ContextMenuProvider>
     )

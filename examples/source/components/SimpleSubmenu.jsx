@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { contextMenu } from "downright";
+
 import BigBox from "../layout/BigBox";
+import { Question, Answer } from "./styles";
 
 @contextMenu(props => (
     [
@@ -23,11 +25,12 @@ export default class SimpleSubmenu extends Component {
 
     render = () => (
         <BigBox blue>
-            <div>
-                { this.props.item
-                    ? `You chose item ${this.props.item}!`
-                    : "Right-click anywhere here for a menu!" }
-            </div>
+            <Question>
+                Favourite animal?
+            </Question>
+            { this.props.item &&
+                <Answer>{`You chose ${this.props.item}`}</Answer>
+            }
         </BigBox>
     )
 

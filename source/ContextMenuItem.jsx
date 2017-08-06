@@ -31,6 +31,7 @@ class ContextMenuItem extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            selected: false,
             submenuVisible: false,
         };
     }
@@ -38,15 +39,11 @@ class ContextMenuItem extends Component {
     // TODO: On receive props / will receive props, verify correct action is there e.g. handler/to
 
     onSubmenuMouseEnter = () => {
-        this.setState({
-            submenuVisible: true,
-        });
+        this.setSubmenuVisible(true);
     }
 
     onSubmenuMouseLeave = () => {
-        this.setState({
-            submenuVisible: false,
-        });
+        this.setSubmenuVisible(false);
     }
 
     onButtonClick = (event) => {
@@ -54,16 +51,28 @@ class ContextMenuItem extends Component {
         // can still provide one, e.g. to preventDefault or whatever)
         if (this.props.onClick) {
             // Execute the click handler
-            this.props.onClick(event);
+            this.props.onClick(event, this.props.item);
         }
         // Trigger provider to close the menu
         this.props.onMenuClick(event);
     }
 
+    onSubmenuClick = () => {
+        this.setState({
+            selected: true,
+        });
+    }
+
+    setSubmenuVisible = (visible) => {
+        this.setState({
+            submenuVisible: visible,
+        });
+    }
+
     renderInnerElement() {
         const { type, content, onClick, onMenuClick, menu, item, className,
             ...others } = this.props;
-        others.className = `${styles[this.props.type] || ""} ${this.props.className}`;
+        others.className = `${styles[this.props.type] || ""}  ${this.state.selected && styles.selected} ${this.props.className}`;
         switch (this.props.type) {
         case "label":
             return <LabelElement {...others}>{content}</LabelElement>;
@@ -74,9 +83,11 @@ class ContextMenuItem extends Component {
             return (
                 <ContextSubmenu
                     menu={menu}
+                    onClick={this.onSubmenuClick}
                     onMenuClick={onMenuClick}
                     onMouseEnter={this.onSubmenuMouseEnter}
                     onMouseLeave={this.onSubmenuMouseLeave}
+                    visible={this.state.submenuVisible || this.state.selected}
                     {...others}
                 >
                     {content}
@@ -99,7 +110,7 @@ class ContextMenuItem extends Component {
 
     render() {
         // .item .thing .custom
-        const className = `${styles.item} ${styles[this.props.type]} ${this.props.className}`;
+        const className = `${styles.item} ${styles[this.props.type]} ${this.state.selected && styles.selected} ${this.props.className}`;
         return (
             <ItemWrapper className={className}>
                 {this.renderInnerElement()}

@@ -5,8 +5,6 @@
 
 .container {
     position: absolute;
-    left: 0;
-    top: 0;
     box-shadow:3px 5px 10px 3px rgba(32,32,32,0.2);
 }
 
@@ -15,18 +13,24 @@
     flex-direction: column;
     background-color: #eee;
     font-family: Helvetica, Arial, sans-serif;
+    transition: opacity
+}
+
+.menu.enter {
+    opacity: 0;
 }
 
 .item {
     background: linear-gradient(to bottom, #ffffff 0%,#e5e5e5 100%);
     list-style-type: none;
     display: flex;
+    position: relative;
 }
 
 .item:hover,
 .item--selected
  {
-    background: linear-gradient(to bottom, #eeeeee 0%,#cccccc 100%);
+    background: linear-gradient(to bottom,#cccccc 0%, #eeeeee 100%);
 }
 
 .item.label,
@@ -44,6 +48,7 @@
     color: #000;
     font-size: 1rem;
     width: 100%;
+    display: block;
 }
 
 .link:visited,
@@ -65,8 +70,4 @@ button.button {
 
 a.link {
     text-decoration: none;
-}
-
-nav.submenu {
-
 }
