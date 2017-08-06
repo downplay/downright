@@ -131,35 +131,31 @@ Menu to be rendered when the submenu is open. If a function is provided the menu
 
 Note: Currently (0.2.0) the options object has no effect. 0.3.0 will bring configuration and style customisation.
 
-/*
 Configures this instance of a context menu. Pass in a plain object with any of these properties:
 
-`stopPropagation: bool (default: false)`
+`stopGathering: bool (default: false)`
 
-If true, this will prevent the event from collecting further menus from higher-level components as it bubbles up the component hierarchy.
-*/
+If true, this will prevent any further menus being collected from higher-up components as the event bubbles up the component hierarchy.
+
+The provider option `gatherMenus` effectively acts as a global switch for this. If `gatherMenus={false}` then menus will never be gathered past the first connected component, and the `stopGathering` setting is ignored.
 
 ### Nested Menu Components
 
 It's entirely possible to create nested components that each have the contextMenu wrapper. In this case, as the click event bubbles up through the DOM tree, the Provider will gather all of the menus emitted by each component on the way, and produce a composite menu by concatenating each menu (with a separator in between).
 
-/*
 If this is not desirable, the behaviour can be altered by setting `gatherMenus={false}` on the ContextMenuProvider. When this is the case, only the *closest* menu to the mouse click will be utilised. 
-*/
 
 ## Examples
 
 Examples are found in https://github.com/downplay/downright/tree/master/examples. To run them, clone the repository and execute:
 
 ```
-npm run build
 npm run dev
 ```
 
 or
 
 ```
-yarn build
 yarn dev
 ```
 
@@ -168,6 +164,10 @@ Then navigate to `http://127.0.0.1:3311/`
 The dev server is hot module enabled so tweak at will.
 
 ## Version History
+
+### 0.2.1
+
+- Implement options to control gathering (bubbling) behaviour
 
 ### 0.2.0
 

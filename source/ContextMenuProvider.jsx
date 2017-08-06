@@ -10,6 +10,11 @@ class ContextMenuProvider extends Component {
 
     static propTypes = {
         children: PropTypes.oneOfType([PropTypes.node]).isRequired,
+        gatherMenus: PropTypes.bool,
+    }
+
+    static defaultProps = {
+        gatherMenus: true,
     }
 
     static childContextTypes = {
@@ -30,7 +35,6 @@ class ContextMenuProvider extends Component {
 
     getChildContext() {
         return {
-            // TODO: Horrible pyramid approaching, refactor this
             contextMenuContext: {
                 addMenuItems: (rawItems) => {
                     const items = this.normalizeMenuItems(rawItems);
@@ -38,6 +42,10 @@ class ContextMenuProvider extends Component {
                     this.buildMenu = this.buildMenu.length ? [...this.buildMenu, { type: "separator" }, ...items] : items;
                 },
                 closeMenu: this.closeMenu,
+                shouldGather: () => this.buildMenuGathering,
+                stopGathering: () => {
+                    this.buildMenuGathering = false;
+                },
             },
         };
     }
@@ -60,6 +68,7 @@ class ContextMenuProvider extends Component {
         // Clear the menu before the 'capture' phase - it will get filled up when the event travels
         // down and then back up the DOM tree.
         this.buildMenu = [];
+        this.buildMenuGathering = this.props.gatherMenus;
     }
 
     onContextMenu = (event) => {
@@ -95,6 +104,7 @@ class ContextMenuProvider extends Component {
     }
 
     normalizeMenuItems(rawItems) {
+        // TODO: Horrible pyramid here, refactor this
         return rawItems.map((item) => {
             if (typeof item === "string") {
                 return { type: "label", content: item };
