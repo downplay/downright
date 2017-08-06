@@ -16,9 +16,12 @@ export default class SimpleComponentWithMenu extends Component {
     render = () => (
         <BigBox green={this.props.green}>
             <div>
-                { this.props.item
-                    ? `You chose item ${this.props.item}!`
-                    : "Right-click anywhere here for a menu!" }
+                <div>
+                    { this.props.item
+                        ? `You chose item ${this.props.item}!`
+                        : (this.props.children || "Right-click anywhere here for a menu!" : "")
+                    }
+                </div>
             </div>
         </BigBox>
     )

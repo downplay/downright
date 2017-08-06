@@ -11,16 +11,23 @@
     "dist/main.js",
     "dist/main.js.map",
     "dist/theme.css",
-    "dist/theme.sss.map",
-    "docs/coverImage.png"
+    "dist/theme.css.map",
+    "dist/bem/main.js",
+    "dist/bem/main.js.map",
+    "dist/bem/theme.css",
+    "dist/bem/theme.css.map",
+    "docs/coverImage.png",
+    "docs/themedMenu.png"
   ],
   "scripts": {
-    "build": "cross-env NODE_ENV=production webpack --config ./build/entry.js",
+    "build": "npm-run-all --parallel build-core build-bem",
+    "build-core": "cross-env NODE_ENV=production webpack --config ./build/entry.js",
     "build-bem": "cross-env NODE_ENV=production DOWNRIGHT_BUILD=bem webpack --config ./build/entry.js",
-    "build-dev": "cross-env NODE_ENV=development webpack --config ./build/entry.js --watch",
+    "build-dev": "npm-run-all --parallel build-core-dev build-bem-dev",
+    "build-core-dev": "cross-env NODE_ENV=development webpack --config ./build/entry.js --watch",
     "build-bem-dev": "cross-env NODE_ENV=development DOWNRIGHT_BUILD=bem webpack --config ./build/entry.js --watch",
-    "dev": "node examples/entry.js",
-    "dev-mon": "nodemon examples/entry.js"
+    "examples": "node examples/entry.js",
+    "examples-watch": "nodemon examples/entry.js"
   },
   "keywords": [
     "react",
@@ -74,6 +81,7 @@
     "install": "^0.10.1",
     "lodash": "^4.17.4",
     "nodemon": "^1.11.0",
+    "npm-run-all": "^4.0.2",
     "postcss-calc": "^6.0.0",
     "postcss-custom-properties": "^6.1.0",
     "postcss-import": "^10.0.0",

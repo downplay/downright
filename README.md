@@ -199,12 +199,14 @@ If this is not desirable, the behaviour can be altered by setting `gatherMenus={
 Examples are found in https://github.com/downplay/downright/tree/master/examples. To run them, clone the repository and execute:
 
 ```
+npm run build
 npm run dev
 ```
 
 or
 
 ```
+yarn build
 yarn dev
 ```
 
