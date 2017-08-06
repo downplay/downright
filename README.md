@@ -2,9 +2,9 @@
 
 Right-click context menu for React, done right.
 
-## Latest major release: version 0.2.0
+## Latest version: 0.2.x
 
-Almost complete rewrite, added reasonable default styles. Rewrite paves the way for making rendering fully customisable in 0.3.0. Submenus now supported but could do with more love.
+Almost complete rewrite, added reasonable default styles. Rewrite paves the way for making rendering fully customisable in 0.3.0. Submenus now working but could do with more love.
 
 ## Sample Code
 
@@ -32,7 +32,6 @@ class MyComponent extends Component {
 
 ## Installation
 
-
 ```
 yarn add downright
 ```
@@ -49,7 +48,7 @@ Depending on your flavour.
 
 ### Provider Setup
 
-DownRight follows the provider pattern used by libraries by React. This means you need to wrap the DownRightProvider component somewhere at the base of your app tree, usually around where you would put other providers e.g.:
+Downright follows the provider pattern used by libraries by React. This means you need to wrap the DownRightProvider component somewhere at the base of your app tree, usually around where you would put other providers e.g.:
 
 ```jsx
 <ReduxProvider store={store}>
@@ -66,6 +65,18 @@ Additional notes:
 3. Currently this will cause an additional wrapping `<div/>` around your entire app. This should be addressed in a future version, possibly via one of the portal libraries.
 
 Also: This is a very early release and I do not consider this production ready, especially as the menu looks horrible right now and has no styling support. This in particular is right at the top of my TODO list!
+
+### Default Theme
+
+Downright ships with default stylings. How you want to include them depends on your setup and webpack config, but it should be just:
+
+```javascript
+import 'downright/dist/theme.css';
+```
+
+The styles use collision-free naming. Currently there is no real way to customise styling, this will be addressed in future releases.
+
+If there are issues with loading the styles, please submit a ticket, also see /examples/webpack.config.js for the loader config to see how this can be used alongside your own CSS modules.
 
 ### Menu Decorator
 
@@ -165,6 +176,10 @@ The dev server is hot module enabled so tweak at will.
 
 ## Version History
 
+### 0.2.2
+
+- Don't use style-loader for building package; use extract-text-webpack-plugin and provide an optional stylesheet that can be included by the developer. Added some guidance for this.
+
 ### 0.2.1
 
 - Implement options to control gathering (bubbling) behaviour
@@ -182,7 +197,6 @@ First release, basic prototype / proof of concept.
 
 There are lots right now! I will address many very soon, particularly:
 
-- Some of the documentation refers to features which aren't implemented yet
 - Ensuring good cross-browser support (should be great, but needs testing)
 - Bugginess with positioning on the screen
 - Removing the outer <div> added by the provider

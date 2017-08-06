@@ -1,6 +1,7 @@
 import webpack from "webpack";
 import path from "path";
 import nodeExternals from "webpack-node-externals";
+import ExtractTextPlugin from "extract-text-webpack-plugin";
 
 const downrightSource = path.resolve(__dirname, "../source/index.js");
 const __DEV__ = process.env.NODE_ENV === "development";
@@ -28,6 +29,7 @@ const webpackConfig = {
     },
 
     plugins: __DEV__ ? [] : [
+        new ExtractTextPlugin("theme.css"),
         new webpack.optimize.UglifyJsPlugin({
             sourceMap: true,
         }),
@@ -77,15 +79,19 @@ const webpackConfig = {
                     },
                     "eslint-loader",
                 ],
-            }, {
+            },
+            __DEV__ ? {
                 test: /\.css$/,
                 loader: "style-loader!css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader",
+            } : {
+                test: /\.css$/,
+                use: ExtractTextPlugin.extract({
+                    fallback: "style-loader",
+                    use: "css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader",
+                }),
             },
         ],
     },
 };
-
-console.log(webpackConfig.devtool);
-
 
 export default webpackConfig;

@@ -36,6 +36,7 @@ const webpackConfig = {
     resolve: {
         extensions: [".css", ".js", ".jsx", ".json"],
         alias: {
+            "downright/dist/theme.css": path.resolve(__dirname, "../dist/theme.css"),
             downright: downrightSource,
         },
     },
@@ -82,9 +83,25 @@ const webpackConfig = {
                     },
                     "eslint-loader",
                 ],
+            }, /*
+                Note the configuration here (in case you have problems):
+                For local css files we are using CSS modules and style loader to selectively
+                load the styles. But packaged CSS will just be loaded directly into <style> tags.
+                This will not work for isomorphic rendering, you will need a different approach.
+            */ {
+                test: /\.css$/,
+                exclude: [
+                    /node_modules/,
+                    /dist/,
+                ],
+                loader: "style-loader!css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader",
             }, {
                 test: /\.css$/,
-                loader: "style-loader!css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader",
+                include: [
+                    /node_modules/,
+                    /dist/,
+                ],
+                loader: "style-loader!css-loader",
             },
         ],
     },
