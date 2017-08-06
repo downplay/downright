@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./styles/menu.css";
+import styles from "../styles/menu.css";
 
 // TODO: This is almost identical to OuterContainer, they
 // can be combined and plug the position in from outside

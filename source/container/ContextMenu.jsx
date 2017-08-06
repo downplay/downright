@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-import MenuWrapper from "./MenuWrapper";
+import MenuWrapper from "../display/MenuWrapper";
 import ContextMenuItem from "./ContextMenuItem";
 
 class ContextMenu extends Component {

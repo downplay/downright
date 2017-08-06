@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import invariant from "invariant";
-import ContextMenu from "./ContextMenu";
-import OuterContainer from "./OuterContainer";
+import ContextMenu from "./container/ContextMenu";
+import OuterContainer from "./display/OuterContainer";
 
 import styles from "./styles/menu.css";
 

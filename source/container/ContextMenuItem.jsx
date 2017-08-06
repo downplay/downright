@@ -2,13 +2,13 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 import ContextSubmenu from "./ContextSubmenu";
-import ButtonElement from "./ButtonElement";
-import LabelElement from "./LabelElement";
-import LinkElement from "./LinkElement";
-import SeparatorElement from "./SeparatorElement";
-import ItemWrapper from "./ItemWrapper";
+import ButtonElement from "../display/ButtonElement";
+import LabelElement from "../display/LabelElement";
+import LinkElement from "../display/LinkElement";
+import SeparatorElement from "../display/SeparatorElement";
+import ItemWrapper from "../display/ItemWrapper";
 
-import styles from "./styles/menu.css";
+import styles from "../styles/menu.css";
 
 const emptySubmenu = [];
 

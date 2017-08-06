@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
-import SubmenuElement from "./SubmenuElement";
-import SubmenuContainer from "./SubmenuContainer";
+import SubmenuElement from "../display/SubmenuElement";
+import SubmenuContainer from "../display/SubmenuContainer";
 import ContextMenu from "./ContextMenu";
 
 class ContextSubmenu extends Component {
