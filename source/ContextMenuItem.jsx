@@ -10,6 +10,8 @@ import ItemWrapper from "./ItemWrapper";
 
 import styles from "./styles/menu.css";
 
+const emptySubmenu = [];
+
 class ContextMenuItem extends Component {
 
     static propTypes = {
@@ -17,7 +19,7 @@ class ContextMenuItem extends Component {
         content: PropTypes.node,
         onClick: PropTypes.func,
         onMenuClick: PropTypes.func,
-        menu: PropTypes.arrayOf(PropTypes.object),
+        menu: PropTypes.oneOfType([PropTypes.array, PropTypes.func]),
     }
 
     static defaultProps = {
@@ -64,7 +66,14 @@ class ContextMenuItem extends Component {
     }
 
     setSubmenuVisible = (visible) => {
+        let menu = this.props.menu;
+        if (visible && !(this.props.menu.constructor === Array) && (typeof this.props.menu === "function")) {
+            menu = this.props.menu();
+        }
+        // TODO: The submenu state is potentially stale. (Also true with static menus.) Actually
+        // need to listen for props changes and retrigger a menu build.
         this.setState({
+            submenu: visible ? menu : emptySubmenu,
             submenuVisible: visible,
         });
     }
@@ -82,7 +91,7 @@ class ContextMenuItem extends Component {
             // A bit of a special case
             return (
                 <ContextSubmenu
-                    menu={menu}
+                    menu={this.state.submenu}
                     onClick={this.onSubmenuClick}
                     onMenuClick={onMenuClick}
                     onMouseEnter={this.onSubmenuMouseEnter}

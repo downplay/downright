@@ -24,5 +24,6 @@ export default () => (
         - Custom style
         - Custom animation
         - Custom elements
+        - Custom properties/data
         - Nested menus
 */

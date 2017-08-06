@@ -4,7 +4,9 @@ export default styled.div`
     width: 30rem;
     height: 30rem;
     background-color: ${(props) => {
-        if (props.blue) {
+        if (props.color) {
+            return props.color;
+        } else if (props.blue) {
             return "#99f";
         } else if (props.green) {
             return "#9f9";
