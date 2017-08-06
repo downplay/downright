@@ -18,16 +18,13 @@ const Header = styled.h1`
 const Menu = styled.ul`
 `;
 
-const ListItem = styled.li`
+const Item = styled(Link)`
     font-size: 2rem;
     margin: 1rem;
     text-align: center;
 `;
 
-const Item = ({ children, ...props }) =>
-    <ListItem><Link {...props}>{children}</Link></ListItem>;
-
-// TODO: Why am I rendering a menu by hand?
+// TODO: Why am I rendering a menu by hand when I have a menu rendering system?
 
 export default () => (
     <Page>

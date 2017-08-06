@@ -73,7 +73,7 @@ const webpackConfig = {
                             ],
                         },
                     },
-                    'eslint-loader',
+                    "eslint-loader",
                 ],
             }, {
                 test: /\.(css)$/,
