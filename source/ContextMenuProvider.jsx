@@ -33,7 +33,6 @@ class ContextMenuProvider extends Component {
             // TODO: Horrible pyramid approaching, refactor this
             contextMenuContext: {
                 addMenuItems: (rawItems) => {
-                    console.log("add menu items");
                     const items = this.normalizeMenuItems(rawItems);
                     // Items further down the DOM tree get inserted in front
                     this.buildMenu = this.buildMenu.length ? [...this.buildMenu, { type: "separator" }, ...items] : items;
@@ -60,7 +59,6 @@ class ContextMenuProvider extends Component {
     onContextMenuCapture = () => {
         // Clear the menu before the 'capture' phase - it will get filled up when the event travels
         // down and then back up the DOM tree.
-        console.log("context menu capture");
         this.buildMenu = [];
     }
 
@@ -68,8 +66,6 @@ class ContextMenuProvider extends Component {
         // The menu should have already been built up via the context handler while the event was
         // bubbling up. If the menu was empty then it's possible the user right-clicked on something
         // that wasn't context menu connected, therefore we need to close the menu.
-        console.log("oncontextmenu");
-        console.log(this.state.menu.length);
         event.preventDefault();
         event.stopPropagation();
         if (this.buildMenu.length === 0) {
