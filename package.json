@@ -11,7 +11,8 @@
     "dist/main.js",
     "dist/main.js.map",
     "dist/theme.css",
-    "dist/theme.sss.map"
+    "dist/theme.sss.map",
+    "docs/coverImage.png"
   ],
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack --config ./build/entry.js",

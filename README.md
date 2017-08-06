@@ -2,6 +2,8 @@
 
 Right-click context menu for React, done right.
 
+![What it looks like](docs/coverImage.png)
+
 ## Latest version: 0.2.x
 
 Almost complete rewrite, added reasonable default styles. Rewrite paves the way for making rendering fully customisable in 0.3.0. Submenus now working but could do with more love.
