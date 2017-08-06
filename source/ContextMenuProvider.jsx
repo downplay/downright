@@ -6,15 +6,19 @@ import OuterContainer from "./display/OuterContainer";
 
 import styles from "./styles/menu.css";
 
+import sanitizeProps from "./tool/sanitizeProps";
+
 class ContextMenuProvider extends Component {
 
     static propTypes = {
         children: PropTypes.oneOfType([PropTypes.node]).isRequired,
         gatherMenus: PropTypes.bool,
+        renderClassNames: PropTypes.bool,
     }
 
     static defaultProps = {
         gatherMenus: true,
+        renderClassNames: true,
     }
 
     static childContextTypes = {
@@ -141,15 +145,21 @@ class ContextMenuProvider extends Component {
     }
 
     renderMenu() {
+        const { gatherMenus, children, ...others } = this.props;
+
+        const sanitized = sanitizeProps(others, "container");
+
         return (
             <OuterContainer
                 position={this.state.menuPosition}
                 onClick={this.onOuterClick}
                 onContextMenu={this.onOuterClick}
+                {...sanitized}
             >
                 <ContextMenu
                     onMenuClick={this.closeMenu}
                     menu={this.state.menu}
+                    {...others}
                 />
             </OuterContainer>
         );

@@ -10,6 +10,8 @@ import ItemWrapper from "../display/ItemWrapper";
 
 import styles from "../styles/menu.css";
 
+import sanitizeProps from "../tool/sanitizeProps";
+
 const emptySubmenu = [];
 
 class ContextMenuItem extends Component {
@@ -80,8 +82,13 @@ class ContextMenuItem extends Component {
 
     renderInnerElement() {
         const { type, content, onClick, onMenuClick, menu, item, className,
-            ...others } = this.props;
-        others.className = `${styles[this.props.type] || ""}  ${this.state.selected && styles.selected} ${this.props.className}`;
+            ...rest } = this.props;
+
+        const others = sanitizeProps(rest, type);
+        if (this.props.renderClassNames) {
+            others.className = `${others.className || ""} ${this.state.selected ? styles.selected : ""}`;
+        }
+
         switch (this.props.type) {
         case "label":
             return <LabelElement {...others}>{content}</LabelElement>;
@@ -97,7 +104,7 @@ class ContextMenuItem extends Component {
                     onMouseEnter={this.onSubmenuMouseEnter}
                     onMouseLeave={this.onSubmenuMouseLeave}
                     visible={this.state.submenuVisible || this.state.selected}
-                    {...others}
+                    {...rest}
                 >
                     {content}
                 </ContextSubmenu>
@@ -118,8 +125,10 @@ class ContextMenuItem extends Component {
     }
 
     render() {
-        // .item .thing .custom
-        const className = `${styles.item} ${styles[this.props.type]} ${this.state.selected && styles.selected} ${this.props.className}`;
+        const others = sanitizeProps(this.props, "item");
+        const className = this.props.renderClassNames ?
+            `${others.className} ${styles[this.props.type]} ${this.state.selected ? styles.selected : ""}`
+            : "";
         return (
             <ItemWrapper className={className}>
                 {this.renderInnerElement()}

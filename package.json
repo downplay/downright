@@ -39,9 +39,9 @@
     "react-router-dom": "^4.0.0"
   },
   "dependencies": {
-    "hoist-non-react-statics": "^2.2.1",
-    "invariant": "^2.2.2",
-    "prop-types": "^15.5.10"
+    "hoist-non-react-statics": "^2.0.0",
+    "invariant": "^2.0.0",
+    "prop-types": "^15.0.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

@@ -4,6 +4,8 @@ import SubmenuElement from "../display/SubmenuElement";
 import SubmenuContainer from "../display/SubmenuContainer";
 import ContextMenu from "./ContextMenu";
 
+import sanitizeProps from "../tool/sanitizeProps";
+
 class ContextSubmenu extends Component {
 
     // eslint-disable-next-line class-methods-use-this
@@ -13,12 +15,17 @@ class ContextSubmenu extends Component {
 
     render() {
         const { menu, onMenuClick, visible, children, ...others } = this.props;
+        const sanitized = sanitizeProps(others, "submenu");
+        const sanitizedContainer = sanitizeProps(others, "container");
         return (
-            <SubmenuElement {...others}>
+            <SubmenuElement {...sanitized}>
                 {children}
                 {visible ? (
-                    <SubmenuContainer position={this.getContainerPosition()}>
-                        <ContextMenu menu={menu} onMenuClick={onMenuClick} />
+                    <SubmenuContainer
+                        {...sanitizedContainer}
+                        position={this.getContainerPosition()}
+                    >
+                        <ContextMenu menu={menu} onMenuClick={onMenuClick} {...others} />
                     </SubmenuContainer>
                 ) : null}
             </SubmenuElement>

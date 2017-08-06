@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 import MenuWrapper from "../display/MenuWrapper";
 import ContextMenuItem from "./ContextMenuItem";
 
+import sanitizeProps from "../tool/sanitizeProps";
+
 class ContextMenu extends Component {
 
     static propTypes = {
@@ -13,8 +15,9 @@ class ContextMenu extends Component {
 
     render() {
         const { menu, onMenuClick, ...others } = this.props;
+        const sanitized = sanitizeProps(others, "menu");
         return (
-            <MenuWrapper {...others}>
+            <MenuWrapper {...sanitized}>
                 {this.props.menu.map((menuItem, index) => (
                     // TODO: Not really anything better to use for a key,
                     // but could allow key as an optional prop, not a lot of
@@ -24,6 +27,7 @@ class ContextMenu extends Component {
                         key={index}
                         onMenuClick={onMenuClick}
                         item={menuItem}
+                        {...others}
                         {...menuItem}
                     />
                 ))}

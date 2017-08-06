@@ -68,39 +68,21 @@ Additional notes:
 
 Also: This is a very early release and I do not consider this production ready, especially as the menu looks horrible right now and has no styling support. This in particular is right at the top of my TODO list!
 
-### Default Theme
+#### properties
 
-Downright ships with default stylings. How you want to include them depends on your setup and webpack config, but it should be just:
+These properties affect all context menus under this provider.
 
-```javascript
-import 'downright/dist/theme.css';
-```
+`className: string (default: null)`
 
-The styles use collision-free naming. There is an alternative build of Downwrite that uses BEM-style naming classes instead. You have to use a different version of both theme.css and the main import:
+If provided, this className will be appended to all menu elements. This can be used to display different menus with completely different styling.
 
-```javascript
-import { ContextMenuProvider } from 'downright/dist/bem/main.js';
+`renderClassNames: bool (default: true)`
 
-import 'downright/dist/theme.css';
-```
+Disable this to not output any classNames at all on menu elements. Will be useful in future updates.
 
-This may be bundled as a separate package in teh future.
+`gatherMenus: bool (default: true)`
 
-With any issues loading the styles, see /examples/webpack.config.js for the loader config to see how this can be used alongside your own CSS modules.
-
-To see what classes are available, you can see the default stylesheet in this file, except that every class must be appended with: `downwrite__contextmenu__`
-
-Default styles are here:
-
-https://github.com/downplay/downright/tree/master/source/styles/menu.css
-
-You can see an example of overriding classes here:
-
-https://github.com/downplay/downright/tree/master/examples/source/examples/Styling.css
-
-It produces a dark red menu like this:
-
-<img src="docs/themedMenu.png" width="320" title="Restyled menu demo">
+This affects the behaviour when context connected components are nested inside each other. By default, all context menus will contribute items towards the generated menu. If this is set to false, then only the immediate container clicked on will render its menus.
 
 ### Menu Decorator
 
@@ -164,8 +146,6 @@ Menu to be rendered when the submenu is open. If a function is provided the menu
 
 #### options
 
-Note: Currently (0.2.0) the options object has no effect. 0.3.0 will bring configuration and style customisation.
-
 Configures this instance of a context menu. Pass in a plain object with any of these properties:
 
 `stopGathering: bool (default: false)`
@@ -173,6 +153,40 @@ Configures this instance of a context menu. Pass in a plain object with any of t
 If true, this will prevent any further menus being collected from higher-up components as the event bubbles up the component hierarchy.
 
 The provider option `gatherMenus` effectively acts as a global switch for this. If `gatherMenus={false}` then menus will never be gathered past the first connected component, and the `stopGathering` setting is ignored.
+
+### Default Theme
+
+Downright ships with default stylings. How you want to include them depends on your setup and webpack config, but it should be just:
+
+```javascript
+import 'downright/dist/theme.css';
+```
+
+The styles use collision-free naming. There is an alternative build of Downwrite that uses BEM-style naming classes instead. You have to use a different version of both theme.css and the main import:
+
+```javascript
+import { ContextMenuProvider } from 'downright/dist/bem/main.js';
+
+import 'downright/dist/theme.css';
+```
+
+This may be bundled as a separate package in the future.
+
+With any issues loading the styles, see /examples/webpack.config.js for the loader config to see how this can be used alongside your own CSS modules.
+
+To see what classes are available, you can see the default stylesheet in this file, except that every class must be appended with: `downwrite__contextmenu__`
+
+Default styles are here:
+
+https://github.com/downplay/downright/tree/master/source/styles/menu.css
+
+You can see an example of overriding classes here:
+
+https://github.com/downplay/downright/tree/master/examples/source/examples/Styling.css
+
+It produces a dark red menu like this:
+
+<img src="docs/themedMenu.png" width="320" title="Restyled menu demo">
 
 ### Nested Menu Components
 
@@ -202,7 +216,8 @@ The dev server is hot module enabled so tweak at will.
 
 ### 0.2.3
 
-- Added alternate BEM build to enable styling by global CSS
+- Added alternate build with BEM classnames to enable styling by global CSS
+- Allow className to be passed into the ContextMenuProvider, this will be appended to *all* rendered elements
 
 ### 0.2.2
 
