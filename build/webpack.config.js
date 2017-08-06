@@ -20,7 +20,7 @@ const webpackConfig = {
         libraryTarget: "umd",
     },
     cache: true,
-    devtool: __DEV__ ? "inline-source-map" : "source-map",
+    devtool: "source-map",
 
     stats: {
         colors: true,
@@ -28,7 +28,9 @@ const webpackConfig = {
     },
 
     plugins: __DEV__ ? [] : [
-        new webpack.optimize.UglifyJsPlugin(),
+        new webpack.optimize.UglifyJsPlugin({
+            sourceMap: true,
+        }),
         new webpack.optimize.AggressiveMergingPlugin(),
     ],
 
@@ -76,12 +78,14 @@ const webpackConfig = {
                     "eslint-loader",
                 ],
             }, {
-                test: /\.(css)$/,
-                loaders: ["css-object-loader", "postcss-loader"],
-                exclude: /node_modules/,
+                test: /\.css$/,
+                loader: "style-loader!css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader",
             },
         ],
     },
 };
+
+console.log(webpackConfig.devtool);
+
 
 export default webpackConfig;

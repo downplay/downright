@@ -2,7 +2,7 @@
 
 Right-click context menu for React, done right.
 
-## Version 0.2.0
+## Latest major release: version 0.2.0
 
 Almost complete rewrite, added reasonable default styles. Rewrite paves the way for making rendering fully customisable in 0.3.0. Submenus now supported but could do with more love.
 
@@ -168,6 +168,7 @@ The dev server is hot module enabled so tweak at will.
 ### 0.2.1
 
 - Implement options to control gathering (bubbling) behaviour
+- Fixed bundling of styles with source
 
 ### 0.2.0
 
