@@ -25,17 +25,25 @@ function makeComponentWrapper(buildMenu) {
                 this.nearestNode.addEventListener("contextmenu", this.onContextMenu);
             }
 
+            componentWillUnmount() {
+                if (this.nearestNode) {
+                    this.nearestNode.removeEventListener("contextmenu", this.onContextMenu);
+                }
+            }
+
+            componentWillUpdate() {
+                this.componentWillUnmount();
+            }
+
+            componentDidUpdate() {
+                this.componentDidMount();
+            }
+
             onContextMenu = () => {
                 // Default will be prevented by the ContextMenuProvider, after the event bubbles.
                 // Other nodes have the opportunity to capture. All we need to do here is
                 // build the menu.
                 this.appendContextMenu();
-            }
-
-            componentWillUnmount() {
-                if (this.nearestNode) {
-                    this.nearestNode.removeEventListener("contextmenu", this.onContextMenu);
-                }
             }
 
             render() {

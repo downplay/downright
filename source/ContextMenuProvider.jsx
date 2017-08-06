@@ -33,11 +33,10 @@ class ContextMenuProvider extends Component {
             // TODO: Horrible pyramid approaching, refactor this
             contextMenuContext: {
                 addMenuItems: (rawItems) => {
+                    console.log("add menu items");
                     const items = this.normalizeMenuItems(rawItems);
                     // Items further down the DOM tree get inserted in front
-                    this.setState({
-                        menu: (this.state.menu.length) ? [...this.state.menu, { type: "separator" }, ...items] : items,
-                    });
+                    this.buildMenu = this.buildMenu.length ? [...this.buildMenu, { type: "separator" }, ...items] : items;
                 },
                 closeMenu: this.closeMenu,
             },
@@ -61,24 +60,41 @@ class ContextMenuProvider extends Component {
     onContextMenuCapture = () => {
         // Clear the menu before the 'capture' phase - it will get filled up when the event travels
         // down and then back up the DOM tree.
-        this.setState({
-            menu: [],
-        });
+        console.log("context menu capture");
+        this.buildMenu = [];
     }
 
     onContextMenu = (event) => {
         // The menu should have already been built up via the context handler while the event was
         // bubbling up. If the menu was empty then it's possible the user right-clicked on something
         // that wasn't context menu connected, therefore we need to close the menu.
-        if (this.state.menu.length === 0) {
+        console.log("oncontextmenu");
+        console.log(this.state.menu.length);
+        event.preventDefault();
+        event.stopPropagation();
+        if (this.buildMenu.length === 0) {
             this.closeMenu();
         } else {
-            event.preventDefault();
-            event.stopPropagation();
             this.setState({
+                menu: this.buildMenu,
                 menuIsOpen: true,
                 menuPosition: { x: event.clientX, y: event.clientY },
             });
+        }
+    }
+
+    onLayerClick = () => {
+        // A click reaching the layer means it was outside the menu,
+        // so close it
+        this.closeMenu();
+    }
+
+    onOuterClick = (event) => {
+        // Stop the event propagating - then it won't close the menu
+        event.stopPropagation();
+        // Also don't try to open another context menu at <all></all>
+        if (event.button === 2) {
+            event.preventDefault();
         }
     }
 
@@ -120,7 +136,11 @@ class ContextMenuProvider extends Component {
 
     renderMenu() {
         return (
-            <OuterContainer position={this.state.menuPosition}>
+            <OuterContainer
+                position={this.state.menuPosition}
+                onClick={this.onOuterClick}
+                onContextMenu={this.onOuterClick}
+            >
                 <ContextMenu
                     onMenuClick={this.closeMenu}
                     menu={this.state.menu}
@@ -134,6 +154,7 @@ class ContextMenuProvider extends Component {
             <div
                 className={styles.layer}
                 ref={(ref) => { this.nearestNode = ref; }}
+                onClick={this.onLayerClick}
             >
                 {this.props.children}
                 {this.state.menuIsOpen ? this.renderMenu() : null}
