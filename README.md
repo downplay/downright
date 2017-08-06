@@ -2,7 +2,7 @@
 
 Right-click context menu for React, done right.
 
-![What it looks like](docs/coverImage.png)
+<img src="docs/coverImage.png" width="359" title="What it looks like">
 
 ## Latest version: 0.2.x
 
