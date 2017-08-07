@@ -6,6 +6,8 @@ import ContextMenuItem from "./ContextMenuItem";
 
 import sanitizeProps from "../tool/sanitizeProps";
 
+import styles from "../styles/menu.css";
+
 class ContextMenu extends Component {
 
     static propTypes = {
@@ -14,8 +16,14 @@ class ContextMenu extends Component {
     }
 
     render() {
-        const { menu, onMenuClick, ...others } = this.props;
+        const { menu, onMenuClick, entered, exiting, ...others } = this.props;
         const sanitized = sanitizeProps(others, "menu");
+        if (entered) {
+            sanitized.className = `${sanitized.className} ${styles.entered}`;
+        }
+        if (exiting) {
+            sanitized.className = `${sanitized.className} ${styles.exiting}`;
+        }
         return (
             <MenuWrapper {...sanitized}>
                 {this.props.menu.map((menuItem, index) => (

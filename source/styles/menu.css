@@ -13,10 +13,12 @@
     flex-direction: column;
     background-color: #eee;
     font-family: Helvetica, Arial, sans-serif;
-    transition: opacity
+    transition: opacity 0.1s linear;
+    opacity: 1;
 }
 
-.menu.enter {
+.menu.entered,
+.menu.exiting {
     opacity: 0;
 }
 

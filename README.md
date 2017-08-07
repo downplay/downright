@@ -1,6 +1,6 @@
 # Downright
 
-Right-click context menu for React, done right.
+Right-click context menu HOC for React.
 
 <img src="docs/coverImage.png" width="359" title="What it looks like">
 
@@ -200,14 +200,14 @@ Examples are found in https://github.com/downplay/downright/tree/master/examples
 
 ```
 npm run build
-npm run dev
+npm run examples
 ```
 
 or
 
 ```
 yarn build
-yarn dev
+yarn examples
 ```
 
 Then navigate to `http://127.0.0.1:3311/`
@@ -215,6 +215,10 @@ Then navigate to `http://127.0.0.1:3311/`
 The dev server is hot module enabled so tweak at will.
 
 ## Version History
+
+### 0.2.4
+
+- Added some support for enter/exit CSS transitions with entering/exiting classNames
 
 ### 0.2.3
 

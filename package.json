@@ -1,7 +1,7 @@
 {
   "name": "downright",
-  "description": "Right-click context menu for React, done right.",
-  "version": "0.2.3",
+  "description": "Right-click context menu HOC for React.",
+  "version": "0.2.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/downplay/downright.git"
@@ -20,13 +20,13 @@
     "docs/themedMenu.png"
   ],
   "scripts": {
-    "build": "npm-run-all --parallel build-core build-bem",
-    "build-core": "cross-env NODE_ENV=production webpack --config ./build/entry.js",
-    "build-bem": "cross-env NODE_ENV=production DOWNRIGHT_BUILD=bem webpack --config ./build/entry.js",
-    "build-dev": "npm-run-all --parallel build-core-dev build-bem-dev",
-    "build-core-dev": "cross-env NODE_ENV=development webpack --config ./build/entry.js --watch",
-    "build-bem-dev": "cross-env NODE_ENV=development DOWNRIGHT_BUILD=bem webpack --config ./build/entry.js --watch",
-    "examples": "node examples/entry.js",
+    "build":          "npm-run-all build-core     build-bem",
+    "build-dev":      "npm-run-all --parallel build-core-dev build-bem-dev",
+    "build-core":     "cross-env NODE_ENV=production  DOWNRIGHT_BUILD=core webpack --config ./build/entry.js",
+    "build-bem":      "cross-env NODE_ENV=production  DOWNRIGHT_BUILD=bem  webpack --config ./build/entry.js",
+    "build-core-dev": "cross-env NODE_ENV=development DOWNRIGHT_BUILD=core webpack --config ./build/entry.js --watch",
+    "build-bem-dev":  "cross-env NODE_ENV=development DOWNRIGHT_BUILD=bem  webpack --config ./build/entry.js --watch",
+    "examples":       "node examples/entry.js",
     "examples-watch": "nodemon examples/entry.js"
   },
   "keywords": [

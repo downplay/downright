@@ -3,8 +3,8 @@ import styles from "../styles/menu.css";
 
 export default ({ children, position, ...others }) => {
     const style = {
-        left: `${position.x}px`,
-        top: `${position.y}px`,
+        left: position.x,
+        top: position.y,
     };
 
     return (

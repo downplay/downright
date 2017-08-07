@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import invariant from "invariant";
 import ContextMenu from "./container/ContextMenu";
@@ -14,11 +15,13 @@ class ContextMenuProvider extends Component {
         children: PropTypes.oneOfType([PropTypes.node]).isRequired,
         gatherMenus: PropTypes.bool,
         renderClassNames: PropTypes.bool,
+        enableTransitions: PropTypes.bool,
     }
 
     static defaultProps = {
         gatherMenus: true,
         renderClassNames: true,
+        enableTransitions: true,
     }
 
     static childContextTypes = {
@@ -34,6 +37,8 @@ class ContextMenuProvider extends Component {
             menuIsOpen: false,
             menu: [],
             menuPosition: null,
+            entered: false,
+            exiting: false,
         };
     }
 
@@ -59,12 +64,30 @@ class ContextMenuProvider extends Component {
         this.nearestNode.addEventListener("contextmenu", this.onContextMenuCapture, true);
         // Catch the event again on the way back up once the context is populated
         this.nearestNode.addEventListener("contextmenu", this.onContextMenu);
+        if (this.outerNode) {
+            this.nearestOuterNode = ReactDOM.findDOMNode(this.outerNode);
+            if (this.nearestOuterNode) {
+                this.nearestOuterNode.addEventListener("contextmenu", this.onOuterContextMenu);
+            }
+        }
+    }
+
+    componentWillUpdate() {
+        this.componentWillUnmount();
+    }
+
+    componentDidUpdate() {
+        this.componentDidMount();
     }
 
     componentWillUnmount() {
         if (this.nearestNode) {
             this.nearestNode.removeEventListener("contextmenu", this.onContextMenu);
             this.nearestNode.removeEventListener("contextmenu", this.onContextMenuCapture, true);
+        }
+        if (this.nearestOuterNode) {
+            this.nearestOuterNode.removeEventListener("contextmenu", this.onOuterContextMenu);
+            this.nearestOuterNode = null;
         }
     }
 
@@ -79,15 +102,28 @@ class ContextMenuProvider extends Component {
         // The menu should have already been built up via the context handler while the event was
         // bubbling up. If the menu was empty then it's possible the user right-clicked on something
         // that wasn't context menu connected, therefore we need to close the menu.
+        // TODO: There is a bug where the contextmenu first again immediately after the window. It's
+        // triggered from the menu itself, rather than a usual target. This was causing the menu
+        // to immediately close itself. Was intermittent, and I don't seem to be able to get a ref
+        // to the outer node early enough to block the event there. Probably can just debounce
+        // the event but it'd be nice to solve this properly.
         event.preventDefault();
         event.stopPropagation();
-        if (this.buildMenu.length === 0) {
-            this.closeMenu();
-        } else {
+        if (this.buildMenu.length > 0) {
             this.setState({
                 menu: this.buildMenu,
                 menuIsOpen: true,
                 menuPosition: { x: event.clientX, y: event.clientY },
+                entered: this.props.enableTransitions,
+                exiting: false,
+            }, () => {
+                if (this.props.enableTransitions) {
+                    setImmediate(() => {
+                        this.setState({
+                            entered: false,
+                        });
+                    });
+                }
             });
         }
     }
@@ -98,12 +134,20 @@ class ContextMenuProvider extends Component {
         this.closeMenu();
     }
 
-    onOuterClick = (event) => {
+    onOuterContextMenu = (event) => {
         // Stop the event propagating - then it won't close the menu
         event.stopPropagation();
-        // Also don't try to open another context menu at <all></all>
-        if (event.button === 2) {
-            event.preventDefault();
+        // Also don't try to open another context menu at all
+        event.preventDefault();
+    }
+
+    onTransitionEnd = () => {
+        // TODO: Check if it's actually the transition we were looking for
+        // Could be any old random transition
+        // Also split this transition management out into a component
+        // since I need it for Submenu too
+        if (this.state.exiting) {
+            this.destroyMenu();
         }
     }
 
@@ -135,30 +179,58 @@ class ContextMenuProvider extends Component {
 
     closeMenu = () => {
         // An ordinary click that wasn't on our menu or a right-click should just close the menu
+        if (!this.state.menuIsOpen || this.state.exiting) return;
+        if (this.props.enableTransitions) {
+            this.setState({
+                exiting: true,
+            }, () => {
+                // Arbitrary timeout to clean up if there wasn't a transition
+                // There isn't actually a TransitionStart event in React. However DOM should
+                // have transitionrun and transitionstart, so could actually listen for those
+                // and kill the menu much quicker if there isn't a transition starting.
+                setTimeout(() => {
+                    if (this.state.exiting && this.state.menuIsOpen) {
+                        this.destroyMenu();
+                    }
+                }, 500);
+            });
+        } else {
+            this.destroyMenu();
+        }
+    }
+
+    destroyMenu = () => {
         if (this.state.menuIsOpen) {
             this.setState({
                 menuIsOpen: false,
                 menu: [],
                 menuPosition: null,
+                exiting: false,
             });
         }
     }
 
+    storeOuterNode = (ref) => {
+        this.outerNode = ref;
+    }
+
     renderMenu() {
         const { gatherMenus, children, ...others } = this.props;
-
         const sanitized = sanitizeProps(others, "container");
 
         return (
             <OuterContainer
+                ref={this.storeOuterNode}
                 position={this.state.menuPosition}
                 onClick={this.onOuterClick}
-                onContextMenu={this.onOuterClick}
+                onTransitionEnd={this.onTransitionEnd}
                 {...sanitized}
             >
                 <ContextMenu
                     onMenuClick={this.closeMenu}
                     menu={this.state.menu}
+                    entered={this.state.entered}
+                    exiting={this.state.exiting}
                     {...others}
                 />
             </OuterContainer>
