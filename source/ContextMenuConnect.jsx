@@ -9,7 +9,7 @@ function makeComponentWrapper(buildMenu, {
     stopGathering = false,
 } = {}) {
     return (WrappedComponent) => {
-        const getDisplayName = name => `ConnectAdvanced(${name})`;
+        const getDisplayName = name => `ContextMenuConnect(${name})`;
         const displayName = getDisplayName(WrappedComponent.displayName);
 
         class ContextMenuConnect extends Component {
@@ -65,7 +65,6 @@ function makeComponentWrapper(buildMenu, {
                     <WrappedComponent
                         ref={(el) => { this.innerNode = el; }}
                         {...this.props}
-                        {...this.state}
                     />
                 );
             }
