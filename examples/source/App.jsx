@@ -7,6 +7,7 @@ import Index from "./Index";
 import Simple from "./examples/Simple";
 import Submenus from "./examples/Submenus";
 import Styling from "./examples/Styling";
+import Nested from "./examples/Nested";
 
 import "./styles/main.css";
 
@@ -17,6 +18,7 @@ export default () =>
             <Route path="/simple" component={Simple} />
             <Route path="/submenus" component={Submenus} />
             <Route path="/styling" component={Styling} />
+            <Route path="/nested" component={Nested} />
         </Switch>
     </HashRouter>;
 
