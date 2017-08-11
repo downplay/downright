@@ -10,5 +10,5 @@ import Heading from "../styles/Heading";
     }
 )
 export default class InnerMenuBlockGather extends Component {
-    render = () => <PaddedBox blue>Nested, appending</PaddedBox>;
+    render = () => <PaddedBox blue>Nested, blocking</PaddedBox>;
 }
