@@ -216,6 +216,10 @@ The dev server is hot module enabled so tweak at will.
 
 ## Version History
 
+### 0.2.5
+
+- Fix page coordinates where the menu appears
+
 ### 0.2.4
 
 - Added some support for enter/exit CSS transitions with entering/exiting classNames

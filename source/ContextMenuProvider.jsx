@@ -127,12 +127,13 @@ class ContextMenuProvider extends Component {
         // the event but it'd be nice to solve this properly.
         event.preventDefault();
         event.stopPropagation();
+        const position = { x: event.pageX, y: event.pageY };
         if (this.buildMenu.length > 0) {
             this.setState(
                 {
                     menu: this.buildMenu,
                     menuIsOpen: true,
-                    menuPosition: { x: event.clientX, y: event.clientY },
+                    menuPosition: position,
                     entered: this.props.enableTransitions,
                     exiting: false
                 },
