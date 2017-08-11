@@ -8,8 +8,6 @@ import LinkElement from "../display/LinkElement";
 import SeparatorElement from "../display/SeparatorElement";
 import ItemWrapper from "../display/ItemWrapper";
 
-import styles from "../styles/menu.css";
-
 import sanitizeProps from "../tool/sanitizeProps";
 
 const emptySubmenu = [];

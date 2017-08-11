@@ -223,6 +223,12 @@ The dev server is hot module enabled so tweak at will.
 
 ## Version History
 
+### 0.3.0
+
+- Brand new theming system
+- Reworked build
+
+
 ### 0.2.5
 
 - Fixed the menu appearing at the wrong page coordinates

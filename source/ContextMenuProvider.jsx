@@ -5,13 +5,25 @@ import invariant from "invariant";
 import ContextMenu from "./container/ContextMenu";
 import OuterContainer from "./display/OuterContainer";
 
-import styles from "./styles/menu.css";
-
 import sanitizeProps from "./tool/sanitizeProps";
+import themeHelper from './tool/themeHelper';
+
+// TODO: At least setup default theme for BEM stylesheet?
+
+const defaultTheme = {
+    elements: {},
+    classNames: {},
+    styles: {}
+};
 
 class ContextMenuProvider extends Component {
     static propTypes = {
         children: PropTypes.oneOfType([PropTypes.node]).isRequired,
+        theme: PropTypes.shape({
+            elements: PropTypes.objectOf(PropTypes.element),
+            classNames: PropTypes.objectOf(PropTypes.string),
+            styles: PropTypes.objectOf(PropTypes.object),
+        }),
         gatherMenus: PropTypes.bool,
         reverseOrder: PropTypes.bool,
         menuSeparator: PropTypes.oneOfType(
@@ -20,10 +32,11 @@ class ContextMenuProvider extends Component {
             PropTypes.object
         ),
         renderClassNames: PropTypes.bool,
-        enableTransitions: PropTypes.bool
+        enableTransitions: PropTypes.bool,
     };
 
     static defaultProps = {
+        theme: defaultTheme,
         gatherMenus: true,
         reverseOrder: false,
         menuSeparator: "-",
@@ -297,33 +310,39 @@ class ContextMenuProvider extends Component {
             reverseOrder,
             menuSeparator,
             children,
+            theme,
             ...others
         } = this.props;
-        const sanitized = sanitizeProps(others, "container");
+
+        const Outer = themeHelper(OuterContainer, this.props.theme, "container")
+        const style = {
+            left: this.state.menuPosition.x,
+            top: this.state.menuPosition.y
+        };
 
         return (
-            <OuterContainer
+            <Outer
                 ref={this.storeOuterNode}
-                position={this.state.menuPosition}
                 onClick={this.onOuterClick}
                 onTransitionEnd={this.onTransitionEnd}
-                {...sanitized}
+                style={style}
             >
                 <ContextMenu
                     onMenuClick={this.closeMenu}
                     menu={this.state.menu}
                     entered={this.state.entered}
                     exiting={this.state.exiting}
+                    theme={theme}
                     {...others}
                 />
-            </OuterContainer>
+            </Outer>
         );
     }
 
     render() {
+        const Layer = themeHelper(this.props.theme, "layer");
         return (
-            <div
-                className={styles.layer}
+            <Layer
                 ref={ref => {
                     this.nearestNode = ref;
                 }}
@@ -331,7 +350,7 @@ class ContextMenuProvider extends Component {
             >
                 {this.props.children}
                 {this.state.menuIsOpen ? this.renderMenu() : null}
-            </div>
+            </Layer>
         );
     }
 }

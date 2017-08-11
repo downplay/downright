@@ -4,9 +4,7 @@ import PropTypes from "prop-types";
 import MenuWrapper from "../display/MenuWrapper";
 import ContextMenuItem from "./ContextMenuItem";
 
-import sanitizeProps from "../tool/sanitizeProps";
-
-import styles from "../styles/menu.css";
+import themeHelper from '../tool/themeHelper';
 
 class ContextMenu extends Component {
     static propTypes = {
