@@ -90,7 +90,7 @@ Will reverse the order in which menus are gathered. So instead of the innermost 
 
 `menuSeparator: string|node|object (default: "-")`
 
-The item to use as a separator to "glue" together different menus gathered during a context menu event. If only one menu is triggered then no separator will be used. The separator follows the same shorthand for menuItems added in the buildMenu callback (described below). The default "-" ultimately generates a single vanilla <hr> tag.
+The item to use as a separator to "glue" together different menus gathered during a context menu event. If only one menu is triggered then no separator will be used. The separator follows the same shorthand for menuItems added in the buildMenu callback (described below). The default `"-"` ultimately generates a single vanilla `<hr>` tag.
 
 ### Menu Decorator
 
@@ -227,9 +227,9 @@ The dev server is hot module enabled so tweak at will.
 
 - Fixed the menu appearing at the wrong page coordinates
 - Added an example for nesting menu connectors
-- Added option to modify nesting behaviour: reverseOrder (default: false)
-- Added option to customise separator used during menu building: menuSeparator (default: "-")
-- Allow React elements to be used in menu build shorthands, e.g. @contextMenu(()=>[<h2>Hi, menu</h2>])
+- Added option to modify nesting behaviour: reverseOrder (default: `false`)
+- Added option to customise separator used during menu building: menuSeparator (default: `"-"`)
+- Allow React elements to be used in menu build shorthands, e.g. `@contextMenu(()=>[<h2>Hi, menu</h2>])`
 
 ### 0.2.4
 
