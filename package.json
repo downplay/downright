@@ -31,7 +31,10 @@
         "examples-watch": "nodemon examples/entry.js"
     },
     "lint-staged": {
-        "*.{js,jsx}": ["eslint", "git add"]
+        "*.{js,jsx}": [
+            "eslint",
+            "git add"
+        ]
     },
     "keywords": [
         "react",

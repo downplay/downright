@@ -5,8 +5,8 @@ import invariant from "invariant";
 import ContextMenu from "./container/ContextMenu";
 import OuterContainer from "./display/OuterContainer";
 
-import sanitizeProps from "./tool/sanitizeProps";
-import themeHelper from './tool/themeHelper';
+import themeHelper from "./tool/themeHelper";
+import themeShape from "./tool/themeShape";
 
 // TODO: At least setup default theme for BEM stylesheet?
 
@@ -19,11 +19,7 @@ const defaultTheme = {
 class ContextMenuProvider extends Component {
     static propTypes = {
         children: PropTypes.oneOfType([PropTypes.node]).isRequired,
-        theme: PropTypes.shape({
-            elements: PropTypes.objectOf(PropTypes.element),
-            classNames: PropTypes.objectOf(PropTypes.string),
-            styles: PropTypes.objectOf(PropTypes.object),
-        }),
+        theme: themeShape,
         gatherMenus: PropTypes.bool,
         reverseOrder: PropTypes.bool,
         menuSeparator: PropTypes.oneOfType(
@@ -32,7 +28,7 @@ class ContextMenuProvider extends Component {
             PropTypes.object
         ),
         renderClassNames: PropTypes.bool,
-        enableTransitions: PropTypes.bool,
+        enableTransitions: PropTypes.bool
     };
 
     static defaultProps = {
@@ -314,7 +310,11 @@ class ContextMenuProvider extends Component {
             ...others
         } = this.props;
 
-        const Outer = themeHelper(OuterContainer, this.props.theme, "container")
+        const Outer = themeHelper(
+            OuterContainer,
+            this.props.theme,
+            "container"
+        );
         const style = {
             left: this.state.menuPosition.x,
             top: this.state.menuPosition.y

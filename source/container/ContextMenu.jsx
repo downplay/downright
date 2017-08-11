@@ -4,25 +4,33 @@ import PropTypes from "prop-types";
 import MenuWrapper from "../display/MenuWrapper";
 import ContextMenuItem from "./ContextMenuItem";
 
-import themeHelper from '../tool/themeHelper';
+import themeHelper from "../tool/themeHelper";
+import themeShape from "../tool/themeShape";
 
 class ContextMenu extends Component {
     static propTypes = {
         menu: PropTypes.arrayOf(PropTypes.object).isRequired,
-        onMenuClick: PropTypes.func.isRequired
+        onMenuClick: PropTypes.func.isRequired,
+        theme: themeShape.isRequired
     };
 
     render() {
-        const { menu, onMenuClick, entered, exiting, ...others } = this.props;
-        const sanitized = sanitizeProps(others, "menu");
-        if (entered) {
-            sanitized.className = `${sanitized.className} ${styles.entered}`;
-        }
-        if (exiting) {
-            sanitized.className = `${sanitized.className} ${styles.exiting}`;
-        }
+        const {
+            menu,
+            onMenuClick,
+            entered,
+            exiting,
+            theme,
+            className,
+            ...others
+        } = this.props;
+        const Menu = themeHelper(MenuWrapper, theme, [
+            "menu",
+            entered ? "entered" : "",
+            exiting ? "exiting" : ""
+        ]);
         return (
-            <MenuWrapper {...sanitized}>
+            <Menu className={className}>
                 {this.props.menu.map((menuItem, index) =>
                     // TODO: Not really anything better to use for a key,
                     // but could allow key as an optional prop, not a lot of
@@ -32,11 +40,13 @@ class ContextMenu extends Component {
                         key={index}
                         onMenuClick={onMenuClick}
                         item={menuItem}
+                        theme={theme}
+                        className={className}
                         {...others}
                         {...menuItem}
                     />
                 )}
-            </MenuWrapper>
+            </Menu>
         );
     }
 }

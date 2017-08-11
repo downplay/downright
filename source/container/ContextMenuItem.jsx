@@ -9,6 +9,8 @@ import SeparatorElement from "../display/SeparatorElement";
 import ItemWrapper from "../display/ItemWrapper";
 
 import sanitizeProps from "../tool/sanitizeProps";
+import themeHelper from "../tool/themeHelper";
+import themeShape from "../tool/themeShape";
 
 const emptySubmenu = [];
 
@@ -24,7 +26,8 @@ class ContextMenuItem extends Component {
         content: PropTypes.node,
         onClick: PropTypes.func,
         onMenuClick: PropTypes.func,
-        menu: PropTypes.oneOfType([PropTypes.array, PropTypes.func])
+        menu: PropTypes.oneOfType([PropTypes.array, PropTypes.func]),
+        theme: themeShape.isRequired
     };
 
     static defaultProps = {
@@ -33,6 +36,13 @@ class ContextMenuItem extends Component {
         onClick: null,
         onMenuClick: null,
         menu: []
+    };
+
+    static defaultElements = {
+        label: LabelElement,
+        separator: SeparatorElement,
+        link: LinkElement,
+        button: ButtonElement
     };
 
     constructor(props) {
@@ -96,25 +106,34 @@ class ContextMenuItem extends Component {
             menu,
             item,
             className,
+            theme,
             ...rest
         } = this.props;
 
-        const others = sanitizeProps(rest, type);
-        if (this.props.renderClassNames) {
-            others.className = `${others.className || ""} ${this.state.selected
-                ? styles.selected
-                : ""}`;
+        const others = sanitizeProps(rest);
+        const names = [type];
+        if (this.state.selected) {
+            names.push("selected");
+        }
+
+        let Element;
+        if (ContextMenuItem.defaultElements[type]) {
+            Element = themeHelper(
+                ContextMenuItem.defaultElements[type],
+                theme,
+                names
+            );
         }
 
         switch (this.props.type) {
             case "label":
                 return (
-                    <LabelElement {...others}>
+                    <Element {...others}>
                         {content}
-                    </LabelElement>
+                    </Element>
                 );
             case "separator":
-                return <SeparatorElement {...others} />;
+                return <Element {...others} />;
             case "submenu":
                 // A bit of a special case
                 return (
@@ -124,6 +143,7 @@ class ContextMenuItem extends Component {
                         onMenuClick={onMenuClick}
                         onMouseEnter={this.onSubmenuMouseEnter}
                         onMouseLeave={this.onSubmenuMouseLeave}
+                        theme={theme}
                         visible={
                             this.state.submenuVisible || this.state.selected
                         }
@@ -133,33 +153,27 @@ class ContextMenuItem extends Component {
                     </ContextSubmenu>
                 );
             case "link":
-                return (
-                    <LinkElement {...others} onClick={this.onButtonClick}>
-                        {this.props.content}
-                    </LinkElement>
-                );
             case "button":
             default:
                 return (
-                    <ButtonElement {...others} onClick={this.onButtonClick}>
+                    <Element {...others} onClick={this.onButtonClick}>
                         {content}
-                    </ButtonElement>
+                    </Element>
                 );
         }
     }
 
     render() {
-        const others = sanitizeProps(this.props, "item");
-        const className = this.props.renderClassNames
-            ? `${others.className} ${styles[this.props.type]} ${this.state
-                  .selected
-                  ? styles.selected
-                  : ""}`
-            : "";
+        const others = sanitizeProps(this.props);
+        const names = ["item", this.props.type];
+        if (this.state.selected) {
+            names.push("selected");
+        }
+        const Item = themeHelper(ItemWrapper, this.props.theme, names);
         return (
-            <ItemWrapper className={className}>
+            <Item {...others}>
                 {this.renderInnerElement()}
-            </ItemWrapper>
+            </Item>
         );
     }
 }

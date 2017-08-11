@@ -5,33 +5,36 @@ import SubmenuContainer from "../display/SubmenuContainer";
 import ContextMenu from "./ContextMenu";
 
 import sanitizeProps from "../tool/sanitizeProps";
+import themeHelper from "../tool/themeHelper";
 
 class ContextSubmenu extends Component {
-    // eslint-disable-next-line class-methods-use-this
-    getContainerPosition() {
-        return { x: 0, y: 0 };
-    }
-
+    // TODO: Proptypes, themeshape
     render() {
-        const { menu, onMenuClick, visible, children, ...others } = this.props;
-        const sanitized = sanitizeProps(others, "submenu");
-        const sanitizedContainer = sanitizeProps(others, "container");
+        const {
+            menu,
+            onMenuClick,
+            visible,
+            children,
+            theme,
+            ...others
+        } = this.props;
+        const sanitized = sanitizeProps(others);
+        const Submenu = themeHelper(SubmenuElement, theme, "submenu");
+        const Container = themeHelper(SubmenuContainer, theme, "container");
+        const style = { top: 0, left: 0 };
         return (
-            <SubmenuElement {...sanitized}>
+            <Submenu {...sanitized}>
                 {children}
                 {visible
-                    ? <SubmenuContainer
-                          {...sanitizedContainer}
-                          position={this.getContainerPosition()}
-                      >
+                    ? <Container {...sanitized} style={style}>
                           <ContextMenu
                               menu={menu}
                               onMenuClick={onMenuClick}
                               {...others}
                           />
-                      </SubmenuContainer>
+                      </Container>
                     : null}
-            </SubmenuElement>
+            </Submenu>
         );
     }
 }
