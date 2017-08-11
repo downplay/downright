@@ -19,7 +19,7 @@ import { contextMenu } from 'downright';
 @contextMenu(props => {
     const {t} = props;
     return [
-        ['Context menu'],                                             // A label or heading
+        'Context menu',                                             // A label or heading
         ['Badger', ()=>props.onClickedBadger()],                      // Calling a handler in the parent
         ['Click me', ()=>props.reduxInjectedAction()],                // A button dispatching an action
         ['Fork me', 'https://https://github.com/downplay/downright']  // Renders a <Link/>
@@ -84,14 +84,20 @@ Disable this to not output any classNames at all on menu elements. Will be usefu
 
 This affects the behaviour when context connected components are nested inside each other. By default, all context menus will contribute items towards the generated menu. If this is set to false, then only the immediate container clicked on will render its menus.
 
+`reverseOrder: bool (default: false)`
+
+Will reverse the order in which menus are gathered. So instead of the innermost menu items being at top of the menu, *above* menus generated further up in the tree, they will be appended instead.
+
+`menuSeparator: string|node|object (default: "-")`
+
+The item to use as a separator to "glue" together different menus gathered during a context menu event. If only one menu is triggered then no separator will be used. The separator follows the same shorthand for menuItems added in the buildMenu callback (described below). The default "-" ultimately generates a single vanilla <hr> tag.
+
 ### Menu Decorator
 
 The mechanism provided to actually make an area right-clickable is a HOC (Higher Order Component) to wrap another React component. This component must conform to:
 
 1) Rendering at least one DOM node, which click events will be attached to
 2) Being a class, not a stateless function.
-
-You must use a wrapped component to 
 
 The HOC can be used as a class decorator, or just wrap programmatically. Its setup is a single callback, which will be invoked when the user triggers a context menu. (And an optional object, which is not implemented yet.)
 
@@ -118,9 +124,10 @@ DownRight is designed for the simplest cast to work nicely with Redux, but it's 
 
 Your configuration callback must return an array of menu items (or null or undefined if no menu needs opening).
 
-Menu items themselves can be defined in three forms:
+Menu items themselves can be defined in various forms:
 
- - A vanilla string, this will produce a menu label
+ - A vanilla string, this will produce a menu label; can also be any React element
+ - The special string "-" will produce a separator instead
  - An array of two elements, the first is a string label, the 2nd is either a link destination or callback onClick function
  - A plain JavaScript object with the following properties:
 
