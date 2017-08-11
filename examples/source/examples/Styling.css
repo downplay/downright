@@ -20,7 +20,7 @@
 }
 :global .downright__contextmenu__item:hover,
 :global .downright__contextmenu__item--selected {
-    background: linear-gradient(to bottom, #733 0%,#933 100%);
+    background: linear-gradient(to bottom, #733 0%, #933 100%);
 }
 
 :global .downright__contextmenu__item.downright__contextmenu__label,
@@ -55,7 +55,7 @@
 }
 :global .green.downright__contextmenu__item:hover,
 :global .green.downright__contextmenu__item--selected {
-    background: linear-gradient(to bottom, #373 0%,#393 100%);
+    background: linear-gradient(to bottom, #373 0%, #393 100%);
 }
 
 :global .green.downright__contextmenu__item.downright__contextmenu__label,

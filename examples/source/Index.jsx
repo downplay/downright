@@ -15,8 +15,7 @@ const Header = styled.h1`
     margin: 6rem;
 `;
 
-const Menu = styled.ul`
-`;
+const Menu = styled.ul``;
 
 const Item = styled(Link)`
     font-size: 2rem;
@@ -26,7 +25,7 @@ const Item = styled(Link)`
 
 // TODO: Why am I rendering a menu by hand when I have a menu rendering system?
 
-export default () => (
+export default () =>
     <Page>
         <Header>Downright Fantastic Examples</Header>
         <Menu>
@@ -34,5 +33,4 @@ export default () => (
             <Item to="/submenus">Submenus and Callbacks</Item>
             <Item to="/styling">Styles and Themeing</Item>
         </Menu>
-    </Page>
-);
+    </Page>;

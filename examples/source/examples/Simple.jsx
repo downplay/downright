@@ -4,17 +4,16 @@ import SimpleComponentWithMenu from "../components/SimpleComponentWithMenu";
 import FullWidthFullHeight from "../layout/FullWidthFullHeight";
 
 export default class Simple extends Component {
-
     constructor(props) {
         super(props);
         this.state = { itemChosen: null };
     }
 
-    onClickItem = (item) => {
+    onClickItem = item => {
         this.setState({ itemChosen: item });
-    }
+    };
 
-    render = () => (
+    render = () =>
         <ContextMenuProvider>
             <FullWidthFullHeight>
                 <SimpleComponentWithMenu
@@ -22,7 +21,5 @@ export default class Simple extends Component {
                     item={this.state.itemChosen}
                 />
             </FullWidthFullHeight>
-        </ContextMenuProvider>
-    )
-
+        </ContextMenuProvider>;
 }

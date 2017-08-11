@@ -10,7 +10,9 @@ const render = () => {
         // eslint-disable-next-line react/jsx-filename-extension
         <AppContainer>
             <App />
-        </AppContainer>, rootNode);
+        </AppContainer>,
+        rootNode
+    );
 };
 
 render();

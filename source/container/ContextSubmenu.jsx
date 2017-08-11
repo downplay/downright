@@ -7,7 +7,6 @@ import ContextMenu from "./ContextMenu";
 import sanitizeProps from "../tool/sanitizeProps";
 
 class ContextSubmenu extends Component {
-
     // eslint-disable-next-line class-methods-use-this
     getContainerPosition() {
         return { x: 0, y: 0 };
@@ -20,18 +19,21 @@ class ContextSubmenu extends Component {
         return (
             <SubmenuElement {...sanitized}>
                 {children}
-                {visible ? (
-                    <SubmenuContainer
-                        {...sanitizedContainer}
-                        position={this.getContainerPosition()}
-                    >
-                        <ContextMenu menu={menu} onMenuClick={onMenuClick} {...others} />
-                    </SubmenuContainer>
-                ) : null}
+                {visible
+                    ? <SubmenuContainer
+                          {...sanitizedContainer}
+                          position={this.getContainerPosition()}
+                      >
+                          <ContextMenu
+                              menu={menu}
+                              onMenuClick={onMenuClick}
+                              {...others}
+                          />
+                      </SubmenuContainer>
+                    : null}
             </SubmenuElement>
         );
     }
-
 }
 
 export default ContextSubmenu;

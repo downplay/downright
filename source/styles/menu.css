@@ -5,7 +5,7 @@
 
 .container {
     position: absolute;
-    box-shadow:3px 5px 10px 3px rgba(32,32,32,0.2);
+    box-shadow: 3px 5px 10px 3px rgba(32, 32, 32, 0.2);
 }
 
 .menu {
@@ -23,16 +23,15 @@
 }
 
 .item {
-    background: linear-gradient(to bottom, #ffffff 0%,#e5e5e5 100%);
+    background: linear-gradient(to bottom, #ffffff 0%, #e5e5e5 100%);
     list-style-type: none;
     display: flex;
     position: relative;
 }
 
 .item:hover,
-.item--selected
- {
-    background: linear-gradient(to bottom,#cccccc 0%, #eeeeee 100%);
+.item--selected {
+    background: linear-gradient(to bottom, #cccccc 0%, #eeeeee 100%);
 }
 
 .item.label,

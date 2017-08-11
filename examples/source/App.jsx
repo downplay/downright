@@ -10,7 +10,7 @@ import Styling from "./examples/Styling";
 
 import "./styles/main.css";
 
-export default () => (
+export default () =>
     <HashRouter>
         <Switch>
             <Route exact path="/" component={Index} />
@@ -18,8 +18,7 @@ export default () => (
             <Route path="/submenus" component={Submenus} />
             <Route path="/styling" component={Styling} />
         </Switch>
-    </HashRouter>
-);
+    </HashRouter>;
 
 /*
     Examples TODO:

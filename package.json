@@ -30,7 +30,6 @@
         "examples": "node examples/entry.js",
         "examples-watch": "nodemon examples/entry.js"
     },
-    "prettier": {},
     "lint-staged": {
         "*.{js,jsx}": ["eslint", "git add"]
     },
@@ -94,7 +93,6 @@
         "postcss-custom-properties": "^6.1.0",
         "postcss-import": "^10.0.0",
         "postcss-loader": "^2.0.6",
-        "prettier": "^1.5.3",
         "react": "^15.6.1",
         "react-dom": "^15.6.1",
         "react-hot-loader": "^3.0.0-beta.7",

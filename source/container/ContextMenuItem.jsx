@@ -15,28 +15,33 @@ import sanitizeProps from "../tool/sanitizeProps";
 const emptySubmenu = [];
 
 class ContextMenuItem extends Component {
-
     static propTypes = {
-        type: PropTypes.oneOf(["label", "button", "link", "separator", "submenu"]),
+        type: PropTypes.oneOf([
+            "label",
+            "button",
+            "link",
+            "separator",
+            "submenu"
+        ]),
         content: PropTypes.node,
         onClick: PropTypes.func,
         onMenuClick: PropTypes.func,
-        menu: PropTypes.oneOfType([PropTypes.array, PropTypes.func]),
-    }
+        menu: PropTypes.oneOfType([PropTypes.array, PropTypes.func])
+    };
 
     static defaultProps = {
         type: "label",
         content: null,
         onClick: null,
         onMenuClick: null,
-        menu: [],
-    }
+        menu: []
+    };
 
     constructor(props) {
         super(props);
         this.state = {
             selected: false,
-            submenuVisible: false,
+            submenuVisible: false
         };
     }
 
@@ -44,13 +49,13 @@ class ContextMenuItem extends Component {
 
     onSubmenuMouseEnter = () => {
         this.setSubmenuVisible(true);
-    }
+    };
 
     onSubmenuMouseLeave = () => {
         this.setSubmenuVisible(false);
-    }
+    };
 
-    onButtonClick = (event) => {
+    onButtonClick = event => {
         // For links there is no button handler (although consumers
         // can still provide one, e.g. to preventDefault or whatever)
         if (this.props.onClick) {
@@ -59,75 +64,99 @@ class ContextMenuItem extends Component {
         }
         // Trigger provider to close the menu
         this.props.onMenuClick(event);
-    }
+    };
 
     onSubmenuClick = () => {
         this.setState({
-            selected: true,
+            selected: true
         });
-    }
+    };
 
-    setSubmenuVisible = (visible) => {
+    setSubmenuVisible = visible => {
         let menu = this.props.menu;
-        if (visible && !(this.props.menu.constructor === Array) && (typeof this.props.menu === "function")) {
+        if (
+            visible &&
+            !(this.props.menu.constructor === Array) &&
+            typeof this.props.menu === "function"
+        ) {
             menu = this.props.menu();
         }
         // TODO: The submenu state is potentially stale. (Also true with static menus.) Actually
         // need to listen for props changes and retrigger a menu build.
         this.setState({
             submenu: visible ? menu : emptySubmenu,
-            submenuVisible: visible,
+            submenuVisible: visible
         });
-    }
+    };
 
     renderInnerElement() {
-        const { type, content, onClick, onMenuClick, menu, item, className,
-            ...rest } = this.props;
+        const {
+            type,
+            content,
+            onClick,
+            onMenuClick,
+            menu,
+            item,
+            className,
+            ...rest
+        } = this.props;
 
         const others = sanitizeProps(rest, type);
         if (this.props.renderClassNames) {
-            others.className = `${others.className || ""} ${this.state.selected ? styles.selected : ""}`;
+            others.className = `${others.className || ""} ${this.state.selected
+                ? styles.selected
+                : ""}`;
         }
 
         switch (this.props.type) {
-        case "label":
-            return <LabelElement {...others}>{content}</LabelElement>;
-        case "separator":
-            return <SeparatorElement {...others} />;
-        case "submenu":
-            // A bit of a special case
-            return (
-                <ContextSubmenu
-                    menu={this.state.submenu}
-                    onClick={this.onSubmenuClick}
-                    onMenuClick={onMenuClick}
-                    onMouseEnter={this.onSubmenuMouseEnter}
-                    onMouseLeave={this.onSubmenuMouseLeave}
-                    visible={this.state.submenuVisible || this.state.selected}
-                    {...rest}
-                >
-                    {content}
-                </ContextSubmenu>
-            );
-        case "link":
-            return (
-                <LinkElement {...others} onClick={this.onButtonClick}>
-                    {this.props.content}
-                </LinkElement>);
-        case "button":
-        default:
-            return (
-                <ButtonElement {...others} onClick={this.onButtonClick}>
-                    {content}
-                </ButtonElement>
-            );
+            case "label":
+                return (
+                    <LabelElement {...others}>
+                        {content}
+                    </LabelElement>
+                );
+            case "separator":
+                return <SeparatorElement {...others} />;
+            case "submenu":
+                // A bit of a special case
+                return (
+                    <ContextSubmenu
+                        menu={this.state.submenu}
+                        onClick={this.onSubmenuClick}
+                        onMenuClick={onMenuClick}
+                        onMouseEnter={this.onSubmenuMouseEnter}
+                        onMouseLeave={this.onSubmenuMouseLeave}
+                        visible={
+                            this.state.submenuVisible || this.state.selected
+                        }
+                        {...rest}
+                    >
+                        {content}
+                    </ContextSubmenu>
+                );
+            case "link":
+                return (
+                    <LinkElement {...others} onClick={this.onButtonClick}>
+                        {this.props.content}
+                    </LinkElement>
+                );
+            case "button":
+            default:
+                return (
+                    <ButtonElement {...others} onClick={this.onButtonClick}>
+                        {content}
+                    </ButtonElement>
+                );
         }
     }
 
     render() {
         const others = sanitizeProps(this.props, "item");
-        const className = this.props.renderClassNames ?
-            `${others.className} ${styles[this.props.type]} ${this.state.selected ? styles.selected : ""}`
+        const className = this.props.renderClassNames
+            ? `${others.className} ${styles[this.props.type]} ${this.state
+                  .selected
+                  ? styles.selected
+                  : ""}`
             : "";
         return (
             <ItemWrapper className={className}>
@@ -135,7 +164,6 @@ class ContextMenuItem extends Component {
             </ItemWrapper>
         );
     }
-
 }
 
 export default ContextMenuItem;

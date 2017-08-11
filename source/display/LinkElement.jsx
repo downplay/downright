@@ -6,4 +6,6 @@ import { Link } from "react-router-dom";
 // Or pass them all in from the top?
 
 export default ({ children, ...others }) =>
-    <Link {...others}>{children}</Link>;
+    <Link {...others}>
+        {children}
+    </Link>;

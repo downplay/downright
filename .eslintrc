@@ -14,7 +14,7 @@
         "react/prefer-stateless-function": 0,
         "react/no-find-dom-node": 0,
         "indent": 0,
-        "react/jsx-indent": [2, 4],
+        "react/jsx-indent": 0,
         "react/jsx-indent-props": 0,
         "react/prop-types": 0,
         "quotes": [2, "double"],

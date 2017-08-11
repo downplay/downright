@@ -3,7 +3,7 @@ import styled from "styled-components";
 export default styled.div`
     width: 30rem;
     height: 30rem;
-    background-color: ${(props) => {
+    background-color: ${props => {
         if (props.color) {
             return props.color;
         } else if (props.blue) {

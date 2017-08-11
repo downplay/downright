@@ -28,17 +28,16 @@ const Subtitle = styled.h1`
 `;
 
 export default class Styling extends Component {
-
     constructor(props) {
         super(props);
         this.state = { itemChosen: null };
     }
 
-    onClickItem = (item) => {
+    onClickItem = item => {
         this.setState({ itemChosen: item });
-    }
+    };
 
-    render = () => (
+    render = () =>
         <div>
             <FullWidthFullHeight>
                 <ContextMenuProvider>
@@ -59,8 +58,8 @@ export default class Styling extends Component {
                     </SimpleComponentWithMenu>
                 </ContextMenuProvider>
             </FullWidthFullHeight>
-            <Subtitle>Two menus operating independently with different providers</Subtitle>
-        </div>
-    )
-
+            <Subtitle>
+                Two menus operating independently with different providers
+            </Subtitle>
+        </div>;
 }

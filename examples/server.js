@@ -13,20 +13,24 @@ app.get("/", (req, res) => {
 
 // Webpack dev server
 const compiler = webpack(webpackConfig);
-app.use(require("webpack-dev-middleware")(compiler, {
-    publicPath: "/scripts/",
-    contentBase: path.resolve(__dirname, "./public"),
-    hot: true,
-    quiet: false,
-    noInfo: false,
-    lazy: false,
-    stats: "normal",
-}));
+app.use(
+    require("webpack-dev-middleware")(compiler, {
+        publicPath: "/scripts/",
+        contentBase: path.resolve(__dirname, "./public"),
+        hot: true,
+        quiet: false,
+        noInfo: false,
+        lazy: false,
+        stats: "normal"
+    })
+);
 
-app.use(require("webpack-hot-middleware")(compiler, {
-    path: "/__what",
-    dynamicPublicPath: false,
-}));
+app.use(
+    require("webpack-hot-middleware")(compiler, {
+        path: "/__what",
+        dynamicPublicPath: false
+    })
+);
 
 // Any public assets
 app.use(express.static("public"));

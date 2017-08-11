@@ -4,7 +4,9 @@ import nodeExternals from "webpack-node-externals";
 import ExtractTextPlugin from "extract-text-webpack-plugin";
 
 const downrightSource = path.resolve(__dirname, "../source/index.js");
+// eslint-disable-next-line no-underscore-dangle
 const __DEV__ = process.env.NODE_ENV === "development";
+// eslint-disable-next-line no-underscore-dangle
 const __BEM__ = process.env.DOWNRIGHT_BUILD === "bem";
 
 // Random hashed CSS classes
@@ -18,33 +20,33 @@ const webpackConfig = {
     target: "node",
     externals: [nodeExternals()],
     entry: {
-        main: [
-            downrightSource,
-        ],
+        main: [downrightSource]
     },
     output: {
-        filename: (__BEM__ ? "bem/" : "") + "main.js",
+        filename: `${__BEM__ ? "bem/" : ""}main.js`,
         path: path.resolve(__dirname, "../dist"),
-        libraryTarget: "umd",
+        libraryTarget: "umd"
     },
     cache: true,
     devtool: "source-map",
 
     stats: {
         colors: true,
-        reasons: true,
+        reasons: true
     },
 
-    plugins: __DEV__ ? [] : [
-        new ExtractTextPlugin((__BEM__ ? "bem/" : "") + "theme.css"),
-        new webpack.optimize.UglifyJsPlugin({
-            sourceMap: true,
-        }),
-        new webpack.optimize.AggressiveMergingPlugin(),
-    ],
+    plugins: __DEV__
+        ? []
+        : [
+              new ExtractTextPlugin(`${__BEM__ ? "bem/" : ""}theme.css`),
+              new webpack.optimize.UglifyJsPlugin({
+                  sourceMap: true
+              }),
+              new webpack.optimize.AggressiveMergingPlugin()
+          ],
 
     resolve: {
-        extensions: ["*", ".js", ".jsx", ".json"],
+        extensions: ["*", ".js", ".jsx", ".json"]
     },
     module: {
         rules: [
@@ -56,7 +58,10 @@ const webpackConfig = {
                         loader: "babel-loader",
                         query: {
                             babelrc: false,
-                            cacheDirectory: path.resolve(__dirname, "../babel-cache"),
+                            cacheDirectory: path.resolve(
+                                __dirname,
+                                "../babel-cache"
+                            ),
                             ignore: "node_modules/**/*",
                             plugins: [
                                 "react-hot-loader/babel",
@@ -66,11 +71,11 @@ const webpackConfig = {
                                     {
                                         helpers: true,
                                         polyfill: false,
-                                        regenerator: true,
-                                    },
+                                        regenerator: true
+                                    }
                                 ],
                                 "babel-plugin-transform-object-rest-spread",
-                                "babel-plugin-transform-decorators-legacy",
+                                "babel-plugin-transform-decorators-legacy"
                             ],
                             presets: [
                                 "babel-preset-react",
@@ -78,27 +83,29 @@ const webpackConfig = {
                                     "babel-preset-env",
                                     {
                                         modules: false,
-                                        uglify: false,
-                                    },
-                                ],
-                            ],
-                        },
+                                        uglify: false
+                                    }
+                                ]
+                            ]
+                        }
                     },
-                    "eslint-loader",
-                ],
+                    "eslint-loader"
+                ]
             },
-            __DEV__ ? {
-                test: /\.css$/,
-                loader: `style-loader!css-loader?modules&importLoaders=1&localIdentName=${cssIdent}!postcss-loader`,
-            } : {
-                test: /\.css$/,
-                use: ExtractTextPlugin.extract({
-                    fallback: "style-loader",
-                    use: `css-loader?modules&importLoaders=1&localIdentName=${cssIdent}!postcss-loader`,
-                }),
-            },
-        ],
-    },
+            __DEV__
+                ? {
+                      test: /\.css$/,
+                      loader: `style-loader!css-loader?modules&importLoaders=1&localIdentName=${cssIdent}!postcss-loader`
+                  }
+                : {
+                      test: /\.css$/,
+                      use: ExtractTextPlugin.extract({
+                          fallback: "style-loader",
+                          use: `css-loader?modules&importLoaders=1&localIdentName=${cssIdent}!postcss-loader`
+                      })
+                  }
+        ]
+    }
 };
 
 export default webpackConfig;

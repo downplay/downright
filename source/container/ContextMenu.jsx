@@ -9,11 +9,10 @@ import sanitizeProps from "../tool/sanitizeProps";
 import styles from "../styles/menu.css";
 
 class ContextMenu extends Component {
-
     static propTypes = {
         menu: PropTypes.arrayOf(PropTypes.object).isRequired,
-        onMenuClick: PropTypes.func.isRequired,
-    }
+        onMenuClick: PropTypes.func.isRequired
+    };
 
     render() {
         const { menu, onMenuClick, entered, exiting, ...others } = this.props;
@@ -26,7 +25,7 @@ class ContextMenu extends Component {
         }
         return (
             <MenuWrapper {...sanitized}>
-                {this.props.menu.map((menuItem, index) => (
+                {this.props.menu.map((menuItem, index) =>
                     // TODO: Not really anything better to use for a key,
                     // but could allow key as an optional prop, not a lot of
                     // point in this case though....
@@ -38,11 +37,10 @@ class ContextMenu extends Component {
                         {...others}
                         {...menuItem}
                     />
-                ))}
+                )}
             </MenuWrapper>
         );
     }
-
 }
 
 export default ContextMenu;

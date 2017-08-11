@@ -1,5 +1,7 @@
 @import 'reset-css/reset.css';
 
-:global html, :global body, :global #root {
+:global html,
+:global body,
+:global #root {
     height: 100%;
 }
