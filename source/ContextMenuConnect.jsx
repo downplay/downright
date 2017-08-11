@@ -4,28 +4,36 @@ import invariant from "invariant";
 import PropTypes from "prop-types";
 import hoistStatics from "hoist-non-react-statics";
 
-function makeComponentWrapper(buildMenu, {
-    // Options object
-    stopGathering = false,
-} = {}) {
-    return (WrappedComponent) => {
+function makeComponentWrapper(
+    buildMenu,
+    {
+        // Options object
+        stopGathering = false
+    } = {}
+) {
+    return WrappedComponent => {
         const getDisplayName = name => `ContextMenuConnect(${name})`;
         const displayName = getDisplayName(WrappedComponent.displayName);
 
         class ContextMenuConnect extends Component {
-
             static contextTypes = {
                 contextMenuContext: PropTypes.shape({
                     addMenuItems: PropTypes.func,
                     shouldGather: PropTypes.func,
-                    stopGathering: PropTypes.func,
-                }),
-            }
+                    stopGathering: PropTypes.func
+                })
+            };
 
             componentDidMount() {
                 this.nearestNode = ReactDOM.findDOMNode(this.innerNode);
-                invariant(this.nearestNode, "Could not find a DOM node to attach contextMenu to");
-                this.nearestNode.addEventListener("contextmenu", this.onContextMenu);
+                invariant(
+                    this.nearestNode,
+                    "Could not find a DOM node to attach contextMenu to"
+                );
+                this.nearestNode.addEventListener(
+                    "contextmenu",
+                    this.onContextMenu
+                );
             }
 
             componentWillUpdate() {
@@ -38,7 +46,10 @@ function makeComponentWrapper(buildMenu, {
 
             componentWillUnmount() {
                 if (this.nearestNode) {
-                    this.nearestNode.removeEventListener("contextmenu", this.onContextMenu);
+                    this.nearestNode.removeEventListener(
+                        "contextmenu",
+                        this.onContextMenu
+                    );
                 }
             }
 
@@ -47,7 +58,7 @@ function makeComponentWrapper(buildMenu, {
                 // Other nodes have the opportunity to capture. All we need to do here is
                 // build the menu.
                 this.appendContextMenu();
-            }
+            };
 
             appendContextMenu() {
                 const context = this.context.contextMenuContext;
@@ -63,12 +74,13 @@ function makeComponentWrapper(buildMenu, {
             render() {
                 return (
                     <WrappedComponent
-                        ref={(el) => { this.innerNode = el; }}
+                        ref={el => {
+                            this.innerNode = el;
+                        }}
                         {...this.props}
                     />
                 );
             }
-
         }
 
         ContextMenuConnect.WrappedComponent = WrappedComponent;
