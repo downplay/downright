@@ -1,7 +1,7 @@
 {
     "name": "downright",
     "description": "Right-click context menu HOC for React.",
-    "version": "0.2.4",
+    "version": "0.2.5",
     "repository": {
         "type": "git",
         "url": "https://github.com/downplay/downright.git"
@@ -31,10 +31,7 @@
         "examples-watch": "nodemon examples/entry.js"
     },
     "lint-staged": {
-        "*.{js,jsx}": [
-            "eslint",
-            "git add"
-        ]
+        "*.{js,jsx}": ["eslint", "git add"]
     },
     "keywords": [
         "react",
