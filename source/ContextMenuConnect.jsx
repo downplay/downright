@@ -8,7 +8,8 @@ function makeComponentWrapper(
     buildMenu,
     {
         // Options object
-        stopGathering = false
+        stopGathering = false,
+        reverseOrder
     } = {}
 ) {
     return WrappedComponent => {
@@ -20,7 +21,8 @@ function makeComponentWrapper(
                 contextMenuContext: PropTypes.shape({
                     addMenuItems: PropTypes.func,
                     shouldGather: PropTypes.func,
-                    stopGathering: PropTypes.func
+                    stopGathering: PropTypes.func,
+                    reverseOrder: PropTypes.func
                 })
             };
 
@@ -67,6 +69,9 @@ function makeComponentWrapper(
                     context.addMenuItems(localItems);
                     if (stopGathering) {
                         context.stopGathering();
+                    }
+                    if (typeof reverseOrder !== "undefined") {
+                        context.reverseOrder(reverseOrder);
                     }
                 }
             }

@@ -36,17 +36,19 @@ const webpackConfig = {
     resolve: {
         extensions: [".js", ".jsx", ".json", ".css"],
         alias: {
+            /*
             "downright/dist/bem/main.js": path.resolve(
                 __dirname,
                 "../dist/bem/main.js"
             ),
-            "downright/dist/theme.css": path.resolve(
-                __dirname,
-                "../dist/theme.css"
-            ),
             "downright/dist/bem/theme.css": path.resolve(
                 __dirname,
                 "../dist/bem/theme.css"
+            ),
+            */
+            "downright/dist/theme.css": path.resolve(
+                __dirname,
+                "../dist/theme.css"
             ),
             downright: downrightSource
         }

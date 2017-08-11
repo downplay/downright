@@ -218,7 +218,11 @@ The dev server is hot module enabled so tweak at will.
 
 ### 0.2.5
 
-- Fix page coordinates where the menu appears
+- Fixed the menu appearing at the wrong page coordinates
+- Added an example for nesting menu connectors
+- Added option to modify nesting behaviour: reverseOrder (default: false)
+- Added option to customise separator used during menu building: menuSeparator (default: "-")
+- Allow React elements to be used in menu build shorthands, e.g. @contextMenu(()=>[<h2>Hi, menu</h2>])
 
 ### 0.2.4
 

@@ -13,12 +13,20 @@ class ContextMenuProvider extends Component {
     static propTypes = {
         children: PropTypes.oneOfType([PropTypes.node]).isRequired,
         gatherMenus: PropTypes.bool,
+        reverseOrder: PropTypes.bool,
+        menuSeparator: PropTypes.oneOfType(
+            PropTypes.node,
+            PropTypes.array,
+            PropTypes.object
+        ),
         renderClassNames: PropTypes.bool,
         enableTransitions: PropTypes.bool
     };
 
     static defaultProps = {
         gatherMenus: true,
+        reverseOrder: false,
+        menuSeparator: "-",
         renderClassNames: true,
         enableTransitions: true
     };
@@ -48,13 +56,16 @@ class ContextMenuProvider extends Component {
                     const items = this.normalizeMenuItems(rawItems);
                     // Items further down the DOM tree get inserted in front
                     this.buildMenu = this.buildMenu.length
-                        ? [...this.buildMenu, { type: "separator" }, ...items]
+                        ? this.concatenateMenus(this.buildMenu, items)
                         : items;
                 },
                 closeMenu: this.closeMenu,
-                shouldGather: () => this.buildMenuGathering,
+                shouldGather: () => this.buildMenuOptions.gatherMenus,
                 stopGathering: () => {
-                    this.buildMenuGathering = false;
+                    this.buildMenuOptions.gatherMenus = false;
+                },
+                reverseOrder: value => {
+                    this.buildMenuOptions.reverseOrder = value;
                 }
             }
         };
@@ -113,7 +124,11 @@ class ContextMenuProvider extends Component {
         // Clear the menu before the 'capture' phase - it will get filled up when the event travels
         // down and then back up the DOM tree.
         this.buildMenu = [];
-        this.buildMenuGathering = this.props.gatherMenus;
+        this.buildMenuOptions = {
+            gatherMenus: this.props.gatherMenus,
+            reverseOrder: this.props.reverseOrder,
+            menuSeparator: this.props.menuSeparator
+        };
     };
 
     onContextMenu = event => {
@@ -173,44 +188,67 @@ class ContextMenuProvider extends Component {
         }
     };
 
-    normalizeMenuItems(rawItems) {
+    concatenateMenus(one, two) {
+        const [left, right] = this.buildMenuOptions.reverseOrder
+            ? [two, one]
+            : [one, two];
+        return this.buildMenuOptions.menuSeparator
+            ? [...left, this.makeSeparator(), ...right]
+            : [...left, ...right];
+    }
+
+    makeSeparator() {
+        return this.expandItemShorthand(this.buildMenuOptions.menuSeparator);
+    }
+
+    expandItemShorthand(item) {
         // TODO: Horrible pyramid here, refactor this
-        return rawItems.map(item => {
-            if (typeof item === "string") {
-                return { type: "label", content: item };
-            } else if (item.constructor === Array) {
-                if (item.length === 1) {
-                    return { type: "label", content: item[0] };
-                } else if (item.length === 2) {
-                    if (typeof item[1] === "string") {
-                        return { type: "link", content: item[0], to: item[1] };
-                    } else if (typeof item[1] === "function") {
-                        return {
-                            type: "button",
-                            content: item[0],
-                            onClick: item[1]
-                        };
-                    } else if (item.constructor === Array) {
-                        return {
-                            type: "submenu",
-                            content: item[0],
-                            menu: this.normalizeMenuItems(item[1])
-                        };
-                    }
-                    invariant(
-                        false,
-                        `Second element of menu item array should be one of string, function, array; got: ${item[1]}`
-                    );
-                } else {
-                    invariant(
-                        false,
-                        `Menu item array can have 1 or 2 elements, this one had ${item.length}`
-                    );
-                }
+        if (typeof item === "string" || React.isValidElement(item)) {
+            if (item === "-") {
+                return { type: "separator" };
             }
-            // TODO: Should be a plain object, need to validate it
-            return item;
-        });
+            return { type: "label", content: item };
+        }
+        if (item.constructor === Array) {
+            if (item.length === 1) {
+                return { type: "label", content: item[0] };
+            }
+            if (item.length === 2) {
+                if (typeof item[1] === "string") {
+                    return { type: "link", content: item[0], to: item[1] };
+                }
+                if (typeof item[1] === "function") {
+                    return {
+                        type: "button",
+                        content: item[0],
+                        onClick: item[1]
+                    };
+                }
+                if (item.constructor === Array) {
+                    return {
+                        type: "submenu",
+                        content: item[0],
+                        menu: this.normalizeMenuItems(item[1])
+                    };
+                }
+                invariant(
+                    false,
+                    `Second element of menu item array should be one of string, function, array; got: ${item[1]}`
+                );
+            } else {
+                invariant(
+                    false,
+                    `Menu item array can have 1 or 2 elements, this one had ${item.length}`
+                );
+            }
+        }
+        // TODO: Should be a plain object, need to validate it
+        return item;
+    }
+
+    normalizeMenuItems(rawItems) {
+        const items = rawItems.map(item => this.expandItemShorthand(item));
+        return items;
     }
 
     closeMenu = () => {
@@ -254,7 +292,13 @@ class ContextMenuProvider extends Component {
     };
 
     renderMenu() {
-        const { gatherMenus, children, ...others } = this.props;
+        const {
+            gatherMenus,
+            reverseOrder,
+            menuSeparator,
+            children,
+            ...others
+        } = this.props;
         const sanitized = sanitizeProps(others, "container");
 
         return (

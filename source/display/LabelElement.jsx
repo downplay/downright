@@ -1,6 +1,6 @@
 import React from "react";
 
 export default ({ children, ...others }) =>
-    <h2 {...others}>
+    <div {...others}>
         {children}
-    </h2>;
+    </div>;
