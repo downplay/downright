@@ -4,30 +4,32 @@ Right-click context menu HOC for React.
 
 <img src="docs/coverImage.png" width="359" title="What it looks like">
 
-## Latest version: 0.2.x
+## Latest version: 0.3.x
 
-Almost complete rewrite, added reasonable default styles. Rewrite paves the way for making rendering fully customisable in 0.3.0. Submenus now working but could do with more love.
+0.3 introduces a granular theming system allowing any element to be fully customised (including swapping out entirely different components).
+
+Next item on the roadmap is submenus: making them display and work properly, giving them transitions.
 
 ## Sample Code
 
 Downright is designed with a minimal API to setup and use in your React app. It provides a HOC to wrap your component to make it emit a context menu. You have access to props The primary use case is that your menu will be dispatching Redux actions, which have been injected into props using Redux. (Downright can be used with )
 
 ```javascript
-import { contextMenu } from 'downright';
+import { contextMenu } from "downright";
+import "downright/theme.css";
 
-@connect(null, props => ...)
+@connect(null, props => {...})
 @contextMenu(props => {
-    const {t} = props;
     return [
-        'Context menu',                                             // A label or heading
-        ['Badger', ()=>props.onClickedBadger()],                      // Calling a handler in the parent
-        ['Click me', ()=>props.reduxInjectedAction()],                // A button dispatching an action
-        ['Fork me', 'https://https://github.com/downplay/downright']  // Renders a <Link/>
+        "Context menu", // A label or heading
+        ["Badger", () => props.onClickedBadger()], // Calling a handler in the parent
+        ["Click me", () => props.reduxInjectedAction()], // A button dispatching an action
+        ["Fork me", `https://https://github.com/downplay/${projectName}`] // Renders a <Link/>
     ];
 })
 class MyComponent extends Component {
     render() {
-        <div>Right-click me to open the menu!</div>
+        <div>Right-click me to open a menu!</div>;
     }
 }
 ```
@@ -48,25 +50,25 @@ Depending on your flavour.
 
 ## Usage
 
-### Provider Setup
+### ContextMenuProvider Setup
 
-Downright follows the provider pattern used by libraries by React. This means you need to wrap the DownRightProvider component somewhere at the base of your app tree, usually around where you would put other providers e.g.:
+Downright follows the provider pattern used by libraries such as Redux. This means you need to wrap the ContextMenuProvider component somewhere around the base of your app tree, usually around where you would put other providers e.g.:
 
 ```jsx
-<ReduxProvider store={store}>
-    <ContextMenuProvider>
+import { ContextMenuProvider } from "downright";
+
+<ContextMenuProvider>
+    <ReduxProvider store={store}>
         <App />
-    </ContextMenuProvider>
-</ReduxProvider>
+    </ReduxProvider>
+</ContextMenuProvider>
 ```
 
 Additional notes:
 
 1. The ordering of any other providers you have shouldn't matter at all for DownRight, it just needs to be outside your main App node
 2. Multiple providers can certainly co-exist as long as they aren't inside each other, but usually you only need a singleton
-3. Currently this will cause an additional wrapping `<div/>` around your entire app. This should be addressed in a future version, possibly via one of the portal libraries.
-
-Also: This is a very early release and I do not consider this production ready, especially as the menu looks horrible right now and has no styling support. This in particular is right at the top of my TODO list!
+3. Currently this will cause an additional wrapping `<div/>` around your entire app. A future version of the package will include the ability to target a layer manually, removing this. Additionally the div should be unneccessary in React v16.
 
 #### properties
 
@@ -163,23 +165,26 @@ The provider option `gatherMenus` effectively acts as a global switch for this. 
 
 ### Default Theme
 
-Downright ships with default stylings. How you want to include them depends on your setup and webpack config, but it should be just:
+Downright ships with default stylings. How you want to include them depends on your setup and webpack config, but should just be able to do this (once) anywhere in your app. This assumes you are using `style-loader` and/or `extract-text-webpack-plugin` (but not `css-modules`) on 3rd-party modules:
 
 ```javascript
-import 'downright/dist/theme.css';
+import "downright/theme.css";
 ```
 
-The styles use collision-free naming. There is an alternative build of Downwrite that uses BEM-style naming classes instead. You have to use a different version of both theme.css and the main import:
+Make sure you 
 
-```javascript
-import { ContextMenuProvider } from 'downright/dist/bem/main.js';
+The styles use collision-free naming. There is an alternative build of Downwrite that uses BEM-style naming classes instead,which you may wish to use if you want to override the styles elsewhere in your own CSS. To use this, you need to import a different CSS file, and provide a theme object to ContextMenuProvider so it know which classNames to use:
 
-import 'downright/dist/theme.css';
+```jsx
+import "downright/themes/bem.css";
+import bemTheme from "downright/themes/bem";
+
+<ContextMenuProvider theme={bemTheme}>
+    {...}
+</ContextMenuProvider>
 ```
 
-This may be bundled as a separate package in the future.
-
-With any issues loading the styles, see /examples/webpack.config.js for the loader config to see how this can be used alongside your own CSS modules.
+With any issues loading the styles, see the loader configuration in `/examples/webpack.config.js` to see how this can be used alongside your own CSS modules configuration.
 
 To see what classes are available, you can see the default stylesheet in this file, except that every class must be appended with: `downwrite__contextmenu__`
 
@@ -191,9 +196,86 @@ You can see an example of overriding classes here:
 
 https://github.com/downplay/downright/tree/master/examples/source/examples/Styling.css
 
-It produces a dark red menu like this:
+#### Advanced theming
 
-<img src="docs/themedMenu.png" width="320" title="Restyled menu demo">
+The `theme` property of `ContextMenuProvider` exposes an API which allows you to customise any single aspect of the rendering of a Downright menu.
+
+A theme is a plain object with three optional properties: `classNames`, `styles`, and `elements`. These properties allow you to map different classNames, styles, and elements to different blocks of the rendering of the menu.
+
+In this example we take the base BEM theme, apply some transition styles inline, and swap out the item element for one with completely customised rendering using `styled-components`.
+
+```jsx
+import bemTheme from "downright/themes/bem";
+
+const Outer = styled.div`
+    background-color: rgba(192,192,255, 0.5)
+`;
+
+const Bullet = styled.div`
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: transparent;
+    &:hover {
+        background-color: white;
+    }
+`;
+
+const Wrapper = styled.div`
+    padding: 5px;
+`;
+
+// Two important things when you swap out an element: make sure you render
+// the children (except for separator), and render any other props using the
+// {...others} pattern as follows.
+const Item = ({children, ...others}) => (
+    <Outer {...others}>
+        <Bullet />
+        <Wrapper>
+            {children}
+        </Wrapper>
+    </Outer>
+);
+
+const elements = {
+    item: Item
+}
+
+// Additional inline styles
+const styles = {
+    menu: {
+        transition: "transform 0.5s linear",
+        transform: "translate(0, 0)"
+    },
+    entered: {
+        transform: "translate(-100%, 0)"
+    },
+    exiting: {
+        transform: "translate(100%, 0)"
+    }
+};
+
+// Put the whole theme together
+const myTheme = { ...bemTheme, styles, elements };
+
+export default myTheme;
+```
+
+The available blocks and styles that can be overridden are:
+
+Block name | Default element | Description
+-----------|-------------|-----------------
+container | `<nav>` | Root container for the menu. This element will be absolutely positioned.
+menu | `<ul>` | Main menu element
+item | `<li>` | Menu item element, wraps every child item (one of the following eleemnts)
+button | `<button>` | Button item element
+link | `<Link>` (from react-router-dom) | Link item element
+label | `<div>` | Label item element
+separator | `<hr>` | Separator item element
+submenu | `<div>` | Submenu item element
+selected | n/a | Currently highlighted menu item, by default the same as the :hover style
+entered | n/a | Applied to menu when it first appears. Used for transitions.
+exiting | n/a | Applied to menu before it leaves. Used for transitions. Menu will wait for transition to end before being removed from DOM.
 
 ### Nested Menu Components
 
@@ -225,9 +307,8 @@ The dev server is hot module enabled so tweak at will.
 
 ### 0.3.0
 
-- Brand new theming system
-- Reworked build
-
+- Brand new theming system, allows override of any class names, inline styles, and elements
+- Reworked build and package
 
 ### 0.2.5
 
@@ -235,7 +316,7 @@ The dev server is hot module enabled so tweak at will.
 - Added an example for nesting menu connectors
 - Added option to modify nesting behaviour: reverseOrder (default: `false`)
 - Added option to customise separator used during menu building: menuSeparator (default: `"-"`)
-- Allow React elements to be used in menu build shorthands, e.g. `@contextMenu(()=>[<h2>Hi, menu</h2>])`
+- Allow React elements to be used in menu build shorthands, e.g. `@contextMenu(()=>[<h2>Hi, menu!</h2>])`
 
 ### 0.2.4
 
