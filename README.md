@@ -202,64 +202,7 @@ The `theme` property of `ContextMenuProvider` exposes an API which allows you to
 
 A theme is a plain object with three optional properties: `classNames`, `styles`, and `elements`. These properties allow you to map different classNames, styles, and elements to different blocks of the rendering of the menu.
 
-In this example we take the base BEM theme, apply some transition styles inline, and swap out the item element for one with completely customised rendering using `styled-components`.
-
-```jsx
-import bemTheme from "downright/themes/bem";
-
-const Outer = styled.div`
-    background-color: rgba(192,192,255, 0.5)
-`;
-
-const Bullet = styled.div`
-    width: 10px;
-    height: 10px;
-    border-radius: 5px;
-    background-color: transparent;
-    &:hover {
-        background-color: white;
-    }
-`;
-
-const Wrapper = styled.div`
-    padding: 5px;
-`;
-
-// Two important things when you swap out an element: make sure you render
-// the children (except for separator), and render any other props using the
-// {...others} pattern as follows.
-const Item = ({children, ...others}) => (
-    <Outer {...others}>
-        <Bullet />
-        <Wrapper>
-            {children}
-        </Wrapper>
-    </Outer>
-);
-
-const elements = {
-    item: Item
-}
-
-// Additional inline styles
-const styles = {
-    menu: {
-        transition: "transform 0.5s linear",
-        transform: "translate(0, 0)"
-    },
-    entered: {
-        transform: "translate(-100%, 0)"
-    },
-    exiting: {
-        transform: "translate(100%, 0)"
-    }
-};
-
-// Put the whole theme together
-const myTheme = { ...bemTheme, styles, elements };
-
-export default myTheme;
-```
+In this example we take the base BEM theme, apply some transition styles inline, and swap out the item element for one with completely customised rendering using `styled-components`: https://github.com/downplay/downright/tree/master/examples/source/styles/customMenuTheme.js
 
 The available blocks and styles that can be overridden are:
 

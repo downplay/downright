@@ -23,6 +23,8 @@ import FullWidthFullHeight from "../layout/FullWidthFullHeight";
 // Important, this must be imported AFTER the base theme
 import "./Styling.css";
 
+import myTheme from "../styles/customMenuTheme";
+
 const Subtitle = styled.h1`
     text-align: center;
     font-size: 3rem;
@@ -59,9 +61,18 @@ export default class Styling extends Component {
                         Right-click for menu with an additional class added
                     </SimpleComponentWithMenu>
                 </ContextMenuProvider>
+                <ContextMenuProvider theme={myTheme}>
+                    <SimpleComponentWithMenu
+                        onClickItem={this.onClickItem}
+                        item={this.state.itemChosen}
+                        green
+                    >
+                        Advanced styling using completely custom theme
+                    </SimpleComponentWithMenu>
+                </ContextMenuProvider>
             </FullWidthFullHeight>
             <Subtitle>
-                Two menus operating independently with different providers
+                Three menus operating independently with different providers
             </Subtitle>
         </div>;
 }
