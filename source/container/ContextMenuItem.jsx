@@ -53,7 +53,16 @@ class ContextMenuItem extends Component {
         };
     }
 
-    // TODO: On receive props / will receive props, verify correct action is there e.g. handler/to
+    componentWillReceiveProps(nextProps) {
+        // TODO: Verify correct action is there e.g. handler/to, generally validate item
+        if (
+            nextProps.theme !== this.props.theme ||
+            nextProps.type !== this.props.type
+        ) {
+            this.Item = null;
+            this.Element = null;
+        }
+    }
 
     onSubmenuMouseEnter = () => {
         this.setSubmenuVisible(true);
@@ -116,14 +125,14 @@ class ContextMenuItem extends Component {
             names.push("selected");
         }
 
-        let Element;
-        if (ContextMenuItem.defaultElements[type]) {
-            Element = themeHelper(
-                ContextMenuItem.defaultElements[type],
+        if (!this.Element) {
+            this.Element = themeHelper(
+                ContextMenuItem.defaultElements[type] || LabelElement,
                 theme,
                 names
             );
         }
+        const Element = this.Element;
 
         switch (this.props.type) {
             case "label":
@@ -164,14 +173,16 @@ class ContextMenuItem extends Component {
     }
 
     render() {
-        const others = sanitizeProps(this.props);
-        const names = ["item", this.props.type];
-        if (this.state.selected) {
-            names.push("selected");
+        if (!this.Item) {
+            const names = ["item", this.props.type];
+            this.Item = themeHelper(ItemWrapper, this.props.theme, names, {
+                selected: "selected"
+            });
         }
-        const Item = themeHelper(ItemWrapper, this.props.theme, names);
+        const Item = this.Item;
+        const others = sanitizeProps(this.props);
         return (
-            <Item {...others}>
+            <Item {...others} selected={this.state.selected}>
                 {this.renderInnerElement()}
             </Item>
         );

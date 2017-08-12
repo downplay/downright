@@ -19,8 +19,13 @@ class ContextSubmenu extends Component {
             ...others
         } = this.props;
         const sanitized = sanitizeProps(others);
-        const Submenu = themeHelper(SubmenuElement, theme, "submenu");
-        const Container = themeHelper(SubmenuContainer, theme, "container");
+        if (!this.Submenu) {
+            this.Submenu = themeHelper(SubmenuElement, theme, "submenu");
+        }
+        if (!this.Container) {
+            this.Container = themeHelper(SubmenuContainer, theme, "container");
+        }
+        const { Submenu, Container } = this;
         const style = { top: 0, left: 0 };
         return (
             <Submenu {...sanitized}>
