@@ -65,7 +65,7 @@ export default class Styling extends Component {
                     <SimpleComponentWithMenu
                         onClickItem={this.onClickItem}
                         item={this.state.itemChosen}
-                        green
+                        blue
                     >
                         Advanced styling using completely custom theme
                     </SimpleComponentWithMenu>
