@@ -1,24 +1,13 @@
 {
     "name": "downright",
     "description": "Right-click context menu HOC for React.",
-    "version": "0.2.5",
+    "version": "0.3.0",
     "repository": {
         "type": "git",
         "url": "https://github.com/downplay/downright.git"
     },
     "main": "dist/main.js",
-    "files": [
-        "dist/main.js",
-        "dist/main.js.map",
-        "dist/theme.css",
-        "dist/theme.css.map",
-        "dist/bem/main.js",
-        "dist/bem/main.js.map",
-        "dist/bem/theme.css",
-        "dist/bem/theme.css.map",
-        "docs/coverImage.png",
-        "docs/themedMenu.png"
-    ],
+    "files": ["dist", "docs"],
     "scripts": {
         "precommit": "lint-staged",
         "build": "npm-run-all build-core     build-bem",
@@ -31,10 +20,7 @@
         "examples-watch": "nodemon examples/entry.js"
     },
     "lint-staged": {
-        "*.{js,jsx}": [
-            "eslint",
-            "git add"
-        ]
+        "*.{js,jsx}": ["eslint", "git add"]
     },
     "keywords": [
         "react",
@@ -45,7 +31,8 @@
         "javascript",
         "react-component",
         "hoc",
-        "ui"
+        "ui",
+        "transitions"
     ],
     "peerDependencies": {
         "prop-types": "^15.0.0 || ^16.0.0",

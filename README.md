@@ -1,12 +1,12 @@
 # Downright
 
-Right-click context menu HOC for React.
+A lightweight (<20k) right-click context menu HOC for React, with completely customisable theming and transitions.
 
 <img src="docs/coverImage.png" width="359" title="What it looks like">
 
 ## Latest version: 0.3.x
 
-0.3 introduces a granular theming system allowing any element to be fully customised (including swapping out entirely different components).
+0.3 introduces a granular theming system allowing any element in the menu to be fully customised (including swapping in entirely different HTML elements and even whole React components).
 
 Next item on the roadmap is submenus: making them display and work properly, giving them transitions.
 
@@ -16,7 +16,7 @@ Downright is designed with a minimal API to setup and use in your React app. It 
 
 ```javascript
 import { contextMenu } from "downright";
-import "downright/theme.css";
+import "downright/dist/theme.css";
 
 @connect(null, props => {...})
 @contextMenu(props => {
@@ -176,8 +176,8 @@ Make sure you
 The styles use collision-free naming. There is an alternative build of Downwrite that uses BEM-style naming classes instead,which you may wish to use if you want to override the styles elsewhere in your own CSS. To use this, you need to import a different CSS file, and provide a theme object to ContextMenuProvider so it know which classNames to use:
 
 ```jsx
-import "downright/themes/bem.css";
-import bemTheme from "downright/themes/bem";
+import "downright/dist/bem/theme.css";
+import bemTheme from "downright/dist/bem/theme";
 
 <ContextMenuProvider theme={bemTheme}>
     {...}
@@ -251,7 +251,6 @@ The dev server is hot module enabled so tweak at will.
 ### 0.3.0
 
 - Brand new theming system, allows override of any class names, inline styles, and elements
-- Reworked build and package
 
 ### 0.2.5
 
