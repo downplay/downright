@@ -3,18 +3,13 @@ import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import invariant from "invariant";
 import ContextMenu from "./container/ContextMenu";
+import MenuLayer from "./display/MenuLayer";
 import OuterContainer from "./display/OuterContainer";
 
 import themeHelper from "./tool/themeHelper";
 import themeShape from "./tool/themeShape";
 
-// TODO: At least setup default theme for BEM stylesheet?
-
-const defaultTheme = {
-    elements: {},
-    classNames: {},
-    styles: {}
-};
+import defaultTheme from "./themes/default";
 
 class ContextMenuProvider extends Component {
     static propTypes = {
@@ -82,12 +77,18 @@ class ContextMenuProvider extends Component {
 
     componentDidMount() {
         // Capture the event at the highest level to initialise the array
+        this.nearestNode = ReactDOM.findDOMNode(this);
+        invariant(
+            this.nearestNode,
+            `No DOM node found. ContextMenuProvider must contain a component that renders a DOM node. If you are using a theme, check the template override for "layer".`
+        );
+        // Listen for both capture event and normal event. We reset the menu on capture,
+        // and allow it to be built as the event bubbles back up the tree to us
         this.nearestNode.addEventListener(
             "contextmenu",
             this.onContextMenuCapture,
             true
         );
-        // Catch the event again on the way back up once the context is populated
         this.nearestNode.addEventListener("contextmenu", this.onContextMenu);
         if (this.outerNode) {
             this.nearestOuterNode = ReactDOM.findDOMNode(this.outerNode);
@@ -340,14 +341,9 @@ class ContextMenuProvider extends Component {
     }
 
     render() {
-        const Layer = themeHelper(this.props.theme, "layer");
+        const Layer = themeHelper(MenuLayer, this.props.theme, "layer");
         return (
-            <Layer
-                ref={ref => {
-                    this.nearestNode = ref;
-                }}
-                onClick={this.onLayerClick}
-            >
+            <Layer onClick={this.onLayerClick}>
                 {this.props.children}
                 {this.state.menuIsOpen ? this.renderMenu() : null}
             </Layer>

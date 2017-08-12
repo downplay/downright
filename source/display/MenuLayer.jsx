@@ -1,6 +1,6 @@
 import React from "react";
 
 export default ({ children, ...others }) =>
-    <nav {...others}>
+    <div {...others}>
         {children}
-    </nav>;
+    </div>;

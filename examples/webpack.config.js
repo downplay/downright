@@ -1,8 +1,8 @@
 import webpack from "webpack";
 import path from "path";
 
-// const downrightSource = path.resolve(__dirname, "../dist/main.js");
-const downrightSource = path.resolve(__dirname, "../source/index.js");
+const downrightSource = file => path.resolve(__dirname, "../dist", file);
+// const downrightSource = path.resolve(__dirname, "../source/index.js");
 
 const webpackConfig = {
     context: path.resolve(__dirname, ".."),
@@ -35,22 +35,14 @@ const webpackConfig = {
 
     resolve: {
         extensions: [".js", ".jsx", ".json", ".css"],
+        // NOTE: Here I'm aliasing everything so the imports in the exanples represent how the
+        // final package will look. Normally using the module direct from npm you do not have to alias in your webpack.
         alias: {
-            /*
-            "downright/dist/bem/main.js": path.resolve(
-                __dirname,
-                "../dist/bem/main.js"
-            ),
-            "downright/dist/bem/theme.css": path.resolve(
-                __dirname,
-                "../dist/bem/theme.css"
-            ),
-            */
-            "downright/dist/theme.css": path.resolve(
-                __dirname,
-                "../dist/theme.css"
-            ),
-            downright: downrightSource
+            "downright/theme.css": downrightSource("theme.css"),
+            "downright/themes/bem.css": downrightSource("bem/theme.css"),
+            "downright/themes/bem": downrightSource("bem/theme.js"),
+            "downright/theme": downrightSource("theme.js"),
+            downright: downrightSource("main.js")
         }
     },
     module: {

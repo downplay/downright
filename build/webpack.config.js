@@ -4,6 +4,8 @@ import nodeExternals from "webpack-node-externals";
 import ExtractTextPlugin from "extract-text-webpack-plugin";
 
 const downrightSource = path.resolve(__dirname, "../source/index.js");
+const themeSource = path.resolve(__dirname, "../source/themes/default.js");
+
 // eslint-disable-next-line no-underscore-dangle
 const __DEV__ = process.env.NODE_ENV === "development";
 // eslint-disable-next-line no-underscore-dangle
@@ -20,10 +22,11 @@ const webpackConfig = {
     target: "node",
     externals: [nodeExternals()],
     entry: {
-        main: [downrightSource]
+        main: [downrightSource],
+        theme: [themeSource]
     },
     output: {
-        filename: `${__BEM__ ? "bem/" : ""}main.js`,
+        filename: `${__BEM__ ? "bem/" : ""}[name].js`,
         path: path.resolve(__dirname, "../dist"),
         libraryTarget: "umd"
     },
@@ -75,7 +78,8 @@ const webpackConfig = {
                                     }
                                 ],
                                 "babel-plugin-transform-object-rest-spread",
-                                "babel-plugin-transform-decorators-legacy"
+                                "babel-plugin-transform-decorators-legacy",
+                                "babel-plugin-add-react-displayname"
                             ],
                             presets: [
                                 "babel-preset-react",

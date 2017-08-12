@@ -10,8 +10,9 @@
     own stylesheet.
     */
 
-import { ContextMenuProvider } from "downright/dist/bem/main.js";
-import "downright/dist/bem/theme.css";
+import { ContextMenuProvider } from "downright";
+import bemTheme from "downright/themes/bem";
+import "downright/themes/bem.css";
 
 import React, { Component } from "react";
 import styled from "styled-components";
@@ -21,6 +22,8 @@ import FullWidthFullHeight from "../layout/FullWidthFullHeight";
 
 // Important, this must be imported AFTER the base theme
 import "./Styling.css";
+
+console.log(bemTheme);
 
 const Subtitle = styled.h1`
     text-align: center;
@@ -40,15 +43,16 @@ export default class Styling extends Component {
     render = () =>
         <div>
             <FullWidthFullHeight>
-                <ContextMenuProvider>
+                <ContextMenuProvider theme={bemTheme}>
                     <SimpleComponentWithMenu
                         onClickItem={this.onClickItem}
                         item={this.state.itemChosen}
+                        theme={bemTheme}
                     >
                         Right-click for a menu with overriden styles
                     </SimpleComponentWithMenu>
                 </ContextMenuProvider>
-                <ContextMenuProvider className="green">
+                <ContextMenuProvider theme={bemTheme} className="green">
                     <SimpleComponentWithMenu
                         onClickItem={this.onClickItem}
                         item={this.state.itemChosen}
