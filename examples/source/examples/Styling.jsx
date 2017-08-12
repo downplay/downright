@@ -20,7 +20,7 @@ import styled from "styled-components";
 import SimpleComponentWithMenu from "../components/SimpleComponentWithMenu";
 import FullWidthFullHeight from "../layout/FullWidthFullHeight";
 
-// Important, this must be imported AFTER the base theme
+// Global styles imported after the BEM theme to override it
 import "./Styling.css";
 
 import myTheme from "../styles/customMenuTheme";

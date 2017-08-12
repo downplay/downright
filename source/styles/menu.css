@@ -30,7 +30,7 @@
 }
 
 .item:hover,
-.item--selected {
+.item.selected {
     background: linear-gradient(to bottom, #cccccc 0%, #eeeeee 100%);
 }
 
@@ -40,12 +40,8 @@
     background: #e5e5e5;
 }
 
-.label,
-.button,
-.link,
-.submenu,
-.separator {
-    padding: 0.2rem;
+.element {
+    padding: 0.4rem;
     text-align: left;
     color: #000;
     font-size: 1rem;
@@ -58,18 +54,22 @@
     color: #000;
 }
 
-h2.label {
+.element.label {
     flex: 1;
     font-weight: bold;
     cursor: default;
 }
 
-button.button {
+.element.button {
     background: none;
     border: none;
     cursor: pointer;
 }
 
-a.link {
+.element.link {
     text-decoration: none;
+}
+
+.element.submenu::after {
+    content: ">";
 }

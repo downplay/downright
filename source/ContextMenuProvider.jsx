@@ -3,8 +3,8 @@ import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import invariant from "invariant";
 import ContextMenu from "./container/ContextMenu";
-// import MenuLayer from "./display/MenuLayer";
-import OuterContainer from "./display/OuterContainer";
+import MenuLayer from "./display/MenuLayer";
+import ContainerElement from "./display/ContainerElement";
 
 import themeHelper from "./tool/themeHelper";
 import themeShape from "./tool/themeShape";
@@ -103,7 +103,8 @@ class ContextMenuProvider extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.theme !== this.props.theme) {
-            this.Outer = null;
+            this.Container = null;
+            this.Layer = null;
         }
     }
 
@@ -317,21 +318,21 @@ class ContextMenuProvider extends Component {
             ...others
         } = this.props;
 
-        if (!this.Outer) {
-            this.Outer = themeHelper(
-                OuterContainer,
+        if (!this.Container) {
+            this.Container = themeHelper(
+                ContainerElement,
                 this.props.theme,
                 "container"
             );
         }
-        const { Outer } = this;
+        const Container = this.Container;
         const style = {
             left: this.state.menuPosition.x,
             top: this.state.menuPosition.y
         };
 
         return (
-            <Outer
+            <Container
                 ref={this.storeOuterNode}
                 onClick={this.onOuterClick}
                 onTransitionEnd={this.onTransitionEnd}
@@ -345,21 +346,20 @@ class ContextMenuProvider extends Component {
                     theme={theme}
                     {...others}
                 />
-            </Outer>
+            </Container>
         );
     }
 
     render() {
-        // const Layer = themeHelper(MenuLayer, this.props.theme, "layer");
-        const layerStyle = {
-            width: "100%",
-            height: "100%"
-        };
+        if (!this.Layer) {
+            this.Layer = themeHelper(MenuLayer, this.props.theme, "layer");
+        }
+        const Layer = this.Layer;
         return (
-            <div style={layerStyle} onClick={this.onLayerClick}>
+            <Layer onClick={this.onLayerClick}>
                 {this.props.children}
                 {this.state.menuIsOpen ? this.renderMenu() : null}
-            </div>
+            </Layer>
         );
     }
 }

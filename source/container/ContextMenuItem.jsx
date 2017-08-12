@@ -120,7 +120,7 @@ class ContextMenuItem extends Component {
         } = this.props;
 
         const others = sanitizeProps(rest);
-        const names = [type];
+        const names = ["element", type];
         if (this.state.selected) {
             names.push("selected");
         }

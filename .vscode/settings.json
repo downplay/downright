@@ -2,5 +2,6 @@
     "editor.formatOnSave": true,
     "search.exclude": {
         "dist": true
-    }
+    },
+    "files.eol": "\n"
 }

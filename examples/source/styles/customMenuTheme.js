@@ -4,17 +4,22 @@ import defaultTheme from "downright/theme";
 
 // Set up styled components for our item template
 const Outer = styled.div`
+    display: flex;
+    flex-direction: row;
     background-color: rgba(192, 192, 255, 0.5);
+    align-items: center;
     &:hover > div {
         visibility: visible;
     }
 `;
 
+// Style a custom bullet
 const Bullet = styled.div`
     width: 10px;
     height: 10px;
-    border-radius: 5px;
-    background-color: white;
+    border-radius: 3px;
+    margin: 0 0 0 5px;
+    background-color: black;
     visibility: hidden;
 `;
 
@@ -38,7 +43,7 @@ const styles = {
         overflow: "hidden"
     },
     menu: {
-        transition: "transform 0.5s linear",
+        transition: "transform 0.2s linear",
         transform: "translate(0, 0)"
     },
     entered: {

@@ -22,10 +22,7 @@ export default () =>
 
 /*
     Examples TODO:
-        - Reinstate styling example
         - Promise submenu
         - Icons
-        - Custom animation
-        - Custom elements
         - Custom properties/data
 */

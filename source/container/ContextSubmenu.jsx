@@ -1,14 +1,29 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 import SubmenuElement from "../display/SubmenuElement";
-import SubmenuContainer from "../display/SubmenuContainer";
+import ContainerElement from "../display/ContainerElement";
 import ContextMenu from "./ContextMenu";
 
 import sanitizeProps from "../tool/sanitizeProps";
 import themeHelper from "../tool/themeHelper";
+import themeShape from "../tool/themeShape";
+
+// TODO: This is far too similar to ContextMenu; we don't need both
 
 class ContextSubmenu extends Component {
-    // TODO: Proptypes, themeshape
+    static propTypes = {
+        menu: PropTypes.arrayOf(PropTypes.object).isRequired,
+        onMenuClick: PropTypes.func.isRequired,
+        theme: themeShape.isRequired
+    };
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.theme !== this.props.theme) {
+            this.Container = null;
+            this.Layer = null;
+        }
+    }
+
     render() {
         const {
             menu,
@@ -23,7 +38,7 @@ class ContextSubmenu extends Component {
             this.Submenu = themeHelper(SubmenuElement, theme, "submenu");
         }
         if (!this.Container) {
-            this.Container = themeHelper(SubmenuContainer, theme, "container");
+            this.Container = themeHelper(ContainerElement, theme, "container");
         }
         const { Submenu, Container } = this;
         const style = { top: 0, left: 0 };

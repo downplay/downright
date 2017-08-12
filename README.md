@@ -24,7 +24,7 @@ import "downright/dist/theme.css";
         "Context menu", // A label or heading
         ["Badger", () => props.onClickedBadger()], // Calling a handler in the parent
         ["Click me", () => props.reduxInjectedAction()], // A button dispatching an action
-        ["Fork me", `https://https://github.com/downplay/${projectName}`] // Renders a <Link/>
+        ["Fork me", `https://https://github.com/downplay/${props.projectName}`] // Renders a <Link/>
     ];
 })
 class MyComponent extends Component {

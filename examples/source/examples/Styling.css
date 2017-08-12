@@ -31,10 +31,7 @@
 
 /* Make text stand out */
 
-:global .downright__contextmenu__label,
-:global .downright__contextmenu__button,
-:global .downright__contextmenu__link,
-:global .downright__contextmenu__submenu {
+:global .downright__contextmenu__element {
     color: #ff9;
 }
 
