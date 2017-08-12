@@ -30,6 +30,7 @@ class ContextSubmenu extends Component {
                           <ContextMenu
                               menu={menu}
                               onMenuClick={onMenuClick}
+                              theme={theme}
                               {...others}
                           />
                       </Container>

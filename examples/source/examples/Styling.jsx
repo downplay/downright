@@ -23,8 +23,6 @@ import FullWidthFullHeight from "../layout/FullWidthFullHeight";
 // Important, this must be imported AFTER the base theme
 import "./Styling.css";
 
-console.log(bemTheme);
-
 const Subtitle = styled.h1`
     text-align: center;
     font-size: 3rem;

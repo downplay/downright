@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import invariant from "invariant";
 import ContextMenu from "./container/ContextMenu";
-import MenuLayer from "./display/MenuLayer";
+// import MenuLayer from "./display/MenuLayer";
 import OuterContainer from "./display/OuterContainer";
 
 import themeHelper from "./tool/themeHelper";
@@ -17,11 +17,11 @@ class ContextMenuProvider extends Component {
         theme: themeShape,
         gatherMenus: PropTypes.bool,
         reverseOrder: PropTypes.bool,
-        menuSeparator: PropTypes.oneOfType(
+        menuSeparator: PropTypes.oneOfType([
             PropTypes.node,
             PropTypes.array,
             PropTypes.object
-        ),
+        ]),
         renderClassNames: PropTypes.bool,
         enableTransitions: PropTypes.bool
     };
@@ -101,6 +101,12 @@ class ContextMenuProvider extends Component {
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.theme !== this.props.theme) {
+            this.Outer = null;
+        }
+    }
+
     componentWillUpdate() {
         this.componentWillUnmount();
     }
@@ -166,7 +172,7 @@ class ContextMenuProvider extends Component {
                     if (this.props.enableTransitions) {
                         setImmediate(() => {
                             this.setState({
-                                entered: false
+                                entered: !this.state.entered
                             });
                         });
                     }
@@ -311,11 +317,14 @@ class ContextMenuProvider extends Component {
             ...others
         } = this.props;
 
-        const Outer = themeHelper(
-            OuterContainer,
-            this.props.theme,
-            "container"
-        );
+        if (!this.Outer) {
+            this.Outer = themeHelper(
+                OuterContainer,
+                this.props.theme,
+                "container"
+            );
+        }
+        const { Outer } = this;
         const style = {
             left: this.state.menuPosition.x,
             top: this.state.menuPosition.y
@@ -341,12 +350,16 @@ class ContextMenuProvider extends Component {
     }
 
     render() {
-        const Layer = themeHelper(MenuLayer, this.props.theme, "layer");
+        // const Layer = themeHelper(MenuLayer, this.props.theme, "layer");
+        const layerStyle = {
+            width: "100%",
+            height: "100%"
+        };
         return (
-            <Layer onClick={this.onLayerClick}>
+            <div style={layerStyle} onClick={this.onLayerClick}>
                 {this.props.children}
                 {this.state.menuIsOpen ? this.renderMenu() : null}
-            </Layer>
+            </div>
         );
     }
 }

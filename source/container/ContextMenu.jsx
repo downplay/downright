@@ -24,13 +24,17 @@ class ContextMenu extends Component {
             className,
             ...others
         } = this.props;
-        const Menu = themeHelper(MenuWrapper, theme, [
-            "menu",
-            entered ? "entered" : "",
-            exiting ? "exiting" : ""
-        ]);
+
+        if (!this.Menu) {
+            this.Menu = themeHelper(MenuWrapper, theme, "menu", {
+                entered: "entered",
+                exiting: "exiting"
+            });
+        }
+        const Menu = this.Menu;
+
         return (
-            <Menu className={className}>
+            <Menu className={className} entered={entered} exiting={exiting}>
                 {this.props.menu.map((menuItem, index) =>
                     // TODO: Not really anything better to use for a key,
                     // but could allow key as an optional prop, not a lot of
