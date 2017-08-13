@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { themed } from "downstyle";
 
 import ContextSubmenu from "./ContextSubmenu";
 import ButtonElement from "../display/ButtonElement";
@@ -9,7 +10,6 @@ import SeparatorElement from "../display/SeparatorElement";
 import ItemWrapper from "../display/ItemWrapper";
 
 import sanitizeProps from "../tool/sanitizeProps";
-import themeHelper from "../tool/themeHelper";
 import themeShape from "../tool/themeShape";
 
 const emptySubmenu = [];
@@ -126,7 +126,7 @@ class ContextMenuItem extends Component {
         }
 
         if (!this.Element) {
-            this.Element = themeHelper(
+            this.Element = themed(
                 ContextMenuItem.defaultElements[type] || LabelElement,
                 theme,
                 names
@@ -175,7 +175,7 @@ class ContextMenuItem extends Component {
     render() {
         if (!this.Item) {
             const names = ["item", this.props.type];
-            this.Item = themeHelper(ItemWrapper, this.props.theme, names, {
+            this.Item = themed(ItemWrapper, this.props.theme, names, {
                 selected: "selected"
             });
         }

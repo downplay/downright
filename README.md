@@ -1,6 +1,6 @@
 # Downright
 
-A lightweight (<20k) right-click context menu HOC for React, with completely customisable theming and transitions.
+A lightweight (<20k minified) right-click context menu HOC for React, with completely customisable theming and transitions.
 
 <img src="docs/coverImage.png" width="359" title="What it looks like">
 
@@ -94,7 +94,7 @@ Will reverse the order in which menus are gathered. So instead of the innermost 
 
 The item to use as a separator to "glue" together different menus gathered during a context menu event. If only one menu is triggered then no separator will be used. The separator follows the same shorthand for menuItems added in the buildMenu callback (described below). The default `"-"` ultimately generates a single vanilla `<hr>` tag.
 
-### Menu Decorator
+### Context Menu connector (HOC / decorator pattern)
 
 The mechanism provided to actually make an area right-clickable is a HOC (Higher Order Component) to wrap another React component. This component must conform to:
 
@@ -198,7 +198,7 @@ https://github.com/downplay/downright/tree/master/examples/source/examples/Styli
 
 #### Advanced theming
 
-The `theme` property of `ContextMenuProvider` exposes an API which allows you to customise any single aspect of the rendering of a Downright menu.
+The `theme` property of `ContextMenuProvider` exposes an API which allows you to customise any single aspect of the rendering of a Downright menu. Theming uses the [Downstyle](https://github.com/downplay/downstyle) system allowing complete customisation of any element; this adds a very tiny dependency to the package, with tree-shaking this should be less than 3kb *un*-minified. (TODO: Some real stats on bundle sizes!) More documentation on how theming works can be found at [Downstyle](https://github.com/downplay/downstyle), but what follows is a reasonably complete guide to customising the themes.
 
 A theme is a plain object with three optional properties: `classNames`, `styles`, and `elements`. These properties allow you to map different classNames, styles, and elements to different blocks of the rendering of the menu.
 
@@ -248,9 +248,10 @@ The dev server is hot module enabled so tweak at will.
 
 ## Version History
 
-### Unreleased
+### 0.3.1
 
 - Fixed several styling issues
+- Theme helper externalised to `downstyle` package
 
 ### 0.3.0
 
@@ -292,13 +293,13 @@ First release, basic prototype / proof of concept.
 
 ## Bugs and Issues
 
-There are lots right now! I will address many very soon, particularly:
+The roadmap for v1 is getting shorter, but here are the known issues/planned features:
 
+- Submenus are completely broken!
+- Handle layout better so menus don't go off the screen
 - Ensuring good cross-browser support (should be great, but needs testing)
-- Bugginess with positioning on the screen
 - Removing the outer <div> added by the provider
 - Additional entities - checkbox, etc.
-- More rendering customisation
 
 Please report any other bugs or issues on GitHub: https://github.com/downplay/downright
 

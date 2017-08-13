@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { themed } from "downstyle";
 
 import MenuWrapper from "../display/MenuWrapper";
 import ContextMenuItem from "./ContextMenuItem";
 
-import themeHelper from "../tool/themeHelper";
 import themeShape from "../tool/themeShape";
 
 class ContextMenu extends Component {
@@ -26,7 +26,7 @@ class ContextMenu extends Component {
         } = this.props;
 
         if (!this.Menu) {
-            this.Menu = themeHelper(MenuWrapper, theme, "menu", {
+            this.Menu = themed(MenuWrapper, theme, "menu", {
                 entered: "entered",
                 exiting: "exiting"
             });

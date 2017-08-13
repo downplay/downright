@@ -2,11 +2,12 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import invariant from "invariant";
+import { themed } from "downstyle";
+
 import ContextMenu from "./container/ContextMenu";
 import MenuLayer from "./display/MenuLayer";
 import ContainerElement from "./display/ContainerElement";
 
-import themeHelper from "./tool/themeHelper";
 import themeShape from "./tool/themeShape";
 
 import defaultTheme from "./themes/default";
@@ -319,7 +320,7 @@ class ContextMenuProvider extends Component {
         } = this.props;
 
         if (!this.Container) {
-            this.Container = themeHelper(
+            this.Container = themed(
                 ContainerElement,
                 this.props.theme,
                 "container"
@@ -352,7 +353,7 @@ class ContextMenuProvider extends Component {
 
     render() {
         if (!this.Layer) {
-            this.Layer = themeHelper(MenuLayer, this.props.theme, "layer");
+            this.Layer = themed(MenuLayer, this.props.theme, "layer");
         }
         const Layer = this.Layer;
         return (
