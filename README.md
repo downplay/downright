@@ -248,6 +248,10 @@ The dev server is hot module enabled so tweak at will.
 
 ## Version History
 
+### Unreleased
+
+- Fixed several styling issues
+
 ### 0.3.0
 
 - Brand new theming system, allows override of any class names, inline styles, and elements
