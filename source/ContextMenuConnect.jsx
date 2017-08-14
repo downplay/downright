@@ -13,8 +13,10 @@ function makeComponentWrapper(
     } = {}
 ) {
     return WrappedComponent => {
-        const getDisplayName = name => `ContextMenuConnect(${name})`;
-        const displayName = getDisplayName(WrappedComponent.displayName);
+        const displayName =
+            WrappedComponent.displayName ||
+            WrappedComponent.name ||
+            "Component";
 
         class ContextMenuConnect extends Component {
             static contextTypes = {
@@ -25,6 +27,10 @@ function makeComponentWrapper(
                     reverseOrder: PropTypes.func
                 })
             };
+
+            static displayName = `ContextMenuConnect(${displayName})`;
+
+            static WrappedComponent = WrappedComponent;
 
             componentDidMount() {
                 this.nearestNode = ReactDOM.findDOMNode(this.innerNode);
@@ -88,8 +94,6 @@ function makeComponentWrapper(
             }
         }
 
-        ContextMenuConnect.WrappedComponent = WrappedComponent;
-        ContextMenuConnect.displayName = displayName;
         return hoistStatics(ContextMenuConnect, WrappedComponent);
     };
 }
