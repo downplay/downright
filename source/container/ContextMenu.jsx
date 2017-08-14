@@ -11,7 +11,10 @@ class ContextMenu extends Component {
     static propTypes = {
         menu: PropTypes.arrayOf(PropTypes.object).isRequired,
         onMenuClick: PropTypes.func.isRequired,
-        theme: themeShape.isRequired
+        theme: themeShape.isRequired,
+        // TODO: Not very happy how this property has to be hoisted
+        // up from the item. Might be better to use context to facilitate this.
+        onSubmenuOpen: PropTypes.func.isRequired
     };
 
     render() {
@@ -46,6 +49,7 @@ class ContextMenu extends Component {
                         item={menuItem}
                         theme={theme}
                         className={className}
+                        onSubmenuOpen={this.props.onSubmenuOpen}
                         {...others}
                         {...menuItem}
                     />

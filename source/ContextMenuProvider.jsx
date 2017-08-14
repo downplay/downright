@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 import invariant from "invariant";
 import { themed } from "downstyle";
 
+import MenuManager from "./MenuManager";
+
 import ContextMenu from "./container/ContextMenu";
 import MenuLayer from "./display/MenuLayer";
 import ContainerElement from "./display/ContainerElement";
@@ -341,6 +343,7 @@ class ContextMenuProvider extends Component {
             >
                 <ContextMenu
                     onMenuClick={this.closeMenu}
+                    onSubmenuOpen={this.onSubmenuOpen}
                     menu={this.state.menu}
                     entered={this.state.entered}
                     exiting={this.state.exiting}
@@ -350,6 +353,7 @@ class ContextMenuProvider extends Component {
             </Container>
         );
     }
+    // {this.state.menuIsOpen ? this.renderMenu() : null}
 
     render() {
         if (!this.Layer) {
@@ -359,7 +363,7 @@ class ContextMenuProvider extends Component {
         return (
             <Layer onClick={this.onLayerClick}>
                 {this.props.children}
-                {this.state.menuIsOpen ? this.renderMenu() : null}
+                <MenuManager />
             </Layer>
         );
     }

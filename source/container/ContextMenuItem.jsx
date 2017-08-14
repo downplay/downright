@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { themed } from "downstyle";
 
-import ContextSubmenu from "./ContextSubmenu";
 import ButtonElement from "../display/ButtonElement";
 import LabelElement from "../display/LabelElement";
 import LinkElement from "../display/LinkElement";
 import SeparatorElement from "../display/SeparatorElement";
+import SubmenuElement from "../display/SubmenuElement";
 import ItemWrapper from "../display/ItemWrapper";
 
 import sanitizeProps from "../tool/sanitizeProps";
@@ -27,7 +27,8 @@ class ContextMenuItem extends Component {
         onClick: PropTypes.func,
         onMenuClick: PropTypes.func,
         menu: PropTypes.oneOfType([PropTypes.array, PropTypes.func]),
-        theme: themeShape.isRequired
+        theme: themeShape.isRequired,
+        onSubMenuOpen: PropTypes.func
     };
 
     static defaultProps = {
@@ -35,6 +36,7 @@ class ContextMenuItem extends Component {
         content: null,
         onClick: null,
         onMenuClick: null,
+        onSubMenuOpen: null,
         menu: []
     };
 
@@ -42,7 +44,8 @@ class ContextMenuItem extends Component {
         label: LabelElement,
         separator: SeparatorElement,
         link: LinkElement,
-        button: ButtonElement
+        button: ButtonElement,
+        submenu: SubmenuElement
     };
 
     constructor(props) {
@@ -87,6 +90,7 @@ class ContextMenuItem extends Component {
         this.setState({
             selected: true
         });
+        this.props.onSubmenuOpen();
     };
 
     setSubmenuVisible = visible => {
@@ -144,7 +148,17 @@ class ContextMenuItem extends Component {
             case "separator":
                 return <Element {...others} />;
             case "submenu":
-                // A bit of a special case
+                return (
+                    <Element
+                        {...others}
+                        onClick={this.onSubmenuClick}
+                        onMouseEnter={this.onSubmenuMouseEnter}
+                        onMouseLeave={this.onSubmenuMouseLeave}
+                    >
+                        {content}
+                    </Element>
+                );
+            /*
                 return (
                     <ContextSubmenu
                         menu={this.state.submenu}
@@ -160,7 +174,7 @@ class ContextMenuItem extends Component {
                     >
                         {content}
                     </ContextSubmenu>
-                );
+                    */
             case "link":
             case "button":
             default:
