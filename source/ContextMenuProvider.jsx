@@ -6,9 +6,7 @@ import { themed } from "downstyle";
 
 import MenuManager from "./MenuManager";
 
-import ContextMenu from "./container/ContextMenu";
 import MenuLayer from "./display/MenuLayer";
-import ContainerElement from "./display/ContainerElement";
 
 import themeShape from "./tool/themeShape";
 
@@ -25,7 +23,6 @@ class ContextMenuProvider extends Component {
             PropTypes.array,
             PropTypes.object
         ]),
-        renderClassNames: PropTypes.bool,
         enableTransitions: PropTypes.bool
     };
 
@@ -48,11 +45,7 @@ class ContextMenuProvider extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            menuIsOpen: false,
-            menu: [],
-            menuPosition: null,
-            entered: false,
-            exiting: false
+            menus: []
         };
     }
 
@@ -164,6 +157,12 @@ class ContextMenuProvider extends Component {
         event.stopPropagation();
         const position = { x: event.pageX, y: event.pageY };
         if (this.buildMenu.length > 0) {
+            const newMenu = {
+                position: position,
+                entered: this.props.enableTransitions,
+                exiting: false,
+                items: this.buildMenu
+            }
             this.setState(
                 {
                     menu: this.buildMenu,
@@ -307,54 +306,6 @@ class ContextMenuProvider extends Component {
         }
     };
 
-    storeOuterNode = ref => {
-        this.outerNode = ref;
-    };
-
-    renderMenu() {
-        const {
-            gatherMenus,
-            reverseOrder,
-            menuSeparator,
-            children,
-            theme,
-            ...others
-        } = this.props;
-
-        if (!this.Container) {
-            this.Container = themed(
-                ContainerElement,
-                this.props.theme,
-                "container"
-            );
-        }
-        const Container = this.Container;
-        const style = {
-            left: this.state.menuPosition.x,
-            top: this.state.menuPosition.y
-        };
-
-        return (
-            <Container
-                ref={this.storeOuterNode}
-                onClick={this.onOuterClick}
-                onTransitionEnd={this.onTransitionEnd}
-                style={style}
-            >
-                <ContextMenu
-                    onMenuClick={this.closeMenu}
-                    onSubmenuOpen={this.onSubmenuOpen}
-                    menu={this.state.menu}
-                    entered={this.state.entered}
-                    exiting={this.state.exiting}
-                    theme={theme}
-                    {...others}
-                />
-            </Container>
-        );
-    }
-    // {this.state.menuIsOpen ? this.renderMenu() : null}
-
     render() {
         if (!this.Layer) {
             this.Layer = themed(MenuLayer, this.props.theme, "layer");
@@ -363,7 +314,7 @@ class ContextMenuProvider extends Component {
         return (
             <Layer onClick={this.onLayerClick}>
                 {this.props.children}
-                <MenuManager />
+                <MenuManager menus={this.state.menus} theme={this.props.theme} />
             </Layer>
         );
     }
