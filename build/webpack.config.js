@@ -67,7 +67,6 @@ const webpackConfig = {
                             ),
                             ignore: "node_modules/**/*",
                             plugins: [
-                                "react-hot-loader/babel",
                                 "babel-plugin-transform-class-properties",
                                 [
                                     "babel-plugin-transform-runtime",
