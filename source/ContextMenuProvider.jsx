@@ -40,7 +40,8 @@ class ContextMenuProvider extends Component {
             closeMenu: React.PropTypes.func
         }),
         menuManagerContext: React.PropTypes.shape({
-            registerManager: React.PropTypes.func
+            registerManager: React.PropTypes.func,
+            normalizeMenuItems: React.PropTypes.func
         })
     };
 
@@ -54,7 +55,8 @@ class ContextMenuProvider extends Component {
                 reverseOrder: this.reverseOrder
             },
             menuManagerContext: {
-                registerManager: this.registerManager
+                registerManager: this.registerManager,
+                normalizeMenuItems: this.normalizeMenuItems
             }
         };
     }
@@ -232,9 +234,11 @@ class ContextMenuProvider extends Component {
         return item;
     }
 
-    normalizeMenuItems(rawItems) {
-        return rawItems.map(item => this.expandItemShorthand(item));
-    }
+    normalizeMenuItems = rawItems =>
+        rawItems.map((item, i) => ({
+            key: i.toString(),
+            ...this.expandItemShorthand(item)
+        }));
 
     render() {
         const {
@@ -247,16 +251,12 @@ class ContextMenuProvider extends Component {
         if (!this.Layer) {
             this.Layer = themed(MenuLayer, this.props.theme, "layer");
         }
-        // const Layer = this.Layer;
+        const Layer = this.Layer;
         return (
-            <div onClick={this.onLayerClick}>
-                <div key="menu">
-                    <MenuManager {...others} />
-                </div>
-                <div key="children">
-                    {this.props.children}
-                </div>
-            </div>
+            <Layer onClick={this.onLayerClick}>
+                <MenuManager {...others} />
+                {this.props.children}
+            </Layer>
         );
     }
 }

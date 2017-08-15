@@ -12,8 +12,6 @@ import ItemWrapper from "../display/ItemWrapper";
 import sanitizeProps from "../tool/sanitizeProps";
 import themeShape from "../tool/themeShape";
 
-const emptySubmenu = [];
-
 class ContextMenuItem extends Component {
     static propTypes = {
         type: PropTypes.oneOf([
@@ -28,7 +26,7 @@ class ContextMenuItem extends Component {
         onMenuClick: PropTypes.func,
         menu: PropTypes.oneOfType([PropTypes.array, PropTypes.func]),
         theme: themeShape.isRequired,
-        onSubMenuOpen: PropTypes.func
+        onSubmenuOpen: PropTypes.func
     };
 
     static defaultProps = {
@@ -36,7 +34,7 @@ class ContextMenuItem extends Component {
         content: null,
         onClick: null,
         onMenuClick: null,
-        onSubMenuOpen: null,
+        onSubmenuOpen: null,
         menu: []
     };
 
@@ -51,8 +49,7 @@ class ContextMenuItem extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selected: false,
-            submenuVisible: false
+            selected: false
         };
     }
 
@@ -68,11 +65,19 @@ class ContextMenuItem extends Component {
     }
 
     onSubmenuMouseEnter = () => {
-        this.setSubmenuVisible(true);
+        // TODO: Use a short delay before opening/closing on hover
+        // this.setSubmenuVisible(true);
     };
 
     onSubmenuMouseLeave = () => {
-        this.setSubmenuVisible(false);
+        // this.setSubmenuVisible(false);
+    };
+
+    onSubmenuClick = event => {
+        this.setState({
+            selected: true
+        });
+        this.props.onSubmenuOpen(event);
     };
 
     onButtonClick = event => {
@@ -82,32 +87,8 @@ class ContextMenuItem extends Component {
             // Execute the click handler
             this.props.onClick(event, this.props.item);
         }
-        // Trigger provider to close the menu
+        // Triggers provider to close the menu
         this.props.onMenuClick(event);
-    };
-
-    onSubmenuClick = () => {
-        this.setState({
-            selected: true
-        });
-        this.props.onSubmenuOpen();
-    };
-
-    setSubmenuVisible = visible => {
-        let menu = this.props.menu;
-        if (
-            visible &&
-            !(this.props.menu.constructor === Array) &&
-            typeof this.props.menu === "function"
-        ) {
-            menu = this.props.menu();
-        }
-        // TODO: The submenu state is potentially stale. (Also true with static menus.) Actually
-        // need to listen for props changes and retrigger a menu build.
-        this.setState({
-            submenu: visible ? menu : emptySubmenu,
-            submenuVisible: visible
-        });
     };
 
     renderInnerElement() {
@@ -116,6 +97,7 @@ class ContextMenuItem extends Component {
             content,
             onClick,
             onMenuClick,
+            onSubmenuOpen,
             menu,
             item,
             className,
@@ -158,23 +140,6 @@ class ContextMenuItem extends Component {
                         {content}
                     </Element>
                 );
-            /*
-                return (
-                    <ContextSubmenu
-                        menu={this.state.submenu}
-                        onClick={this.onSubmenuClick}
-                        onMenuClick={onMenuClick}
-                        onMouseEnter={this.onSubmenuMouseEnter}
-                        onMouseLeave={this.onSubmenuMouseLeave}
-                        theme={theme}
-                        visible={
-                            this.state.submenuVisible || this.state.selected
-                        }
-                        {...rest}
-                    >
-                        {content}
-                    </ContextSubmenu>
-                    */
             case "link":
             case "button":
             default:

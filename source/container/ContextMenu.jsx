@@ -9,12 +9,14 @@ import themeShape from "../tool/themeShape";
 
 class ContextMenu extends Component {
     static propTypes = {
-        // TODO: Use shapes for propTypess (also on parent components)
+        // TODO: Use shapes for propTypes (also on parent components)
         items: PropTypes.arrayOf(PropTypes.object).isRequired,
         theme: themeShape.isRequired,
         depth: PropTypes.number,
         entered: PropTypes.bool,
-        exiting: PropTypes.bool
+        exiting: PropTypes.bool,
+        onMenuClick: PropTypes.func.isRequired,
+        onSubmenuOpen: PropTypes.func.isRequired
     };
 
     static defaultProps = {
@@ -31,6 +33,7 @@ class ContextMenu extends Component {
             className,
             entered,
             exiting,
+            onSubmenuOpen,
             ...others
         } = this.props;
 
@@ -40,6 +43,7 @@ class ContextMenu extends Component {
                 exiting: "exiting"
             });
         }
+
         const Menu = this.Menu;
 
         return (
@@ -55,7 +59,7 @@ class ContextMenu extends Component {
                         item={menuItem}
                         theme={theme}
                         className={className}
-                        onSubmenuOpen={this.props.onSubmenuOpen}
+                        onSubmenuOpen={event => onSubmenuOpen(event, menuItem)}
                         {...others}
                         {...menuItem}
                     />

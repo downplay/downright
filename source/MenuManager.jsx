@@ -10,16 +10,11 @@ import ContainerElement from "./display/ContainerElement";
 // menus, and manages their rendering and positioning
 export default class MenuManager extends Component {
     static propTypes = {
-        onMenuClick: PropTypes.func,
-        // TODO: Not very happy how this property has to be hoisted all the way
-        // up from the item. Might be better to use context to facilitate this.
-        onSubmenuOpen: PropTypes.func,
         enableTransitions: PropTypes.bool
+        // TODO: Some handlers like onMenuOpen/Close
     };
 
     static defaultProps = {
-        onMenuClick: null,
-        onSubmenuOpen: null,
         enableTransitions: true
     };
 
@@ -83,7 +78,7 @@ export default class MenuManager extends Component {
     };
 
     onMenuClick = key => {
-        this.closeMenu(key);
+        this.closeMenu(key, true);
     };
 
     // Don't let menus close automatically from clicks on items, only when
@@ -97,6 +92,30 @@ export default class MenuManager extends Component {
         event.stopPropagation();
         // Also still don't try to open default context menu
         event.preventDefault();
+    };
+
+    // TODO: Not very happy how this handler has to be hoisted all the way
+    // up from the item. Might be better to use context to facilitate this.
+    onSubmenuOpen = (event, menuItem, menu) => {
+        // Close any other submenus with the same parent
+        this.state.menus.forEach(m => {
+            if (m.parent === menu) {
+                this.closeMenu(m.key);
+            }
+        });
+        // Position relative to event source
+        const bounds = event.target.getBoundingClientRect();
+        const position = {
+            x: bounds.right,
+            y: bounds.top
+        };
+        const newMenu = {
+            key: `${menu.key}_${menuItem.key}`,
+            items: this.buildMenuItems(menuItem.menu),
+            parent: menu,
+            position
+        };
+        this.openMenu(newMenu);
     };
 
     openMenu(menu) {
@@ -133,7 +152,14 @@ export default class MenuManager extends Component {
         this.state.menus.forEach(m => this.closeMenu(m.key));
     }
 
-    closeMenu(key) {
+    closeMenu(key, closeParent = false) {
+        const menu = this.state.menus.find(m => m.key === key);
+        if (!menu) {
+            return;
+        }
+        if (closeParent && menu.parent) {
+            this.closeMenu(menu.parent.key, true);
+        }
         if (this.props.enableTransitions) {
             this.setState(
                 {
@@ -161,6 +187,14 @@ export default class MenuManager extends Component {
         this.setState({
             menus: this.state.menus.filter(m => m.key !== key)
         });
+    }
+
+    buildMenuItems(menu) {
+        const items =
+            !(menu.constructor === Array) && typeof menu === "function"
+                ? menu()
+                : menu;
+        return this.context.menuManagerContext.normalizeMenuItems(items);
     }
 
     render() {
@@ -191,7 +225,9 @@ export default class MenuManager extends Component {
                         >
                             <ContextMenu
                                 onMenuClick={() => this.onMenuClick(menu.key)}
-                                onSubmenuOpen={this.onSubmenuOpen}
+                                onSubmenuOpen={(event, menuItem) => {
+                                    this.onSubmenuOpen(event, menuItem, menu);
+                                }}
                                 items={items}
                                 theme={theme}
                                 entered={entered}

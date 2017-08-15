@@ -11,13 +11,15 @@ import { Question, Answer } from "./styles";
         [
             ["Garfield", props.onCat],
             ["Macavity", props.onCat],
-            ["Fritz", props.onCat]
+            ["Fritz", props.onCat],
+            ["Top Cat", props.onCat]
         ]
     ],
     [
         "Dogs",
         [
             ["Snoopy", props.onDog],
+            ["Snoop Dogg", props.onDog],
             ["Scooby Doo", props.onDog],
             ["The Hound", props.onDog]
         ]
