@@ -74,13 +74,13 @@ Additional notes:
 
 These properties affect all context menus under this provider.
 
+`theme: object (default: see "default theme")`
+
+An optional object describing the classNames, styles and elements used to render each type of element in the menu. See sections on "Default Theme" and "Advanced Theming" for information on how to use this property.
+
 `className: string (default: null)`
 
-If provided, this className will be appended to all menu elements. This can be used to display different menus with completely different styling.
-
-`renderClassNames: bool (default: true)`
-
-Disable this to not output any classNames at all on menu elements. Will be useful in future updates.
+If provided, this className will be appended to all menu elements. This can be used for transient and individual menu variations beyond the built-in theming support.
 
 `gatherMenus: bool (default: true)`
 
@@ -93,6 +93,16 @@ Will reverse the order in which menus are gathered. So instead of the innermost 
 `menuSeparator: string|node|object (default: "-")`
 
 The item to use as a separator to "glue" together different menus gathered during a context menu event. If only one menu is triggered then no separator will be used. The separator follows the same shorthand for menuItems added in the buildMenu callback (described below). The default `"-"` ultimately generates a single vanilla `<hr>` tag.
+
+`enableTransitions: bool (default: true)`
+
+Whether to enable CSS transition animations for menus (and submenus) entering and leaving the page. When true, the following will happen:
+
+1. A menu that has just appeared will have an `entered` style applied, and this will be immediately removed after first render
+
+2. A menu that is about to be removed will have an `exiting` style applied. The menu component will wait for an onTransitionEnd event before finally removing itself from DOM.
+
+Both `entered` and `exiting` styles can be customised as described in the section on Theming.
 
 ### Context Menu connector (HOC / decorator pattern)
 

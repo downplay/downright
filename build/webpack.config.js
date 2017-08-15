@@ -95,6 +95,13 @@ const webpackConfig = {
                     "eslint-loader"
                 ]
             },
+            {
+                test: /\.svg$/,
+                use: {
+                    loader: "svg-url-loader",
+                    options: {}
+                }
+            },
             __DEV__
                 ? {
                       test: /\.css$/,

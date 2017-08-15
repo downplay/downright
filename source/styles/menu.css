@@ -70,6 +70,6 @@
     text-decoration: none;
 }
 
-.element.submenu::after {
-    content: ">";
+.element.submenu {
+    background: transparent url("./triangleRight.svg") no-repeat right center;
 }

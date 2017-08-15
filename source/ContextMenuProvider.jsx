@@ -31,7 +31,6 @@ class ContextMenuProvider extends Component {
         gatherMenus: true,
         reverseOrder: false,
         menuSeparator: "-",
-        renderClassNames: true,
         enableTransitions: true
     };
 
@@ -45,7 +44,8 @@ class ContextMenuProvider extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            menus: []
+            menus: [],
+            menuIndex: 0
         };
     }
 
@@ -158,29 +158,14 @@ class ContextMenuProvider extends Component {
         const position = { x: event.pageX, y: event.pageY };
         if (this.buildMenu.length > 0) {
             const newMenu = {
-                position: position,
-                entered: this.props.enableTransitions,
-                exiting: false,
+                key: `root${this.state.menuIndex}`,
+                position,
                 items: this.buildMenu
-            }
-            this.setState(
-                {
-                    menu: this.buildMenu,
-                    menuIsOpen: true,
-                    menuPosition: position,
-                    entered: this.props.enableTransitions,
-                    exiting: false
-                },
-                () => {
-                    if (this.props.enableTransitions) {
-                        setImmediate(() => {
-                            this.setState({
-                                entered: !this.state.entered
-                            });
-                        });
-                    }
-                }
-            );
+            };
+            this.setState({
+                menus: [newMenu],
+                menuIndex: this.state.menuIndex + 1
+            });
         }
     };
 
@@ -206,6 +191,12 @@ class ContextMenuProvider extends Component {
             this.destroyMenu();
         }
     };
+
+    onMenuClick = () => {
+        this.destroyMenu();
+    };
+
+    onSubmenuOpen = () => {};
 
     concatenateMenus(one, two) {
         const [left, right] = this.buildMenuOptions.reverseOrder
@@ -307,6 +298,13 @@ class ContextMenuProvider extends Component {
     };
 
     render() {
+        const {
+            gatherMenus,
+            reverseOrder,
+            menuSeparator,
+            ...others
+        } = this.props;
+
         if (!this.Layer) {
             this.Layer = themed(MenuLayer, this.props.theme, "layer");
         }
@@ -314,7 +312,12 @@ class ContextMenuProvider extends Component {
         return (
             <Layer onClick={this.onLayerClick}>
                 {this.props.children}
-                <MenuManager menus={this.state.menus} theme={this.props.theme} />
+                <MenuManager
+                    menus={this.state.menus}
+                    onMenuClick={this.onMenuClick}
+                    onSubmenuOpen={this.onSubmenuOpen}
+                    {...others}
+                />
             </Layer>
         );
     }

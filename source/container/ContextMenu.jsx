@@ -9,24 +9,34 @@ import themeShape from "../tool/themeShape";
 
 class ContextMenu extends Component {
     static propTypes = {
-        menu: PropTypes.arrayOf(PropTypes.object).isRequired,
-        onMenuClick: PropTypes.func.isRequired,
+        // TODO: Use shapes for propTypess (also on parent components)
+        items: PropTypes.arrayOf(PropTypes.object).isRequired,
         theme: themeShape.isRequired,
-        // TODO: Not very happy how this property has to be hoisted
-        // up from the item. Might be better to use context to facilitate this.
-        onSubmenuOpen: PropTypes.func.isRequired
+        depth: PropTypes.number
     };
 
+    static defaultProps = {
+        depth: 0
+    };
+
+    state = {
+        entered: this.props.enableTransitions,
+        exiting: false
+    };
+
+    componentDidMount() {
+        if (this.props.enableTransitions) {
+            setImmediate(() => {
+                this.setState({
+                    entered: !this.state.entered
+                });
+            });
+        }
+    }
+
     render() {
-        const {
-            menu,
-            onMenuClick,
-            entered,
-            exiting,
-            theme,
-            className,
-            ...others
-        } = this.props;
+        const { items, onMenuClick, theme, className, ...others } = this.props;
+        const { entered, exiting } = this.state;
 
         if (!this.Menu) {
             this.Menu = themed(MenuWrapper, theme, "menu", {
@@ -38,7 +48,7 @@ class ContextMenu extends Component {
 
         return (
             <Menu className={className} entered={entered} exiting={exiting}>
-                {this.props.menu.map((menuItem, index) =>
+                {this.props.items.map((menuItem, index) =>
                     // TODO: Not really anything better to use for a key,
                     // but could allow key as an optional prop, not a lot of
                     // point in this case though....
