@@ -212,7 +212,7 @@ class ContextMenuProvider extends Component {
                         onClick: item[1]
                     };
                 }
-                if (item.constructor === Array) {
+                if (item[1] && item[1].constructor === Array) {
                     return {
                         type: "submenu",
                         content: item[0],
