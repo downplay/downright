@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import ReactDOM from "react-dom";
 import { themed } from "downstyle";
 
 import ContextMenu from "./container/ContextMenu";
@@ -9,51 +10,193 @@ import ContainerElement from "./display/ContainerElement";
 // menus, and manages their rendering and positioning
 export default class MenuManager extends Component {
     static propTypes = {
-        menus: PropTypes.arrayOf(PropTypes.object),
-        onMenuClick: PropTypes.func.isRequired,
+        onMenuClick: PropTypes.func,
         // TODO: Not very happy how this property has to be hoisted all the way
         // up from the item. Might be better to use context to facilitate this.
-        onSubmenuOpen: PropTypes.func.isRequired
+        onSubmenuOpen: PropTypes.func,
+        enableTransitions: PropTypes.bool
     };
 
     static defaultProps = {
-        menus: []
+        onMenuClick: null,
+        onSubmenuOpen: null,
+        enableTransitions: true
     };
 
-    storeOuterNode = ref => {
-        this.outerNode = ref;
+    static contextTypes = {
+        menuManagerContext: React.PropTypes.shape({
+            registerManager: React.PropTypes.func
+        })
     };
+
+    state = {
+        menus: [],
+        menuIndex: 0
+    };
+
+    componentDidMount() {
+        this.context.menuManagerContext.registerManager(this);
+        // TODO: Try to get React's onContextMenu event working - would remove
+        // a lot of boilerplate
+        if (this.outerNode) {
+            this.nearestOuterNode = ReactDOM.findDOMNode(this.outerNode);
+            if (this.nearestOuterNode) {
+                this.nearestOuterNode.addEventListener(
+                    "contextmenu",
+                    this.onOuterContextMenu
+                );
+            }
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.theme !== this.props.theme) {
+            this.Container = null;
+        }
+    }
+
+    componentWillUpdate() {
+        this.componentWillUnmount();
+    }
+
+    componentDidUpdate() {
+        this.componentDidMount();
+    }
+
+    componentWillUnmount() {
+        if (this.nearestOuterNode) {
+            this.nearestOuterNode.removeEventListener(
+                "contextmenu",
+                this.onOuterContextMenu
+            );
+            this.nearestOuterNode = null;
+        }
+    }
+
+    onTransitionEnd = key => {
+        // TODO: Check if it's actually the transition we were looking for
+        // Could be any old random transition (e.g. item hovers).
+        const menu = this.state.menus.find(m => m.key === key);
+        if (menu && menu.exiting) {
+            this.removeMenu(key);
+        }
+    };
+
+    onMenuClick = key => {
+        this.closeMenu(key);
+    };
+
+    // Don't let menus close automatically from clicks on items, only when
+    // we tell them to
+    onOuterClick = event => event.stopPropagation();
+
+    onOuterContextMenu = event => {
+        // Catches right clicks originating inside the menu itself. The contextmenu event
+        // seems to get double-triggered, and we don't want to close it from right-clicking
+        // on it again.
+        event.stopPropagation();
+        // Also still don't try to open default context menu
+        event.preventDefault();
+    };
+
+    openMenu(menu) {
+        // TODO: Immutable state changes here get a bit messy, could clean this up a bit
+        const newMenu = {
+            ...menu,
+            key: menu.key || `root${this.state.menuIndex}`,
+            entered: this.props.enableTransitions,
+            exiting: false
+        };
+        this.setState(
+            {
+                menus: [...this.state.menus, newMenu],
+                menuIndex: this.state.menuIndex + 1
+            },
+            () => {
+                if (this.props.enableTransitions) {
+                    setImmediate(() => {
+                        this.setState({
+                            menus: [
+                                ...this.state.menus.filter(
+                                    m => m.key !== newMenu.key
+                                ),
+                                { ...newMenu, entered: false }
+                            ]
+                        });
+                    });
+                }
+            }
+        );
+    }
+
+    closeMenus() {
+        this.state.menus.forEach(m => this.closeMenu(m.key));
+    }
+
+    closeMenu(key) {
+        if (this.props.enableTransitions) {
+            this.setState(
+                {
+                    menus: this.state.menus.map(
+                        m => (m.key === key ? { ...m, exiting: true } : m)
+                    )
+                },
+                () => {
+                    // Arbitrary timeout to clean up if there wasn't a transition
+                    // There isn't actually a TransitionStart event in React. However DOM should
+                    // have transitionrun and transitionstart, so could actually listen for those
+                    // and kill the menu much quicker if there isn't a transition starting.
+                    // TODO: Should allow for
+                    setTimeout(() => {
+                        this.removeMenu(key);
+                    }, 500);
+                }
+            );
+        } else {
+            this.removeMenu(key);
+        }
+    }
+
+    removeMenu(key) {
+        this.setState({
+            menus: this.state.menus.filter(m => m.key !== key)
+        });
+    }
 
     render() {
-        const { children, theme, menus, ...others } = this.props;
+        const { children, theme, ...others } = this.props;
 
         if (!this.Container) {
             this.Container = themed(ContainerElement, theme, "container");
         }
         const Container = this.Container;
-
         return (
-            <div>
-                {this.props.menus.map(menu => {
+            <div key="foo">
+                {Object.values(this.state.menus).map(menu => {
                     const style = {
                         left: menu.position.x,
                         top: menu.position.y
                     };
-
+                    const { items, entered, exiting, menuOthers } = menu;
                     return (
                         <Container
                             key={menu.key}
-                            ref={this.storeOuterNode}
+                            ref={ref => {
+                                this.outerNode = ref;
+                            }}
                             onClick={this.onOuterClick}
-                            onTransitionEnd={this.onTransitionEnd}
+                            onTransitionEnd={() =>
+                                this.onTransitionEnd(menu.key)}
                             style={style}
                         >
                             <ContextMenu
-                                key={menu.key}
-                                onMenuClick={this.props.onMenuClick}
-                                onSubmenuOpen={this.props.onSubmenuOpen}
-                                items={menu.items}
+                                onMenuClick={() => this.onMenuClick(menu.key)}
+                                onSubmenuOpen={this.onSubmenuOpen}
+                                items={items}
                                 theme={theme}
+                                entered={entered}
+                                exiting={exiting}
+                                {...menuOthers}
                                 {...others}
                             />
                         </Container>

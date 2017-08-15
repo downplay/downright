@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
+import ReactDOM from "react-dom";
 import invariant from "invariant";
 import { themed } from "downstyle";
 
@@ -38,35 +38,23 @@ class ContextMenuProvider extends Component {
         contextMenuContext: React.PropTypes.shape({
             addMenuItems: React.PropTypes.func,
             closeMenu: React.PropTypes.func
+        }),
+        menuManagerContext: React.PropTypes.shape({
+            registerManager: React.PropTypes.func
         })
     };
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            menus: [],
-            menuIndex: 0
-        };
-    }
 
     getChildContext() {
         return {
             contextMenuContext: {
-                addMenuItems: rawItems => {
-                    const items = this.normalizeMenuItems(rawItems);
-                    // Items further down the DOM tree get inserted in front
-                    this.buildMenu = this.buildMenu.length
-                        ? this.concatenateMenus(this.buildMenu, items)
-                        : items;
-                },
+                addMenuItems: this.addMenuItems,
                 closeMenu: this.closeMenu,
-                shouldGather: () => this.buildMenuOptions.gatherMenus,
-                stopGathering: () => {
-                    this.buildMenuOptions.gatherMenus = false;
-                },
-                reverseOrder: value => {
-                    this.buildMenuOptions.reverseOrder = value;
-                }
+                shouldGather: this.shouldGather,
+                stopGathering: this.stopGathering,
+                reverseOrder: this.reverseOrder
+            },
+            menuManagerContext: {
+                registerManager: this.registerManager
             }
         };
     }
@@ -86,20 +74,10 @@ class ContextMenuProvider extends Component {
             true
         );
         this.nearestNode.addEventListener("contextmenu", this.onContextMenu);
-        if (this.outerNode) {
-            this.nearestOuterNode = ReactDOM.findDOMNode(this.outerNode);
-            if (this.nearestOuterNode) {
-                this.nearestOuterNode.addEventListener(
-                    "contextmenu",
-                    this.onOuterContextMenu
-                );
-            }
-        }
     }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.theme !== this.props.theme) {
-            this.Container = null;
             this.Layer = null;
         }
     }
@@ -123,13 +101,6 @@ class ContextMenuProvider extends Component {
                 this.onContextMenuCapture,
                 true
             );
-        }
-        if (this.nearestOuterNode) {
-            this.nearestOuterNode.removeEventListener(
-                "contextmenu",
-                this.onOuterContextMenu
-            );
-            this.nearestOuterNode = null;
         }
     }
 
@@ -157,46 +128,51 @@ class ContextMenuProvider extends Component {
         event.stopPropagation();
         const position = { x: event.pageX, y: event.pageY };
         if (this.buildMenu.length > 0) {
+            // TODO: Actually maybe the key SHOULD be assigned from here,
+            // e.g. context_0 etc., then other code can open their own menus and provide
+            // unique keys themselves; e.g. a site menu closing and immediately opening
+            // should be able to cancel the transition rather than open a whole new menu.
             const newMenu = {
-                key: `root${this.state.menuIndex}`,
                 position,
                 items: this.buildMenu
             };
-            this.setState({
-                menus: [newMenu],
-                menuIndex: this.state.menuIndex + 1
-            });
+            invariant(
+                this.menuManager,
+                "No menu manager found, unable to open context menu"
+            );
+            this.menuManager.closeMenus();
+            this.menuManager.openMenu(newMenu);
         }
     };
 
     onLayerClick = () => {
-        // A click reaching the layer means it was outside the menu,
-        // so close it
-        this.closeMenu();
-    };
-
-    onOuterContextMenu = event => {
-        // Stop the event propagating - then it won't close the menu
-        event.stopPropagation();
-        // Also don't try to open another context menu at all
-        event.preventDefault();
-    };
-
-    onTransitionEnd = () => {
-        // TODO: Check if it's actually the transition we were looking for
-        // Could be any old random transition
-        // Also split this transition management out into a component
-        // since I need it for Submenu too
-        if (this.state.exiting) {
-            this.destroyMenu();
+        // A click reaching the layer means it was outside any menu,
+        // so close them all
+        if (this.menuManager) {
+            this.menuManager.closeMenus();
         }
     };
 
-    onMenuClick = () => {
-        this.destroyMenu();
+    // Context API methods
+    // TODO: This is a bit complicated, need to simplify
+    addMenuItems = rawItems => {
+        const items = this.normalizeMenuItems(rawItems);
+        // Items further down the DOM tree get inserted in front
+        this.buildMenu = this.buildMenu.length
+            ? this.concatenateMenus(this.buildMenu, items)
+            : items;
     };
-
-    onSubmenuOpen = () => {};
+    shouldGather = () => this.buildMenuOptions.gatherMenus;
+    stopGathering = () => {
+        this.buildMenuOptions.gatherMenus = false;
+    };
+    reverseOrder = value => {
+        this.buildMenuOptions.reverseOrder = value;
+    };
+    registerManager = manager => {
+        this.menuManager = manager;
+    };
+    // End Context API methods
 
     concatenateMenus(one, two) {
         const [left, right] = this.buildMenuOptions.reverseOrder
@@ -257,45 +233,8 @@ class ContextMenuProvider extends Component {
     }
 
     normalizeMenuItems(rawItems) {
-        const items = rawItems.map(item => this.expandItemShorthand(item));
-        return items;
+        return rawItems.map(item => this.expandItemShorthand(item));
     }
-
-    closeMenu = () => {
-        // An ordinary click that wasn't on our menu or a right-click should just close the menu
-        if (!this.state.menuIsOpen || this.state.exiting) return;
-        if (this.props.enableTransitions) {
-            this.setState(
-                {
-                    exiting: true
-                },
-                () => {
-                    // Arbitrary timeout to clean up if there wasn't a transition
-                    // There isn't actually a TransitionStart event in React. However DOM should
-                    // have transitionrun and transitionstart, so could actually listen for those
-                    // and kill the menu much quicker if there isn't a transition starting.
-                    setTimeout(() => {
-                        if (this.state.exiting && this.state.menuIsOpen) {
-                            this.destroyMenu();
-                        }
-                    }, 500);
-                }
-            );
-        } else {
-            this.destroyMenu();
-        }
-    };
-
-    destroyMenu = () => {
-        if (this.state.menuIsOpen) {
-            this.setState({
-                menuIsOpen: false,
-                menu: [],
-                menuPosition: null,
-                exiting: false
-            });
-        }
-    };
 
     render() {
         const {
@@ -308,17 +247,16 @@ class ContextMenuProvider extends Component {
         if (!this.Layer) {
             this.Layer = themed(MenuLayer, this.props.theme, "layer");
         }
-        const Layer = this.Layer;
+        // const Layer = this.Layer;
         return (
-            <Layer onClick={this.onLayerClick}>
-                {this.props.children}
-                <MenuManager
-                    menus={this.state.menus}
-                    onMenuClick={this.onMenuClick}
-                    onSubmenuOpen={this.onSubmenuOpen}
-                    {...others}
-                />
-            </Layer>
+            <div onClick={this.onLayerClick}>
+                <div key="menu">
+                    <MenuManager {...others} />
+                </div>
+                <div key="children">
+                    {this.props.children}
+                </div>
+            </div>
         );
     }
 }

@@ -12,31 +12,27 @@ class ContextMenu extends Component {
         // TODO: Use shapes for propTypess (also on parent components)
         items: PropTypes.arrayOf(PropTypes.object).isRequired,
         theme: themeShape.isRequired,
-        depth: PropTypes.number
+        depth: PropTypes.number,
+        entered: PropTypes.bool,
+        exiting: PropTypes.bool
     };
 
     static defaultProps = {
-        depth: 0
-    };
-
-    state = {
-        entered: this.props.enableTransitions,
+        depth: 0,
+        entered: false,
         exiting: false
     };
 
-    componentDidMount() {
-        if (this.props.enableTransitions) {
-            setImmediate(() => {
-                this.setState({
-                    entered: !this.state.entered
-                });
-            });
-        }
-    }
-
     render() {
-        const { items, onMenuClick, theme, className, ...others } = this.props;
-        const { entered, exiting } = this.state;
+        const {
+            items,
+            onMenuClick,
+            theme,
+            className,
+            entered,
+            exiting,
+            ...others
+        } = this.props;
 
         if (!this.Menu) {
             this.Menu = themed(MenuWrapper, theme, "menu", {
