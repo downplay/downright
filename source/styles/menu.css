@@ -60,7 +60,8 @@
     cursor: default;
 }
 
-.element.button {
+.element.button,
+.element.submenu {
     background: none;
     border: none;
     cursor: pointer;
@@ -71,5 +72,6 @@
 }
 
 .element.submenu {
-    background: transparent url("./triangleRight.svg") no-repeat right center;
+    background: transparent url("./triangleRight.svg") no-repeat right 5px
+        center;
 }
