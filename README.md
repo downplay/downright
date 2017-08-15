@@ -1,14 +1,19 @@
 # Downright
 
-A lightweight (<20k minified) right-click context menu HOC for React, with completely customisable theming and transitions.
+A lightweight (~20k minified) right-click context menu HOC for React, with completely customisable theming and transitions.
 
 <img src="docs/coverImage.png" width="359" title="What it looks like">
 
-## Latest version: 0.3.x
+## Latest version: 0.4.0
 
-0.3 introduces a granular theming system allowing any element in the menu to be fully customised (including swapping in entirely different HTML elements and even whole React components).
+Features:
 
-Next item on the roadmap is submenus: making them display and work properly, giving them transitions.
+* Convenient HOC with simple shorthand to create context-sensitive zone
+* Granular theming, replace/extend any classNames and styles, and swap out any element with your own components to customise the HTML output
+* Submenus and CSS transitions
+* Deferred submenu building for large menus
+
+See the end for roadmap / planned features.
 
 ## Sample Code
 
@@ -258,6 +263,10 @@ The dev server is hot module enabled so tweak at will.
 
 ## Version History
 
+### 0.4.0
+
+- Submenu rewrite; they work now and look prety good
+
 ### 0.3.1
 
 - Fixed several styling issues
@@ -301,15 +310,18 @@ Almost complete rewrite, and reasonable default styles. Rewrite paves the way fo
 
 First release, basic prototype / proof of concept.
 
+## Planned / Roadmap
+
+* Better handling of page layout; don't go off sides, add scrollbars
+* Provide a button component for left-click open
+* Support keyboard, full accessibility
+* Ship a couple of themes - e.g. dark, high-contrast
+* Export the menu primitives for ad hoc use
+* Testing for cross-browser support
+* Remove the outer `<div>` added by the provider
+* Additional entities
+
 ## Bugs and Issues
-
-The roadmap for v1 is getting shorter, but here are the known issues/planned features:
-
-- Submenus are completely broken!
-- Handle layout better so menus don't go off the screen
-- Ensuring good cross-browser support (should be great, but needs testing)
-- Removing the outer <div> added by the provider
-- Additional entities - checkbox, etc.
 
 Please report any other bugs or issues on GitHub: https://github.com/downplay/downright
 
