@@ -1,10 +1,10 @@
 # Downright
 
-A lightweight (~20k minified) right-click context menu HOC for React, with completely customisable theming and transitions.
+A lightweight (~22k minified) right-click context menu HOC for React, with completely customisable theming and transitions.
 
 <img src="docs/coverImage.png" width="359" title="What it looks like">
 
-## Latest version: 0.4.0
+## Latest version: 0.4.1
 
 Features:
 
@@ -263,6 +263,12 @@ The dev server is hot module enabled so tweak at will.
 
 ## Version History
 
+### 0.4.1
+
+- Improved menu positioning. Will never go off top or bottom of the screen, and gets a vertical scrollbar if it's too tall to fit. Will also not go off the RHS. This can cause submenus to overlap with parent menus, so could still be improved further.
+- Menu is now using fixed positioning, along with transform for layout
+- Remove some spurious prop warnings (also new downstyle version)
+
 ### 0.4.0
 
 - Submenu rewrite; they work now and look prety good
@@ -312,14 +318,13 @@ First release, basic prototype / proof of concept.
 
 ## Planned / Roadmap
 
-* Better handling of page layout; don't go off sides, add scrollbars
-* Provide a button component for left-click open
+* Provide a button component for opening menus with left-click
 * Support keyboard, full accessibility
 * Ship a couple of themes - e.g. dark, high-contrast
-* Export the menu primitives for ad hoc use
+* Export the menu primitives for ad-hoc use
 * Testing for cross-browser support
 * Remove the outer `<div>` added by the provider
-* Additional entities
+* Additional item types (inputs, toggles...)
 
 ## Bugs and Issues
 

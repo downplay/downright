@@ -1,7 +1,7 @@
 {
     "name": "downright",
     "description": "Right-click context menu HOC for React.",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "repository": {
         "type": "git",
         "url": "https://github.com/downplay/downright.git"
@@ -12,7 +12,7 @@
         "precommit": "lint-staged",
         "build": "npm-run-all build-core     build-bem",
         "build-dev": "npm-run-all --parallel build-core-dev build-bem-dev",
-        "build-core": "cross-env NODE_ENV=production  DOWNRIGHT_BUILD=core webpack --config ./build/entry.js",
+        "build-core": "cross-env NODE_ENV=production  DOWNRIGHT_BUILD=core webpack --config ./build/entry.js --watch",
         "build-bem": "cross-env NODE_ENV=production  DOWNRIGHT_BUILD=bem  webpack --config ./build/entry.js",
         "build-core-dev": "cross-env NODE_ENV=development DOWNRIGHT_BUILD=core webpack --config ./build/entry.js --watch",
         "build-bem-dev": "cross-env NODE_ENV=development DOWNRIGHT_BUILD=bem  webpack --config ./build/entry.js --watch",
@@ -41,7 +41,7 @@
         "react-router-dom": "^4.0.0"
     },
     "dependencies": {
-        "downstyle": "^0.1.0",
+        "downstyle": "^0.1.1",
         "hoist-non-react-statics": "^2.0.0",
         "invariant": "^2.0.0"
     },
