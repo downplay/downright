@@ -25,6 +25,12 @@ class ContextMenu extends Component {
         exiting: false
     };
 
+    componentWillReceiveProps(nextProps) {
+        if (this.props.theme !== nextProps.theme) {
+            this.Menu = null;
+        }
+    }
+
     render() {
         const {
             items,

@@ -43,12 +43,6 @@ export default class MenuManager extends Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.theme !== this.props.theme) {
-            this.Container = null;
-        }
-    }
-
     componentWillUpdate() {
         this.componentWillUnmount();
     }
