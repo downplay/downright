@@ -1,23 +1,27 @@
 # Downright
 
-A lightweight (~22k minified) right-click context menu HOC for React Web, with completely customisable theming and transitions.
+A lightweight (~23k minified) right-click context menu HOC for React Web, with completely customisable theming and transitions.
 
 <img src="docs/coverImage.png" width="359" title="What it looks like">
 
-## Latest version: 0.4.2
+## Latest version: 0.5.0
+
+0.5.0 marks the first release that is largely bug-free and possibly even usable in production!
 
 Features:
 
 * Convenient HOC with simple shorthand to create context-sensitive zone
-* Granular theming, replace/extend any classNames and styles, and swap out any element with your own components to customise the HTML output
-* Submenus and CSS transitions
-* Deferred submenu building for large menus
+* Granular theming; replace/extend any classNames and styles, and swap out any element with your own components to customise the HTML output
+* Supports any type of menu item: label, button, link, separator, and any custom element
+* CSS transitions and submenus - any depth, with optionally deferred building
+* Light-weight - 23k for the core, plus 5k for the default theme (minified sizes)
+* Low-dependency - depends only on standard React packages and very common third party libraries, plus a very tiny theming helper called "*[downstyle](https://github.com/downplay/downstyle)*"
 
 See the end for roadmap / planned features.
 
 ## Sample Code
 
-Downright is designed with a minimal API to setup and use in your React app. It provides a HOC to wrap your component to make it emit a context menu. You have access to props The primary use case is that your menu will be dispatching Redux actions, which have been injected into props using Redux. (Downright can be used with )
+Downright is designed with a minimal API to setup and use in your React app. It provides a HOC to wrap your component to make it emit a context menu. You have access to props The primary use case is that your menu will be dispatching Redux actions, which have been injected into props using Redux. (Downright works very nicely with Redux, but this is entirely optional and not a dependency!)
 
 ```javascript
 import { contextMenu } from "downright";
@@ -29,7 +33,7 @@ import "downright/dist/theme.css";
         "Context menu", // A label or heading
         ["Badger", () => props.onClickedBadger()], // Calling a handler in the parent
         ["Click me", () => props.reduxInjectedAction()], // A button dispatching an action
-        ["Fork me", `https://https://github.com/downplay/${props.projectName}`] // Renders a <Link/>
+        ["Fork me on GitHub", "https://https://github.com/downplay/downright", target="_blank"] // Renders a <Link/>
     ];
 })
 class MyComponent extends Component {
@@ -112,6 +116,10 @@ Both `entered` and `exiting` styles can be customised as described in the sectio
 `alwaysPreventNativeContextMenu: bool (default: false)`
 
 If true, then the native (browser) context menu will *always* be suppressed, even if the user invokes it on something that isn't wrapped in @contextMenu. Note: It can only be suppressed when the event originates within the ContextMenuProvider.
+
+`submenuHoverDelay: number (default: 500) (in milliseconds)`
+
+Time in milliseconds a submenu waits after mouse hover before it opens.
 
 ### Context Menu connector (HOC / decorator pattern)
 
@@ -267,13 +275,17 @@ The dev server is hot module enabled so tweak at will.
 
 ## Version History
 
-### 0.4.3
+### 0.5.0
 
-#### More bugfixes
+#### More bugfixes!
 
 - Fix opening one submenu when a different submenu is open, by deduping keys
 - Moved handling of `entered`/`exiting` to the right level and make all exiting transitions work properly
 - Fixed application of `selected` on opened submenus
+
+#### New feature
+
+- Submenus open on hover after short delay, configurable with `submenuHoverDelay` prop on ContextMenuProvider, defaults to 500ms
 
 ### 0.4.2
 
@@ -344,12 +356,23 @@ First release, basic prototype / proof of concept.
 ## Planned / Roadmap
 
 * Provide a button component for opening menus with left-click
+* Include the ability to generate nav bars / application-style menus as well
 * Support keyboard, full accessibility
+* Proper touch support
 * Ship a couple of themes - e.g. dark, high-contrast
 * Export the menu primitives for ad-hoc use
 * Testing for cross-browser support
 * Remove the outer `<div>` added by the provider
+
+### Out of Scope
+
+While the menu as-is approaches feature completeness, there are some features that would be really nice for certain use cases. However, I do not want the bundle size to get significantly
+larger than it already is! Consequently, if any of these out-of-scope features are released, they will be as separate packages which can extend the core.
+
+* Custom themeable scrollbars (currently just native)
+* Paging / lazy instantiation of elements
 * Additional item types (inputs, toggles...)
+* A variety of transition extenders
 
 ## Bugs and Issues
 

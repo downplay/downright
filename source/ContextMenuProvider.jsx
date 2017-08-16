@@ -24,7 +24,8 @@ class ContextMenuProvider extends Component {
             PropTypes.object
         ]),
         enableTransitions: PropTypes.bool,
-        alwaysPreventNativeContextMenu: PropTypes.bool
+        alwaysPreventNativeContextMenu: PropTypes.bool,
+        submenuHoverDelay: PropTypes.number
     };
 
     static defaultProps = {
@@ -33,7 +34,8 @@ class ContextMenuProvider extends Component {
         reverseOrder: false,
         menuSeparator: "-",
         enableTransitions: true,
-        alwaysPreventNativeContextMenu: false
+        alwaysPreventNativeContextMenu: false,
+        submenuHoverDelay: 500
     };
 
     static childContextTypes = {

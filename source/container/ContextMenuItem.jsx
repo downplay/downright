@@ -58,13 +58,28 @@ class ContextMenuItem extends Component {
         }
     }
 
-    onSubmenuMouseEnter = () => {
-        // TODO: Use a short delay before opening/closing on hover
-        // this.setSubmenuVisible(true);
+    componentWillUnmount() {
+        this.onSubmenuMouseLeave();
+    }
+
+    onSubmenuMouseEnter = event => {
+        this.setState({
+            hover: true
+        });
+        if (this.hoverTimeout) {
+            clearTimeout(this.hoverTimeout);
+        }
+        event.persist();
+        setTimeout(() => {
+            // Passing the event so we have reference to the DOM node
+            this.onSubmenuClick(event);
+        }, this.props.submenuHoverDelay);
     };
 
     onSubmenuMouseLeave = () => {
-        // this.setSubmenuVisible(false);
+        if (this.hoverTimeout) {
+            clearTimeout(this.hoverTimeout);
+        }
     };
 
     onSubmenuClick = event => {

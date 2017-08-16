@@ -3,6 +3,7 @@ export default props => {
     const {
         renderClassNames,
         enableTransitions,
+        submenuHoverDelay,
         onMenuClick,
         onSubmenuOpen,
         item,
