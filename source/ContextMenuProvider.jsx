@@ -23,7 +23,8 @@ class ContextMenuProvider extends Component {
             PropTypes.array,
             PropTypes.object
         ]),
-        enableTransitions: PropTypes.bool
+        enableTransitions: PropTypes.bool,
+        alwaysPreventNativeContextMenu: PropTypes.bool
     };
 
     static defaultProps = {
@@ -31,7 +32,8 @@ class ContextMenuProvider extends Component {
         gatherMenus: true,
         reverseOrder: false,
         menuSeparator: "-",
-        enableTransitions: true
+        enableTransitions: true,
+        alwaysPreventNativeContextMenu: false
     };
 
     static childContextTypes = {
@@ -119,35 +121,36 @@ class ContextMenuProvider extends Component {
 
     onContextMenu = event => {
         // The menu should have already been built up via the context handler while the event was
-        // bubbling up. If the menu was empty then it's possible the user right-clicked on something
-        // that wasn't context menu connected, therefore we need to close the menu.
-        // TODO: There is a bug where the contextmenu first again immediately after the window. It's
-        // triggered from the menu itself, rather than a usual target. This was causing the menu
-        // to immediately close itself. Was intermittent, and I don't seem to be able to get a ref
-        // to the outer node early enough to block the event there. Probably can just debounce
-        // the event but it'd be nice to solve this properly.
-        event.preventDefault();
-        event.stopPropagation();
+        // bubbling up
+        if (
+            this.buildMenu.length > 0 ||
+            this.props.alwaysPreventNativeContextMenu
+        ) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        // Only show menu if we received items to display
+        if (this.buildMenu.length === 0) {
+            return;
+        }
         const position = {
             x: event.pageX - window.scrollX,
             y: event.pageY - window.scrollY
         };
-        if (this.buildMenu.length > 0) {
-            // TODO: Actually maybe the key SHOULD be assigned from here,
-            // e.g. context_0 etc., then other code can open their own menus and provide
-            // unique keys themselves; e.g. a site menu closing and immediately opening
-            // should be able to cancel the transition rather than open a whole new menu.
-            const newMenu = {
-                position,
-                items: this.buildMenu
-            };
-            invariant(
-                this.menuManager,
-                "No menu manager found, unable to open context menu"
-            );
-            this.menuManager.closeMenus();
-            this.menuManager.openMenu(newMenu);
-        }
+        // TODO: Actually maybe the key SHOULD be assigned from here,
+        // e.g. context_0 etc., then other code can open their own menus and provide
+        // unique keys themselves; e.g. a site menu closing and immediately opening
+        // should be able to cancel the transition rather than open a whole new menu.
+        const newMenu = {
+            position,
+            items: this.buildMenu
+        };
+        invariant(
+            this.menuManager,
+            "No menu manager found, unable to open context menu"
+        );
+        this.menuManager.closeMenus();
+        this.menuManager.openMenu(newMenu);
     };
 
     onLayerClick = () => {

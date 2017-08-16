@@ -109,6 +109,10 @@ Whether to enable CSS transition animations for menus (and submenus) entering an
 
 Both `entered` and `exiting` styles can be customised as described in the section on Theming.
 
+`alwaysPreventNativeContextMenu: bool (default: false)`
+
+If true, then the native (browser) context menu will *always* be suppressed, even if the user invokes it on something that isn't wrapped in @contextMenu. Note: It can only be suppressed when the event originates within the ContextMenuProvider.
+
 ### Context Menu connector (HOC / decorator pattern)
 
 The mechanism provided to actually make an area right-clickable is a HOC (Higher Order Component) to wrap another React component. This component must conform to:
@@ -273,6 +277,8 @@ The dev server is hot module enabled so tweak at will.
 - Also gave menus a z-index of 1000 to be sure (could review this, it's a completely arbitrary number, consider providing a dedicated prop for this specific style property)
 - Added some padding to prevent submenu text overlapping the triangle icon
 - Fixed that onClick handlers were triggering twice
+- Allow native browser context menu to open if no @contextMenu wrapper gets hit
+- Added an `alwaysPreventNativeContextMenu` option (default: `false`) to enable the previous behaviour
 
 ### 0.4.1
 
