@@ -12,7 +12,8 @@ import { Question, Answer } from "./styles";
             ["Garfield", props.onCat],
             ["Macavity", props.onCat],
             ["Fritz", props.onCat],
-            ["Top Cat", props.onCat]
+            ["Top Cat", props.onCat],
+            ["Heathcliffe", props.onCat]
         ]
     ],
     [
@@ -21,7 +22,8 @@ import { Question, Answer } from "./styles";
             ["Snoopy", props.onDog],
             ["Snoop Dogg", props.onDog],
             ["Scooby Doo", props.onDog],
-            ["The Hound", props.onDog]
+            ["The Hound", props.onDog],
+            ["Lassie", props.onDog]
         ]
     ],
     ["Back to home", "/"],
