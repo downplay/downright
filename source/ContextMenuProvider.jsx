@@ -238,8 +238,7 @@ class ContextMenuProvider extends Component {
     }
 
     normalizeMenuItems = rawItems =>
-        rawItems.map((item, i) => ({
-            key: i.toString(),
+        rawItems.map(item => ({
             ...this.expandItemShorthand(item)
         }));
 
@@ -257,8 +256,8 @@ class ContextMenuProvider extends Component {
         const Layer = this.Layer;
         return (
             <Layer onClick={this.onLayerClick}>
-                <MenuManager {...others} />
                 {this.props.children}
+                <MenuManager {...others} />
             </Layer>
         );
     }
