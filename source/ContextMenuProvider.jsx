@@ -128,7 +128,10 @@ class ContextMenuProvider extends Component {
         // the event but it'd be nice to solve this properly.
         event.preventDefault();
         event.stopPropagation();
-        const position = { x: event.pageX, y: event.pageY };
+        const position = {
+            x: event.pageX - window.scrollX,
+            y: event.pageY - window.scrollY
+        };
         if (this.buildMenu.length > 0) {
             // TODO: Actually maybe the key SHOULD be assigned from here,
             // e.g. context_0 etc., then other code can open their own menus and provide

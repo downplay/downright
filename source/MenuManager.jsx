@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import ReactDOM from "react-dom";
-import { themed } from "downstyle";
 
+import MenuContainer from "./container/MenuContainer";
 import ContextMenu from "./container/ContextMenu";
-import ContainerElement from "./display/ContainerElement";
 
 // The Manager sits in the DOM layer where we want to render
 // menus, and manages their rendering and positioning
@@ -71,6 +70,7 @@ export default class MenuManager extends Component {
     onTransitionEnd = key => {
         // TODO: Check if it's actually the transition we were looking for
         // Could be any old random transition (e.g. item hovers).
+        // TODO: Also push entering/exiting and transition handling down to MenuContainer
         const menu = this.state.menus.find(m => m.key === key);
         if (menu && menu.exiting) {
             this.removeMenu(key);
@@ -132,18 +132,25 @@ export default class MenuManager extends Component {
                 menuIndex: this.state.menuIndex + 1
             },
             () => {
-                if (this.props.enableTransitions) {
-                    setImmediate(() => {
+                setImmediate(() => {
+                    let updateMenu = newMenu;
+                    // Now menu is rendered maybe reposition it
+
+                    // Begin enter transition
+                    if (this.props.enableTransitions) {
+                        updateMenu = { ...newMenu, entered: false };
+                    }
+                    if (updateMenu !== newMenu) {
                         this.setState({
                             menus: [
                                 ...this.state.menus.filter(
                                     m => m.key !== newMenu.key
                                 ),
-                                { ...newMenu, entered: false }
+                                updateMenu
                             ]
                         });
-                    });
-                }
+                    }
+                });
             }
         );
     }
@@ -197,45 +204,36 @@ export default class MenuManager extends Component {
         return this.context.menuManagerContext.normalizeMenuItems(items);
     }
 
+    storeOuterRef = ref => {
+        this.outerNode = ref;
+    };
+
     render() {
         const { children, theme, ...others } = this.props;
-
-        if (!this.Container) {
-            this.Container = themed(ContainerElement, theme, "container");
-        }
-        const Container = this.Container;
         return (
-            <div key="foo">
+            <div ref={this.storeOuterRef} onClick={this.onOuterClick}>
                 {Object.values(this.state.menus).map(menu => {
-                    const style = {
-                        left: menu.position.x,
-                        top: menu.position.y
-                    };
-                    const { items, entered, exiting, menuOthers } = menu;
+                    const { key, ...menuOthers } = menu;
+                    // TODO: Binding the functions in here is bad and will cause re-renders.
+                    // As is creating the style object above. Need to handle all these things better.
+                    // Maybe just store on menu object.
                     return (
-                        <Container
-                            key={menu.key}
-                            ref={ref => {
-                                this.outerNode = ref;
-                            }}
-                            onClick={this.onOuterClick}
-                            onTransitionEnd={() =>
-                                this.onTransitionEnd(menu.key)}
-                            style={style}
+                        <MenuContainer
+                            key={key}
+                            onTransitionEnd={() => this.onTransitionEnd(key)}
+                            position={menu.position}
+                            theme={theme}
                         >
                             <ContextMenu
-                                onMenuClick={() => this.onMenuClick(menu.key)}
+                                onMenuClick={() => this.onMenuClick(key)}
                                 onSubmenuOpen={(event, menuItem) => {
                                     this.onSubmenuOpen(event, menuItem, menu);
                                 }}
-                                items={items}
                                 theme={theme}
-                                entered={entered}
-                                exiting={exiting}
-                                {...menuOthers}
                                 {...others}
+                                {...menuOthers}
                             />
-                        </Container>
+                        </MenuContainer>
                     );
                 })}
             </div>

@@ -10,6 +10,7 @@ export default props => {
         content,
         type,
         depth,
+        parent,
         ...others
     } = props;
     return {

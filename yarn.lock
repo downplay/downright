@@ -1694,9 +1694,9 @@ domain-browser@^1.1.1:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/domain-browser/-/domain-browser-1.1.7.tgz#867aa4b093faa05f1de08c06f4d7b21fdf8698bc"
 
-downstyle@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/downstyle/-/downstyle-0.1.0.tgz#e1979b30ecaa68b7aeb0ab08ab3d6e83855a9913"
+downstyle@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/downstyle/-/downstyle-0.1.1.tgz#ac733174539b30c676b91149aed994f5458fdd74"
 
 duplexer@~0.1.1:
   version "0.1.1"

@@ -34,6 +34,7 @@ class ContextMenu extends Component {
             entered,
             exiting,
             onSubmenuOpen,
+            position,
             ...others
         } = this.props;
 

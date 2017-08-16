@@ -4,8 +4,9 @@
 }
 
 .container {
-    position: absolute;
+    position: fixed;
     box-shadow: 3px 5px 10px 3px rgba(32, 32, 32, 0.2);
+    overflow-y: auto;
 }
 
 .menu {
