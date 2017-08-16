@@ -272,6 +272,8 @@ The dev server is hot module enabled so tweak at will.
 #### More bugfixes
 
 - Fix opening one submenu when a different submenu is open, by deduping keys
+- Moved handling of `entered`/`exiting` to the right level and make all exiting transitions work properly
+- Fixed application of `selected` on opened submenus
 
 ### 0.4.2
 

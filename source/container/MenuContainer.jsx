@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
+import PropTypes from "prop-types";
 import { themed } from "downstyle";
 import invariant from "invariant";
 import ContainerElement from "../display/ContainerElement";
+import themeShape from "../tool/themeShape";
 
 // HACK: There isn't really a reliable way to get window innerWidth *minus* the width
 // of the vertical scrollbar. So at the RHS the menu ends up appearing partially *underneath*
@@ -11,8 +13,24 @@ import ContainerElement from "../display/ContainerElement";
 const SCROLLBAR_WIDTH_OFFSET = 20;
 
 class MenuContainer extends Component {
+    static propTypes = {
+        onTransitionEnd: PropTypes.func.isRequired,
+        position: PropTypes.shape({
+            x: PropTypes.number.isRequired,
+            y: PropTypes.number.isRequired
+        }).isRequired,
+        theme: themeShape.isRequired,
+        enableTransitions: PropTypes.bool.isRequired,
+        exiting: PropTypes.bool
+    };
+
+    static defaultProps = {
+        exiting: false
+    };
+
     state = {
-        style: { left: 0, top: 0 }
+        style: { left: 0, top: 0 },
+        entered: this.props.enableTransitions
     };
 
     componentDidMount() {
@@ -81,17 +99,36 @@ class MenuContainer extends Component {
         if (style !== this.state.style) {
             this.setState({ style });
         }
+        if (this.state.entered) {
+            this.setState({ entered: false });
+        }
     }
 
     render() {
-        const { theme, children, position, ...others } = this.props;
+        const {
+            theme,
+            children,
+            position,
+            exiting,
+            enableTransitions,
+            ...others
+        } = this.props;
+        const { style, entered } = this.state;
         if (!this.Container) {
-            this.Container = themed(ContainerElement, theme, "container");
+            this.Container = themed(ContainerElement, theme, "container", {
+                entered: "entered",
+                exiting: "exiting"
+            });
         }
         const Container = this.Container;
 
         return (
-            <Container {...others} style={this.state.style}>
+            <Container
+                {...others}
+                style={style}
+                entered={entered}
+                exiting={exiting}
+            >
                 {children}
             </Container>
         );

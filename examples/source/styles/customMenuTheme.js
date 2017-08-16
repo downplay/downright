@@ -37,10 +37,17 @@ const Item = ({ children, ...others }) =>
     </Outer>;
 
 // Additional inline styles, use a slide transition
+// TODO: Transitions are broken now transitions are applied on the <nav> rather
+// than the <ul>. Either need an extra wrapping <div> to just do the positioning,
+// or move the transitions back to the <ul> and remove ALL styles from <nav>.
+// Preferring 2nd option right now, since if the developer wants an extra wrapper
+// for styling they can always add one, and it saves having to push entered/exiting
+// to two separate places.
 const styles = {
     container: {
         boxShadow: "none",
-        overflow: "hidden"
+        overflow: "hidden",
+        transition: "none"
     },
     menu: {
         transition: "transform 0.2s linear",

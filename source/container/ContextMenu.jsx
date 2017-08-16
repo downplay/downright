@@ -18,16 +18,12 @@ class ContextMenu extends Component {
         items: PropTypes.arrayOf(PropTypes.object).isRequired,
         theme: themeShape.isRequired,
         depth: PropTypes.number,
-        entered: PropTypes.bool,
-        exiting: PropTypes.bool,
         onMenuClick: PropTypes.func.isRequired,
         onSubmenuOpen: PropTypes.func.isRequired
     };
 
     static defaultProps = {
-        depth: 0,
-        entered: false,
-        exiting: false
+        depth: 0
     };
 
     state = {
@@ -41,7 +37,7 @@ class ContextMenu extends Component {
         }
     }
 
-    onSubmenuOpen = (event, menuItem) => {
+    onSubmenuOpen = (event, menuItem, index) => {
         this.props.onSubmenuOpen(
             event,
             menuItem,
@@ -49,6 +45,7 @@ class ContextMenu extends Component {
             this.props.menu
         );
         this.setState(prevState => ({
+            selectedIndex: index,
             submenuIndex: prevState.submenuIndex + 1
         }));
     };
@@ -59,25 +56,19 @@ class ContextMenu extends Component {
             onMenuClick,
             theme,
             className,
-            entered,
-            exiting,
             onSubmenuOpen,
-            position,
             menu,
             ...others
         } = this.props;
 
         if (!this.Menu) {
-            this.Menu = themed(MenuWrapper, theme, "menu", {
-                entered: "entered",
-                exiting: "exiting"
-            });
+            this.Menu = themed(MenuWrapper, theme, "menu");
         }
 
         const Menu = this.Menu;
 
         return (
-            <Menu className={className} entered={entered} exiting={exiting}>
+            <Menu className={className}>
                 {this.props.items.map((menuItem, index) =>
                     // TODO: Not really anything better to use for a key,
                     // but could allow key as an optional prop, not a lot of
@@ -87,6 +78,7 @@ class ContextMenu extends Component {
                         key={index}
                         selected={this.state.selectedIndex === index}
                         onMenuClick={onMenuClick}
+                        index={index}
                         item={menuItem}
                         theme={theme}
                         className={className}

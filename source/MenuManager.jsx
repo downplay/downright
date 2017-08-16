@@ -116,37 +116,12 @@ export default class MenuManager extends Component {
         // TODO: Immutable state changes here get a bit messy, could clean this up a bit
         const newMenu = {
             ...menu,
-            key: menu.key || `root${this.state.menuIndex}`,
-            entered: this.props.enableTransitions,
-            exiting: false
+            key: menu.key || `root${this.state.menuIndex}`
         };
-        this.setState(
-            {
-                menus: [...this.state.menus, newMenu],
-                menuIndex: this.state.menuIndex + 1
-            },
-            () => {
-                setImmediate(() => {
-                    let updateMenu = newMenu;
-                    // Now menu is rendered maybe reposition it
-
-                    // Begin enter transition
-                    if (this.props.enableTransitions) {
-                        updateMenu = { ...newMenu, entered: false };
-                    }
-                    if (updateMenu !== newMenu) {
-                        this.setState({
-                            menus: [
-                                ...this.state.menus.filter(
-                                    m => m.key !== newMenu.key
-                                ),
-                                updateMenu
-                            ]
-                        });
-                    }
-                });
-            }
-        );
+        this.setState(prevState => ({
+            menus: [...prevState.menus, newMenu],
+            menuIndex: prevState.menuIndex + 1
+        }));
     }
 
     closeMenus() {
@@ -163,17 +138,16 @@ export default class MenuManager extends Component {
         }
         if (this.props.enableTransitions) {
             this.setState(
-                {
-                    menus: this.state.menus.map(
+                prevState => ({
+                    menus: prevState.menus.map(
                         m => (m.key === key ? { ...m, exiting: true } : m)
                     )
-                },
+                }),
                 () => {
                     // Arbitrary timeout to clean up if there wasn't a transition
-                    // There isn't actually a TransitionStart event in React. However DOM should
+                    // There isn't actually a TransitionStart event in React. TODO: However DOM should
                     // have transitionrun and transitionstart, so could actually listen for those
                     // and kill the menu much quicker if there isn't a transition starting.
-                    // TODO: Should allow for
                     setTimeout(() => {
                         this.removeMenu(key);
                     }, 500);
@@ -185,9 +159,9 @@ export default class MenuManager extends Component {
     }
 
     removeMenu(key) {
-        this.setState({
-            menus: this.state.menus.filter(m => m.key !== key)
-        });
+        this.setState(prevState => ({
+            menus: prevState.menus.filter(m => m.key !== key)
+        }));
     }
 
     buildMenuItems(menu) {
@@ -207,7 +181,7 @@ export default class MenuManager extends Component {
         return (
             <div ref={this.storeOuterRef} onClick={this.onOuterClick}>
                 {Object.values(this.state.menus).map(menu => {
-                    const { key, ...menuOthers } = menu;
+                    const { key, exiting, position, ...menuOthers } = menu;
                     // TODO: Binding the functions in here is bad and will cause re-renders.
                     // As is creating the style object above. Need to handle all these things better.
                     // Maybe just store on menu object.
@@ -215,7 +189,9 @@ export default class MenuManager extends Component {
                         <MenuContainer
                             key={key}
                             onTransitionEnd={() => this.onTransitionEnd(key)}
-                            position={menu.position}
+                            position={position}
+                            exiting={exiting}
+                            enableTransitions={this.props.enableTransitions}
                             theme={theme}
                         >
                             <ContextMenu

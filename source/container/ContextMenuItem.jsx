@@ -27,7 +27,8 @@ class ContextMenuItem extends Component {
         menu: PropTypes.oneOfType([PropTypes.array, PropTypes.func]),
         theme: themeShape.isRequired,
         onSubmenuOpen: PropTypes.func.isRequired,
-        selected: PropTypes.bool
+        selected: PropTypes.bool,
+        index: PropTypes.number.isRequired
     };
 
     static defaultProps = {
@@ -67,7 +68,7 @@ class ContextMenuItem extends Component {
     };
 
     onSubmenuClick = event => {
-        this.props.onSubmenuOpen(event, this.props.item);
+        this.props.onSubmenuOpen(event, this.props.item, this.props.index);
     };
 
     onButtonClick = event => {

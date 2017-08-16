@@ -13,6 +13,7 @@ export default props => {
         depth,
         parent,
         onClick,
+        index,
         ...others
     } = props;
     return {
