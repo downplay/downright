@@ -1,10 +1,10 @@
 # Downright
 
-A lightweight (~22k minified) right-click context menu HOC for React, with completely customisable theming and transitions.
+A lightweight (~22k minified) right-click context menu HOC for React Web, with completely customisable theming and transitions.
 
 <img src="docs/coverImage.png" width="359" title="What it looks like">
 
-## Latest version: 0.4.1
+## Latest version: 0.4.2
 
 Features:
 
@@ -262,6 +262,17 @@ Then navigate to `http://127.0.0.1:3311/`
 The dev server is hot module enabled so tweak at will.
 
 ## Version History
+
+### 0.4.2
+
+#### Bugfixes!
+
+- Menu `<nav>` will now respond if theme changes
+- Fixed that menu aggregation via bubbling wasn't working
+- Reorder rendering order, context menu would sometimes render underneath other elements
+- Also gave menus a z-index of 1000 to be sure (could review this, it's a completely arbitrary number, consider providing a dedicated prop for this specific style property)
+- Added some padding to prevent submenu text overlapping the triangle icon
+- Fixed that onClick handlers were triggering twice
 
 ### 0.4.1
 

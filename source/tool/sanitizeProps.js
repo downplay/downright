@@ -1,3 +1,4 @@
+// TODO: This is clearly a bad way to handle this, think of a better solution
 export default props => {
     const {
         renderClassNames,
@@ -11,6 +12,7 @@ export default props => {
         type,
         depth,
         parent,
+        onClick,
         ...others
     } = props;
     return {
