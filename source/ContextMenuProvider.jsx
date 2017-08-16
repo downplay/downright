@@ -250,6 +250,7 @@ class ContextMenuProvider extends Component {
             gatherMenus,
             reverseOrder,
             menuSeparator,
+            alwaysPreventNativeContextMenu,
             ...others
         } = this.props;
 

@@ -10,6 +10,11 @@ import themeShape from "../tool/themeShape";
 class ContextMenu extends Component {
     static propTypes = {
         // TODO: Use shapes for propTypes (also on parent components)
+        // Also remove the duplication of having menu and all its children separately
+        menu: PropTypes.shape({
+            items: PropTypes.arrayOf(PropTypes.object),
+            depth: PropTypes.number
+        }).isRequired,
         items: PropTypes.arrayOf(PropTypes.object).isRequired,
         theme: themeShape.isRequired,
         depth: PropTypes.number,
@@ -25,11 +30,28 @@ class ContextMenu extends Component {
         exiting: false
     };
 
+    state = {
+        selectedIndex: null,
+        submenuIndex: 0
+    };
+
     componentWillReceiveProps(nextProps) {
         if (this.props.theme !== nextProps.theme) {
             this.Menu = null;
         }
     }
+
+    onSubmenuOpen = (event, menuItem) => {
+        this.props.onSubmenuOpen(
+            event,
+            menuItem,
+            this.state.submenuIndex,
+            this.props.menu
+        );
+        this.setState(prevState => ({
+            submenuIndex: prevState.submenuIndex + 1
+        }));
+    };
 
     render() {
         const {
@@ -41,6 +63,7 @@ class ContextMenu extends Component {
             exiting,
             onSubmenuOpen,
             position,
+            menu,
             ...others
         } = this.props;
 
@@ -62,11 +85,12 @@ class ContextMenu extends Component {
                     <ContextMenuItem
                         // eslint-disable-next-line react/no-array-index-key
                         key={index}
+                        selected={this.state.selectedIndex === index}
                         onMenuClick={onMenuClick}
                         item={menuItem}
                         theme={theme}
                         className={className}
-                        onSubmenuOpen={event => onSubmenuOpen(event, menuItem)}
+                        onSubmenuOpen={this.onSubmenuOpen}
                         {...others}
                         {...menuItem}
                     />

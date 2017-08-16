@@ -23,19 +23,19 @@ class ContextMenuItem extends Component {
         ]),
         content: PropTypes.node,
         onClick: PropTypes.func,
-        onMenuClick: PropTypes.func,
+        onMenuClick: PropTypes.func.isRequired,
         menu: PropTypes.oneOfType([PropTypes.array, PropTypes.func]),
         theme: themeShape.isRequired,
-        onSubmenuOpen: PropTypes.func
+        onSubmenuOpen: PropTypes.func.isRequired,
+        selected: PropTypes.bool
     };
 
     static defaultProps = {
         type: "label",
         content: null,
         onClick: null,
-        onMenuClick: null,
-        onSubmenuOpen: null,
-        menu: []
+        menu: [],
+        selected: false
     };
 
     static defaultElements = {
@@ -45,13 +45,6 @@ class ContextMenuItem extends Component {
         button: ButtonElement,
         submenu: SubmenuElement
     };
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            selected: false
-        };
-    }
 
     componentWillReceiveProps(nextProps) {
         // TODO: Verify correct action is there e.g. handler/to, generally validate item
@@ -74,10 +67,7 @@ class ContextMenuItem extends Component {
     };
 
     onSubmenuClick = event => {
-        this.setState({
-            selected: true
-        });
-        this.props.onSubmenuOpen(event);
+        this.props.onSubmenuOpen(event, this.props.item);
     };
 
     onButtonClick = event => {
@@ -106,16 +96,14 @@ class ContextMenuItem extends Component {
         } = this.props;
 
         const others = sanitizeProps(rest);
-        const names = ["element", type];
-        if (this.state.selected) {
-            names.push("selected");
-        }
-
         if (!this.Element) {
             this.Element = themed(
                 ContextMenuItem.defaultElements[type] || LabelElement,
                 theme,
-                names
+                ["element", type],
+                {
+                    selected: "selected"
+                }
             );
         }
         const Element = this.Element;
@@ -161,7 +149,7 @@ class ContextMenuItem extends Component {
         const Item = this.Item;
         const others = sanitizeProps(this.props);
         return (
-            <Item {...others} selected={this.state.selected}>
+            <Item {...others}>
                 {this.renderInnerElement()}
             </Item>
         );

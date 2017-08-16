@@ -267,6 +267,12 @@ The dev server is hot module enabled so tweak at will.
 
 ## Version History
 
+### 0.4.3
+
+#### More bugfixes
+
+- Fix opening one submenu when a different submenu is open, by deduping keys
+
 ### 0.4.2
 
 #### Bugfixes!

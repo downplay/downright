@@ -89,8 +89,8 @@ export default class MenuManager extends Component {
     };
 
     // TODO: Not very happy how this handler has to be hoisted all the way
-    // up from the item. Might be better to use context to facilitate this.
-    onSubmenuOpen = (event, menuItem, menu) => {
+    // up from the item and with all this cruft. Might be better to use context to facilitate this.
+    onSubmenuOpen = (event, menuItem, submenuIndex, menu) => {
         // Close any other submenus with the same parent
         this.state.menus.forEach(m => {
             if (m.parent === menu) {
@@ -104,7 +104,7 @@ export default class MenuManager extends Component {
             y: bounds.top
         };
         const newMenu = {
-            key: `${menu.key}_${menuItem.key}`,
+            key: `${menu.key}_sub${submenuIndex}`,
             items: this.buildMenuItems(menuItem.menu),
             parent: menu,
             position
@@ -220,9 +220,8 @@ export default class MenuManager extends Component {
                         >
                             <ContextMenu
                                 onMenuClick={() => this.onMenuClick(key)}
-                                onSubmenuOpen={(event, menuItem) => {
-                                    this.onSubmenuOpen(event, menuItem, menu);
-                                }}
+                                onSubmenuOpen={this.onSubmenuOpen}
+                                menu={menu}
                                 theme={theme}
                                 {...others}
                                 {...menuOthers}
