@@ -275,6 +275,10 @@ The dev server is hot module enabled so tweak at will.
 
 ## Version History
 
+### Next version
+
+- Fixed buggy enter/leave timer on submenu due to timeout not being stored
+
 ### 0.5.0
 
 #### More bugfixes!

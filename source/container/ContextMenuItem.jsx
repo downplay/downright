@@ -70,7 +70,7 @@ class ContextMenuItem extends Component {
             clearTimeout(this.hoverTimeout);
         }
         event.persist();
-        setTimeout(() => {
+        this.hoverTimeout = setTimeout(() => {
             // Passing the event so we have reference to the DOM node
             this.onSubmenuClick(event);
         }, this.props.submenuHoverDelay);
