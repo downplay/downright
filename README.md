@@ -4,9 +4,9 @@ A lightweight (~25k minified) right-click context menu HOC for React Web, with c
 
 <img src="docs/coverImage.png" width="359" title="What it looks like">
 
-## Latest version: 0.5.0
+## Latest version: 0.5.1
 
-0.5.0 marks the first release that is largely bug-free and possibly even usable in production!
+0.5.x marks a move to largely stable releases possibly even usable in production!
 
 Features:
 
@@ -21,7 +21,7 @@ See the end for roadmap / planned features.
 
 ## Sample Code
 
-Downright is designed with a minimal API to setup and use in your React app. It provides a HOC to wrap your component to make it emit a context menu. You have access to props The primary use case is that your menu will be dispatching Redux actions, which have been injected into props using Redux. (Downright works very nicely with Redux, but this is entirely optional and not a dependency!)
+Downright is designed with a minimal API to setup and use in your React app. It provides a HOC to wrap your component to make it emit a context menu. You have access to props here, an obvious use case being that your menu may wish to receive store data and dispatch actions, which have been injected into props using Redux. (Downright works very nicely with Redux, but this is entirely optional and not a dependency!)
 
 ```javascript
 import { contextMenu } from "downright";
@@ -30,10 +30,13 @@ import "downright/dist/theme.css";
 @connect(null, props => {...})
 @contextMenu(props => {
     return [
-        "Context menu", // A label or heading
-        ["Badger", () => props.onClickedBadger()], // Calling a handler in the parent
+        "Context menu",                                  // A label or heading
+        ["Badger", () => props.onChosen("badger")],      // Calling a handler in the parent
         ["Click me", () => props.reduxInjectedAction()], // A button dispatching an action
-        ["Fork me on GitHub", "https://https://github.com/downplay/downright", target="_blank"] // Renders a <Link/>
+        ["Home", "/"]                                    // Renders a <Link/>
+        ["Fork me on GitHub",
+            "https://https://github.com/downplay/downright",
+            target="_blank"]                             // Open a URL in a new window
     ];
 })
 class MyComponent extends Component {
