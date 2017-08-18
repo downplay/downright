@@ -1,6 +1,6 @@
 # Downright
 
-A lightweight (~23k minified) right-click context menu HOC for React Web, with completely customisable theming and transitions.
+A lightweight (~25k minified) right-click context menu HOC for React Web, with completely customisable theming and transitions.
 
 <img src="docs/coverImage.png" width="359" title="What it looks like">
 
@@ -14,7 +14,7 @@ Features:
 * Granular theming; replace/extend any classNames and styles, and swap out any element with your own components to customise the HTML output
 * Supports any type of menu item: label, button, link, separator, and any custom element
 * CSS transitions and submenus - any depth, with optionally deferred building
-* Light-weight - 23k for the core, plus 5k for the default theme (minified sizes)
+* Light-weight - 25k for the core, plus 5k for the default theme (minified sizes) - for a well featured and extremely flexible menu component
 * Low-dependency - depends only on standard React packages and very common third party libraries, plus a very tiny theming helper called "*[downstyle](https://github.com/downplay/downstyle)*"
 
 See the end for roadmap / planned features.
@@ -178,7 +178,7 @@ URL to navigate to when clicking on the link. The Link component from `react-rou
 
 `menu: array|function`
 
-Menu to be rendered when the submenu is open. If a function is provided the menu will be rendered on-demand. The function will receive the same parameters as the configuration callback.
+Menu to be rendered when the submenu is open. If a function is provided the menu will be rendered on-demand. This callback will receive the same parameters as the configuration callback. The callback can return an array of menu items in the same format as the configuration callback, or may optionally return a Promise, in which case the submenu will be not be opened until the Promise resolves. If something would cause the menu to close in the menu time (a different submenu opening, or the parent menu closing) then the submenu will never be opened.
 
 #### options
 
@@ -278,6 +278,7 @@ The dev server is hot module enabled so tweak at will.
 ### Next version
 
 - Fixed buggy enter/leave timer on submenu due to timeout not being stored
+- Can now return a Promise from submenu builder callbacks to load menus asynchronously
 
 ### 0.5.0
 

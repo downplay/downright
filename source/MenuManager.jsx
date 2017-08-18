@@ -19,7 +19,9 @@ export default class MenuManager extends Component {
 
     static contextTypes = {
         menuManagerContext: React.PropTypes.shape({
-            registerManager: React.PropTypes.func
+            registerManager: React.PropTypes.func,
+            unregisterManager: React.PropTypes.func,
+            normalizeMenuItems: React.PropTypes.func
         })
     };
 
@@ -30,35 +32,23 @@ export default class MenuManager extends Component {
 
     componentDidMount() {
         this.context.menuManagerContext.registerManager(this);
-        // TODO: Try to get React's onContextMenu event working - would remove
-        // a lot of boilerplate
-        if (this.outerNode) {
-            this.nearestOuterNode = ReactDOM.findDOMNode(this.outerNode);
-            if (this.nearestOuterNode) {
-                this.nearestOuterNode.addEventListener(
-                    "contextmenu",
-                    this.onOuterContextMenu
-                );
-            }
-        }
+        this.attachEventListener();
     }
 
     componentWillUpdate() {
-        this.componentWillUnmount();
+        this.detachEventListener();
     }
 
     componentDidUpdate() {
-        this.componentDidMount();
+        this.attachEventListener();
     }
 
     componentWillUnmount() {
-        if (this.nearestOuterNode) {
-            this.nearestOuterNode.removeEventListener(
-                "contextmenu",
-                this.onOuterContextMenu
-            );
-            this.nearestOuterNode = null;
-        }
+        this.detachEventListener();
+        this.context.menuManagerContext.unregisterManager(this);
+        // Close all menus - should prevent any setState() occurring on
+        // an unmounted component
+        this.closeMenus();
     }
 
     onTransitionEnd = key => {
@@ -90,7 +80,7 @@ export default class MenuManager extends Component {
 
     // TODO: Not very happy how this handler has to be hoisted all the way
     // up from the item and with all this cruft. Might be better to use context to facilitate this.
-    onSubmenuOpen = (event, menuItem, submenuIndex, menu) => {
+    onSubmenuOpen = async (event, menuItem, submenuIndex, menu) => {
         // Close any other submenus with the same parent
         this.state.menus.forEach(m => {
             if (m.parent === menu) {
@@ -103,13 +93,20 @@ export default class MenuManager extends Component {
             x: bounds.right,
             y: bounds.top
         };
+
+        // Open the menu straight away with no items
+        const newMenuKey = `${menu.key}_sub${submenuIndex}`;
         const newMenu = {
-            key: `${menu.key}_sub${submenuIndex}`,
-            items: this.buildMenuItems(menuItem.menu),
+            key: newMenuKey,
+            items: null,
             parent: menu,
             position
         };
         this.openMenu(newMenu);
+
+        // Wait for the items to build
+        const items = await this.buildMenuItems(menuItem.menu);
+        this.updateMenu(newMenuKey, m => ({ ...m, items }));
     };
 
     openMenu(menu) {
@@ -124,12 +121,33 @@ export default class MenuManager extends Component {
         }));
     }
 
+    findMenu(key) {
+        return this.state.menus.find(m => m.key === key);
+    }
+
+    updateMenu(key, updater, callback) {
+        // If a menu no longer exists or is exiting then either another menu has
+        // been opened or we have unmounted; either way don't need to set the state
+        const newMenu = this.findMenu(key);
+        if (!newMenu || newMenu.exiting) {
+            return;
+        }
+        this.setState(
+            prevState => ({
+                menus: prevState.menus.map(
+                    m => (m.key === key ? updater(m) : m)
+                )
+            }),
+            callback
+        );
+    }
+
     closeMenus() {
         this.state.menus.forEach(m => this.closeMenu(m.key));
     }
 
     closeMenu(key, closeParent = false) {
-        const menu = this.state.menus.find(m => m.key === key);
+        const menu = this.findMenu(key);
         if (!menu) {
             return;
         }
@@ -137,12 +155,9 @@ export default class MenuManager extends Component {
             this.closeMenu(menu.parent.key, true);
         }
         if (this.props.enableTransitions) {
-            this.setState(
-                prevState => ({
-                    menus: prevState.menus.map(
-                        m => (m.key === key ? { ...m, exiting: true } : m)
-                    )
-                }),
+            this.updateMenu(
+                key,
+                m => ({ ...m, exiting: true }),
                 () => {
                     // Arbitrary timeout to clean up if there wasn't a transition
                     // There isn't actually a TransitionStart event in React. TODO: However DOM should
@@ -159,17 +174,46 @@ export default class MenuManager extends Component {
     }
 
     removeMenu(key) {
+        if (!this.findMenu(key)) {
+            return;
+        }
         this.setState(prevState => ({
             menus: prevState.menus.filter(m => m.key !== key)
         }));
     }
 
-    buildMenuItems(menu) {
+    async buildMenuItems(menu) {
         const items =
             !(menu.constructor === Array) && typeof menu === "function"
-                ? menu()
+                ? await menu()
                 : menu;
+        // TODO: Maybe normalizeMenuItems should be static, we only need the menuSeparator
+        // config prop
         return this.context.menuManagerContext.normalizeMenuItems(items);
+    }
+
+    attachEventListener() {
+        // TODO: Try to get React's onContextMenu event working - would remove
+        // a lot of boilerplate
+        if (this.outerNode) {
+            this.nearestOuterNode = ReactDOM.findDOMNode(this.outerNode);
+            if (this.nearestOuterNode) {
+                this.nearestOuterNode.addEventListener(
+                    "contextmenu",
+                    this.onOuterContextMenu
+                );
+            }
+        }
+    }
+
+    detachEventListener() {
+        if (this.nearestOuterNode) {
+            this.nearestOuterNode.removeEventListener(
+                "contextmenu",
+                this.onOuterContextMenu
+            );
+            this.nearestOuterNode = null;
+        }
     }
 
     storeOuterRef = ref => {

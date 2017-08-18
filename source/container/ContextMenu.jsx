@@ -15,7 +15,7 @@ class ContextMenu extends Component {
             items: PropTypes.arrayOf(PropTypes.object),
             depth: PropTypes.number
         }).isRequired,
-        items: PropTypes.arrayOf(PropTypes.object).isRequired,
+        items: PropTypes.arrayOf(PropTypes.object),
         theme: themeShape.isRequired,
         depth: PropTypes.number,
         onMenuClick: PropTypes.func.isRequired,
@@ -23,7 +23,8 @@ class ContextMenu extends Component {
     };
 
     static defaultProps = {
-        depth: 0
+        depth: 0,
+        items: null
     };
 
     state = {
@@ -67,7 +68,10 @@ class ContextMenu extends Component {
 
         const Menu = this.Menu;
 
+        // Render the menu only once items have been loaded
+        // TODO: Might be nice to display a spinner while loading
         return (
+            this.props.items &&
             <Menu className={className}>
                 {this.props.items.map((menuItem, index) =>
                     // TODO: Not really anything better to use for a key,

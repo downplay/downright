@@ -45,6 +45,7 @@ class ContextMenuProvider extends Component {
         }),
         menuManagerContext: React.PropTypes.shape({
             registerManager: React.PropTypes.func,
+            unregisterManager: React.PropTypes.func,
             normalizeMenuItems: React.PropTypes.func
         })
     };
@@ -60,6 +61,7 @@ class ContextMenuProvider extends Component {
             },
             menuManagerContext: {
                 registerManager: this.registerManager,
+                unregisterManager: this.unregisterManager,
                 normalizeMenuItems: this.normalizeMenuItems
             }
         };
@@ -181,6 +183,11 @@ class ContextMenuProvider extends Component {
     };
     registerManager = manager => {
         this.menuManager = manager;
+    };
+    unregisterManager = manager => {
+        if (this.menuManager === manager) {
+            this.menuManager = null;
+        }
     };
     // End Context API methods
 
