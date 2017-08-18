@@ -83,7 +83,10 @@ class ContextMenuItem extends Component {
     };
 
     onSubmenuClick = event => {
-        this.props.onSubmenuOpen(event, this.props.item, this.props.index);
+        // Only open if not already open
+        if (!this.props.selected) {
+            this.props.onSubmenuOpen(event, this.props.item, this.props.index);
+        }
     };
 
     onButtonClick = event => {

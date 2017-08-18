@@ -275,10 +275,11 @@ The dev server is hot module enabled so tweak at will.
 
 ## Version History
 
-### Next version
+### 0.5.1
 
-- Fixed buggy enter/leave timer on submenu due to timeout not being stored
 - Can now return a Promise from submenu builder callbacks to load menus asynchronously. Added an example for this on the Submenus example page.
+- Fixed buggy enter/leave timer on submenu due to timeout not being stored
+- Fixed clicking on already open/opening menu would close it and reopen it
 
 ### 0.5.0
 
