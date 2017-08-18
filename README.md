@@ -278,7 +278,7 @@ The dev server is hot module enabled so tweak at will.
 ### Next version
 
 - Fixed buggy enter/leave timer on submenu due to timeout not being stored
-- Can now return a Promise from submenu builder callbacks to load menus asynchronously
+- Can now return a Promise from submenu builder callbacks to load menus asynchronously. Added an example for this on the Submenus example page.
 
 ### 0.5.0
 

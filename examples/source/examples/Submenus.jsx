@@ -40,6 +40,11 @@ export default class Submenus extends Component {
                     onChooseColour={this.onChooseColour}
                     chosenColour={this.state.chosenColour}
                 />
+                <OnDemandSubmenu
+                    usePromises
+                    onChooseColour={this.onChooseColour}
+                    chosenColour={this.state.chosenColour}
+                />
                 <SimpleSubmenu
                     onCat={this.onCat}
                     onDog={this.onDog}

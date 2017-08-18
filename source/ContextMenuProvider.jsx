@@ -126,6 +126,7 @@ class ContextMenuProvider extends Component {
     onContextMenu = event => {
         // The menu should have already been built up via the context handler while the event was
         // bubbling up
+        // TODO: Allow promises, for consistency with submenu API?
         if (
             this.buildMenu.length > 0 ||
             this.props.alwaysPreventNativeContextMenu
