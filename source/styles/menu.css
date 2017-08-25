@@ -7,8 +7,6 @@
     position: fixed;
     box-shadow: 3px 5px 10px 3px rgba(32, 32, 32, 0.2);
     overflow-y: auto;
-    transition: opacity 0.1s linear;
-    opacity: 1;
     z-index: 1000;
 }
 
@@ -17,10 +15,12 @@
     flex-direction: column;
     background-color: #eee;
     font-family: Helvetica, Arial, sans-serif;
+    transition: opacity 0.1s linear;
+    opacity: 1;
 }
 
-.container.entered,
-.container.exiting {
+.menu.entered,
+.menu.exiting {
     opacity: 0;
 }
 

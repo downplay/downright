@@ -291,7 +291,13 @@ The dev server is hot module enabled so tweak at will.
 
 ### 0.6.0
 
-- Reworked build to get rid of /dist in package and remove some redundant files
+#### Improvments and fixes
+
+- Apply transitions on the menu rather than wrapper (`<nav>` vs outer `<div>`) and fix examples
+
+#### Breaking changes
+
+- Reworked build to get rid of /dist in package and remove some redundant files, see intro
 
 ### 0.5.1
 

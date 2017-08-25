@@ -19,18 +19,30 @@ class ContextMenu extends Component {
         theme: themeShape.isRequired,
         depth: PropTypes.number,
         onMenuClick: PropTypes.func.isRequired,
-        onSubmenuOpen: PropTypes.func.isRequired
+        onSubmenuOpen: PropTypes.func.isRequired,
+        enableTransitions: PropTypes.bool.isRequired,
+        exiting: PropTypes.bool
     };
 
     static defaultProps = {
         depth: 0,
-        items: null
+        items: null,
+        exiting: false
     };
 
     state = {
         selectedIndex: null,
-        submenuIndex: 0
+        submenuIndex: 0,
+        entered: this.props.enableTransitions
     };
+
+    componentDidMount() {
+        if (this.state.entered) {
+            setImmediate(() => {
+                this.setState({ entered: false });
+            });
+        }
+    }
 
     componentWillReceiveProps(nextProps) {
         if (this.props.theme !== nextProps.theme) {
@@ -59,11 +71,18 @@ class ContextMenu extends Component {
             className,
             onSubmenuOpen,
             menu,
+            exiting,
+            enableTransitions,
             ...others
         } = this.props;
 
+        const { entered } = this.state;
+
         if (!this.Menu) {
-            this.Menu = themed(MenuWrapper, theme, "menu");
+            this.Menu = themed(MenuWrapper, theme, "menu", {
+                entered: "entered",
+                exiting: "exiting"
+            });
         }
 
         const Menu = this.Menu;
@@ -72,7 +91,7 @@ class ContextMenu extends Component {
         // TODO: Might be nice to display a spinner while loading
         return (
             this.props.items &&
-            <Menu className={className}>
+            <Menu className={className} entered={entered} exiting={exiting}>
                 {this.props.items.map((menuItem, index) =>
                     // TODO: Not really anything better to use for a key,
                     // but could allow key as an optional prop, not a lot of

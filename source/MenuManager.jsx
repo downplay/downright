@@ -234,8 +234,6 @@ export default class MenuManager extends Component {
                             key={key}
                             onTransitionEnd={() => this.onTransitionEnd(key)}
                             position={position}
-                            exiting={exiting}
-                            enableTransitions={this.props.enableTransitions}
                             theme={theme}
                         >
                             <ContextMenu
@@ -243,6 +241,7 @@ export default class MenuManager extends Component {
                                 onSubmenuOpen={this.onSubmenuOpen}
                                 menu={menu}
                                 theme={theme}
+                                exiting={exiting}
                                 {...others}
                                 {...menuOthers}
                             />

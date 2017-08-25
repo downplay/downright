@@ -19,18 +19,11 @@ class MenuContainer extends Component {
             x: PropTypes.number.isRequired,
             y: PropTypes.number.isRequired
         }).isRequired,
-        theme: themeShape.isRequired,
-        enableTransitions: PropTypes.bool.isRequired,
-        exiting: PropTypes.bool
-    };
-
-    static defaultProps = {
-        exiting: false
+        theme: themeShape.isRequired
     };
 
     state = {
-        style: { left: 0, top: 0 },
-        entered: this.props.enableTransitions
+        style: { left: 0, top: 0 }
     };
 
     componentDidMount() {
@@ -99,36 +92,18 @@ class MenuContainer extends Component {
         if (style !== this.state.style) {
             this.setState({ style });
         }
-        if (this.state.entered) {
-            this.setState({ entered: false });
-        }
     }
 
     render() {
-        const {
-            theme,
-            children,
-            position,
-            exiting,
-            enableTransitions,
-            ...others
-        } = this.props;
-        const { style, entered } = this.state;
+        const { theme, children, position, ...others } = this.props;
+        const { style } = this.state;
         if (!this.Container) {
-            this.Container = themed(ContainerElement, theme, "container", {
-                entered: "entered",
-                exiting: "exiting"
-            });
+            this.Container = themed(ContainerElement, theme, "container");
         }
         const Container = this.Container;
 
         return (
-            <Container
-                {...others}
-                style={style}
-                entered={entered}
-                exiting={exiting}
-            >
+            <Container {...others} style={style}>
                 {children}
             </Container>
         );
