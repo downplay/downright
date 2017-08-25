@@ -5,6 +5,7 @@ import ExtractTextPlugin from "extract-text-webpack-plugin";
 
 const downrightCore = path.resolve(__dirname, "../source/index.js");
 const themeDefault = path.resolve(__dirname, "../source/themes/default.js");
+const themeDark = path.resolve(__dirname, "../source/themes/dark.js");
 
 // Random hashed CSS classes
 let cssIdent = "[name]__[local]___[hash:base64:5]";
@@ -21,6 +22,10 @@ switch (process.env.DOWNRIGHT_BUILD) {
         break;
     case "theme-default":
         entry.default = themeDefault;
+        break;
+    case "theme-dark":
+        entry.dark = themeDark;
+        cssOutputPath = "themes/dark.css";
         break;
     case "theme-bem":
         entry.bem = themeDefault;

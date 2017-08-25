@@ -38,7 +38,8 @@ export default class SimpleSubmenu extends Component {
     render = () =>
         <BigBox blue>
             <Question>Favourite animal?</Question>
-            {this.props.item &&
-                <Answer>{`You chose ${this.props.item}`}</Answer>}
+            {this.props.item
+                ? <Answer>{`You chose ${this.props.item}`}</Answer>
+                : this.props.children}
         </BigBox>;
 }

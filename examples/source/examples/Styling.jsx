@@ -14,10 +14,14 @@ import { ContextMenuProvider } from "downright";
 import bemTheme from "downright/themes/bem";
 import "downright/themes/bem.css";
 
+import darkTheme from "downright/themes/dark";
+import "downright/themes/dark.css";
+
 import React, { Component } from "react";
 import styled from "styled-components";
 
 import SimpleComponentWithMenu from "../components/SimpleComponentWithMenu";
+import SimpleSubmenu from "../components/SimpleSubmenu";
 import FullWidthFullHeight from "../layout/FullWidthFullHeight";
 
 // Global styles imported after the BEM theme to override it
@@ -43,13 +47,23 @@ export default class Styling extends Component {
     render = () =>
         <div>
             <FullWidthFullHeight>
+                <ContextMenuProvider theme={darkTheme}>
+                    <SimpleSubmenu
+                        onCat={this.onClickItem}
+                        onDog={this.onClickItem}
+                        item={this.state.itemChosen}
+                    >
+                        This menu uses the alternate &quot;dark&quot; theme
+                        shipped with Downright
+                    </SimpleSubmenu>
+                </ContextMenuProvider>
                 <ContextMenuProvider theme={bemTheme}>
                     <SimpleComponentWithMenu
                         onClickItem={this.onClickItem}
                         item={this.state.itemChosen}
-                        theme={bemTheme}
                     >
-                        Right-click for a menu with overriden styles
+                        This menu uses the BEM-named stylesheet, and we have
+                        overriden some classes using global CSS styles
                     </SimpleComponentWithMenu>
                 </ContextMenuProvider>
                 <ContextMenuProvider theme={bemTheme} className="green">
@@ -58,7 +72,9 @@ export default class Styling extends Component {
                         item={this.state.itemChosen}
                         green
                     >
-                        Right-click for menu with an additional class added
+                        This also uses the BEM styles, and we passing an
+                        additional &quot;green&quot; class to further modify the
+                        styles
                     </SimpleComponentWithMenu>
                 </ContextMenuProvider>
                 <ContextMenuProvider theme={myTheme}>
@@ -67,7 +83,9 @@ export default class Styling extends Component {
                         item={this.state.itemChosen}
                         blue
                     >
-                        Advanced styling using completely custom theme
+                        This uses a custom theme with multiple modifications
+                        including rendering additional HTML elemenets and
+                        applying a custom transition
                     </SimpleComponentWithMenu>
                 </ContextMenuProvider>
             </FullWidthFullHeight>

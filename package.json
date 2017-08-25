@@ -18,11 +18,12 @@
         "scrub": "babel-node ./build/scrub.js",
         "assemble": "babel-node ./build/assemble.js",
         "build": "npm-run-all scrub build-all",
-        "build-all": "npm-run-all --parallel build-core build-theme-default build-theme-bem assemble",
+        "build-all": "npm-run-all --parallel build-core build-theme-default build-theme-bem build-theme-dark assemble",
         "build-core": "cross-env NODE_ENV=production  DOWNRIGHT_BUILD=core webpack --config ./build/entry.js",
         "build-core-dev": "cross-env NODE_ENV=development DOWNRIGHT_BUILD=core webpack --config ./build/entry.js --watch",
         "build-theme-default": "cross-env NODE_ENV=production  DOWNRIGHT_BUILD=theme-default  webpack --config ./build/entry.js",
         "build-theme-bem": "cross-env NODE_ENV=production  DOWNRIGHT_BUILD=theme-bem  webpack --config ./build/entry.js",
+        "build-theme-dark": "cross-env NODE_ENV=production  DOWNRIGHT_BUILD=theme-dark  webpack --config ./build/entry.js",
         "examples": "node examples/entry.js",
         "examples-watch": "nodemon examples/entry.js"
     },

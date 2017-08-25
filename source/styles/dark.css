@@ -1,0 +1,25 @@
+@import "menu.css";
+
+.container {
+    box-shadow: 3px 5px 10px 3px rgba(255, 255, 255, 0.2);
+}
+.item {
+    background: linear-gradient(to bottom, #555 0%, #222 100%);
+}
+.item:hover,
+.item.selected {
+    background: linear-gradient(to bottom, #000 0%, #333 100%);
+}
+.item.label,
+.item.label:hover,
+.item.label.selected {
+    background: #222;
+}
+.element,
+.link:visited,
+.link:active {
+    color: #fff;
+}
+.element.submenu {
+    background-image: url("./triangleRightLight.svg");
+}

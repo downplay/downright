@@ -13,7 +13,6 @@
 .menu {
     display: flex;
     flex-direction: column;
-    background-color: #eee;
     font-family: Helvetica, Arial, sans-serif;
     transition: opacity 0.1s linear;
     opacity: 1;
@@ -45,12 +44,12 @@
 .element {
     padding: 0.4rem;
     text-align: left;
-    color: #000;
     font-size: 1rem;
     width: 100%;
     display: block;
 }
 
+.element,
 .link:visited,
 .link:active {
     color: #000;

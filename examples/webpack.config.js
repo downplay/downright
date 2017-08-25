@@ -35,8 +35,8 @@ const webpackConfig = {
 
     resolve: {
         extensions: [".js", ".jsx", ".json", ".css"],
-        // NOTE: Here I'm aliasing everything so the imports in the exanples represent how the
-        // final package will look. Normally using the module direct from npm you do not have to alias in your webpack.
+        // NOTE: Here I'm aliasing everything so the imports in the exanples represent how importing from the released
+        // package would look. Normally using the module direct from npm you do not have to alias in your webpack.
         alias: {
             "downright/themes/default.css": downrightSource(
                 "themes/default.css"
@@ -44,6 +44,8 @@ const webpackConfig = {
             "downright/themes/default": downrightSource("themes/default.js"),
             "downright/themes/bem.css": downrightSource("themes/bem.css"),
             "downright/themes/bem": downrightSource("themes/bem.js"),
+            "downright/themes/dark.css": downrightSource("themes/dark.css"),
+            "downright/themes/dark": downrightSource("themes/dark.js"),
             downright: downrightSource("main.js")
         }
     },

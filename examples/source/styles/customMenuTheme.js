@@ -51,13 +51,13 @@ const styles = {
     },
     menu: {
         transition: "transform 0.2s linear",
-        transform: "translate(0, 0)"
+        transform: "translate(0, 0) scale(1, 1)"
     },
     entered: {
-        transform: "translate(-100%, 0)"
+        transform: "translate(-100%, 0) scale(0, 0)"
     },
     exiting: {
-        transform: "translate(100%, 0)"
+        transform: "translate(100%, 0) scale(0, 0)"
     }
 };
 
