@@ -6,6 +6,19 @@ A lightweight (~25k minified) right-click context menu HOC for React Web, with c
 
 ## Latest version: 0.5.1
 
+### *BREAKING CHANGES* in 0.6.0:
+
+* Package structure has changed. There is no more dist folder. Themes are imported from:
+
+`js
+import "downright/themes/default.css";  // CSS file with default (hashed) naming
+import classNames from "downright/themes/default";  // Class names for default theme
+import "downright/themes/bem.css";      // CSS file with BEM naming
+import bemClassNames from "downright/themes/bem";  // Class names for BEM theme
+`
+
+### About this version
+
 0.5.x marks a move to largely stable releases possibly even usable in production!
 
 Features:
@@ -198,16 +211,14 @@ The provider option `gatherMenus` effectively acts as a global switch for this. 
 Downright ships with default stylings. How you want to include them depends on your setup and webpack config, but should just be able to do this (once) anywhere in your app. This assumes you are using `style-loader` and/or `extract-text-webpack-plugin` (but not `css-modules`) on 3rd-party modules:
 
 ```javascript
-import "downright/theme.css";
+import "downright/themes/default.css";
 ```
-
-Make sure you 
 
 The styles use collision-free naming. There is an alternative build of Downwrite that uses BEM-style naming classes instead,which you may wish to use if you want to override the styles elsewhere in your own CSS. To use this, you need to import a different CSS file, and provide a theme object to ContextMenuProvider so it know which classNames to use:
 
 ```jsx
-import "downright/dist/bem/theme.css";
-import bemTheme from "downright/dist/bem/theme";
+import "downright/themes/bem.css";
+import bemTheme from "downright/themes/bem";
 
 <ContextMenuProvider theme={bemTheme}>
     {...}
@@ -277,6 +288,10 @@ Then navigate to `http://127.0.0.1:3311/`
 The dev server is hot module enabled so tweak at will.
 
 ## Version History
+
+### 0.6.0
+
+- Reworked build to get rid of /dist in package and remove some redundant files
 
 ### 0.5.1
 

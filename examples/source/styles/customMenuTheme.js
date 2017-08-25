@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import defaultTheme from "downright/theme";
+import defaultTheme from "downright/themes/default";
 
 // Set up styled components for our item template
 const Outer = styled.div`

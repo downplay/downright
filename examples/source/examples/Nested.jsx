@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { ContextMenuProvider } from "downright";
-import "downright/theme.css";
+import "downright/themes/default.css";
 
 import InnerMenu from "../components/InnerMenu";
 import InnerMenuReverseGather from "../components/InnerMenuReverseGather";

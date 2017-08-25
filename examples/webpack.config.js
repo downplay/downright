@@ -38,10 +38,12 @@ const webpackConfig = {
         // NOTE: Here I'm aliasing everything so the imports in the exanples represent how the
         // final package will look. Normally using the module direct from npm you do not have to alias in your webpack.
         alias: {
-            "downright/theme.css": downrightSource("theme.css"),
-            "downright/themes/bem.css": downrightSource("bem/theme.css"),
-            "downright/themes/bem": downrightSource("bem/theme.js"),
-            "downright/theme": downrightSource("theme.js"),
+            "downright/themes/default.css": downrightSource(
+                "themes/default.css"
+            ),
+            "downright/themes/default": downrightSource("themes/default.js"),
+            "downright/themes/bem.css": downrightSource("themes/bem.css"),
+            "downright/themes/bem": downrightSource("themes/bem.js"),
             downright: downrightSource("main.js")
         }
     },

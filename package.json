@@ -1,21 +1,28 @@
 {
     "name": "downright",
     "description": "Right-click context menu HOC for React.",
-    "version": "0.5.1",
+    "version": "0.6.0",
     "repository": {
         "type": "git",
         "url": "https://github.com/downplay/downright.git"
     },
-    "main": "dist/main.js",
-    "files": ["dist", "docs/coverImage.png", "docs/themedMenu.png"],
+    "main": "main.js",
+    "files": [
+        "main.js.map",
+        "themes",
+        "docs/coverImage.png",
+        "docs/themedMenu.png"
+    ],
     "scripts": {
         "precommit": "lint-staged",
-        "build": "npm-run-all build-core     build-bem",
+        "scrub": "babel-node ./build/scrub.js",
+        "assemble": "babel-node ./build/assemble.js",
+        "build": "npm-run-all scrub build-core build-theme-default build-theme-bem assemble",
         "build-dev": "npm-run-all --parallel build-core-dev build-bem-dev",
-        "build-core": "cross-env NODE_ENV=production  DOWNRIGHT_BUILD=core webpack --config ./build/entry.js --watch",
-        "build-bem": "cross-env NODE_ENV=production  DOWNRIGHT_BUILD=bem  webpack --config ./build/entry.js",
+        "build-core": "cross-env NODE_ENV=production  DOWNRIGHT_BUILD=core webpack --config ./build/entry.js",
         "build-core-dev": "cross-env NODE_ENV=development DOWNRIGHT_BUILD=core webpack --config ./build/entry.js --watch",
-        "build-bem-dev": "cross-env NODE_ENV=development DOWNRIGHT_BUILD=bem  webpack --config ./build/entry.js --watch",
+        "build-theme-default": "cross-env NODE_ENV=production  DOWNRIGHT_BUILD=theme-default  webpack --config ./build/entry.js",
+        "build-theme-bem": "cross-env NODE_ENV=production  DOWNRIGHT_BUILD=theme-bem  webpack --config ./build/entry.js",
         "examples": "node examples/entry.js",
         "examples-watch": "nodemon examples/entry.js"
     },
@@ -47,6 +54,7 @@
     },
     "devDependencies": {
         "autoprefixer": "^7.1.2",
+        "babel-cli": "^6.26.0",
         "babel-core": "^6.25.0",
         "babel-eslint": "^7.2.3",
         "babel-loader": "^7.1.1",
@@ -76,7 +84,9 @@
         "eslint-plugin-react": "7.1.0",
         "express": "^4.15.3",
         "extract-text-webpack-plugin": "^3.0.0",
+        "fs-extra": "^4.0.1",
         "husky": "^0.14.3",
+        "ignore-loader": "^0.1.2",
         "lint-staged": "^4.0.3",
         "lodash": "^4.17.4",
         "nodemon": "^1.11.0",

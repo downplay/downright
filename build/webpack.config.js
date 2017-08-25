@@ -3,30 +3,44 @@ import path from "path";
 import nodeExternals from "webpack-node-externals";
 import ExtractTextPlugin from "extract-text-webpack-plugin";
 
-const downrightSource = path.resolve(__dirname, "../source/index.js");
-const themeSource = path.resolve(__dirname, "../source/themes/default.js");
-
-// eslint-disable-next-line no-underscore-dangle
-const __DEV__ = process.env.NODE_ENV === "development";
-// eslint-disable-next-line no-underscore-dangle
-const __BEM__ = process.env.DOWNRIGHT_BUILD === "bem";
+const downrightCore = path.resolve(__dirname, "../source/index.js");
+const themeDefault = path.resolve(__dirname, "../source/themes/default.js");
 
 // Random hashed CSS classes
 let cssIdent = "[name]__[local]___[hash:base64:5]";
-if (__BEM__) {
-    cssIdent = "downright__contextmenu__[local]";
+let mainOutputPath = "themes/[name].js";
+let cssOutputPath = "themes/default.css";
+const externals = [nodeExternals()];
+const entry = {};
+
+switch (process.env.DOWNRIGHT_BUILD) {
+    case "core":
+        entry.main = [downrightCore];
+        mainOutputPath = "[name].js";
+        externals.push(/themes\/default/);
+        break;
+    case "theme-default":
+        entry.default = themeDefault;
+        break;
+    case "theme-bem":
+        entry.bem = themeDefault;
+        cssIdent = "downright__contextmenu__[local]";
+        cssOutputPath = "themes/bem.css";
+        break;
+    default:
+        break;
 }
+
+// eslint-disable-next-line no-underscore-dangle
+const __DEV__ = process.env.NODE_ENV === "development";
 
 const webpackConfig = {
     context: path.resolve(__dirname, ".."),
     target: "node",
-    externals: [nodeExternals()],
-    entry: {
-        main: [downrightSource],
-        theme: [themeSource]
-    },
+    externals,
+    entry,
     output: {
-        filename: `${__BEM__ ? "bem/" : ""}[name].js`,
+        filename: mainOutputPath,
         path: path.resolve(__dirname, "../dist"),
         libraryTarget: "umd"
     },
@@ -41,7 +55,7 @@ const webpackConfig = {
     plugins: __DEV__
         ? []
         : [
-              new ExtractTextPlugin(`${__BEM__ ? "bem/" : ""}theme.css`),
+              new ExtractTextPlugin(cssOutputPath),
               new webpack.optimize.UglifyJsPlugin({
                   sourceMap: true
               }),
