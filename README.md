@@ -11,10 +11,10 @@ A lightweight (~25k minified) right-click context menu HOC for React Web, with c
 * Package structure has changed. There is no more dist folder. Themes are imported from:
 
 `js
-import "downright/themes/default.css";  // CSS file with default (hashed) naming
-import classNames from "downright/themes/default";  // Class names for default theme
-import "downright/themes/bem.css";      // CSS file with BEM naming
-import bemClassNames from "downright/themes/bem";  // Class names for BEM theme
+import "downright/themes/default.css";             // CSS file with default (hashed) naming
+import classNames from "downright/themes/default"; // Theme object for default theme
+import "downright/themes/bem.css";                 // CSS file with BEM naming
+import bemClassNames from "downright/themes/bem";  // Theme object for BEM theme
 `
 
 ### About this version
@@ -225,6 +225,17 @@ import bemTheme from "downright/themes/bem";
 </ContextMenuProvider>
 ```
 
+There is also a "dark" theme available if you are so inclined:
+
+```jsx
+import "downright/themes/dark.css";
+import bemTheme from "downright/themes/dark";
+
+<ContextMenuProvider theme={darkTheme}>
+    {...}
+</ContextMenuProvider>
+```
+
 With any issues loading the styles, see the loader configuration in `/examples/webpack.config.js` to see how this can be used alongside your own CSS modules configuration.
 
 To see what classes are available, you can see the default stylesheet in this file, except that every class must be appended with: `downwrite__contextmenu__`
@@ -233,8 +244,9 @@ Default styles are here:
 
 https://github.com/downplay/downright/tree/master/source/styles/menu.css
 
-You can see an example of overriding classes here:
+You can see various examples of themes and styling here:
 
+https://github.com/downplay/downright/tree/master/examples/source/examples/Styling.jsx
 https://github.com/downplay/downright/tree/master/examples/source/examples/Styling.css
 
 #### Advanced theming
@@ -294,6 +306,7 @@ The dev server is hot module enabled so tweak at will.
 #### Improvments and fixes
 
 - Apply transitions on the menu rather than wrapper (`<nav>` vs outer `<div>`) and fix examples
+- Included a new "dark" theme
 
 #### Breaking changes
 
