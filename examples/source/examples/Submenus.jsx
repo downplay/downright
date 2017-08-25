@@ -36,6 +36,11 @@ export default class Submenus extends Component {
     render = () =>
         <ContextMenuProvider>
             <FullWidthFullHeight>
+                <SimpleSubmenu
+                    onCat={this.onCat}
+                    onDog={this.onDog}
+                    item={this.state.animalName}
+                />
                 <OnDemandSubmenu
                     onChooseColour={this.onChooseColour}
                     chosenColour={this.state.chosenColour}
@@ -44,11 +49,6 @@ export default class Submenus extends Component {
                     usePromises
                     onChooseColour={this.onChooseColour}
                     chosenColour={this.state.chosenColour}
-                />
-                <SimpleSubmenu
-                    onCat={this.onCat}
-                    onDog={this.onDog}
-                    item={this.state.animalName}
                 />
             </FullWidthFullHeight>
         </ContextMenuProvider>;

@@ -20,6 +20,7 @@ class ContextMenu extends Component {
         depth: PropTypes.number,
         onMenuClick: PropTypes.func.isRequired,
         onSubmenuOpen: PropTypes.func.isRequired,
+        onHasDimensions: PropTypes.func.isRequired,
         enableTransitions: PropTypes.bool.isRequired,
         exiting: PropTypes.bool
     };
@@ -42,12 +43,17 @@ class ContextMenu extends Component {
                 this.setState({ entered: false });
             });
         }
+        this.hasDimensions();
     }
 
     componentWillReceiveProps(nextProps) {
         if (this.props.theme !== nextProps.theme) {
             this.Menu = null;
         }
+    }
+
+    componentDidUpdate() {
+        this.hasDimensions();
     }
 
     onSubmenuOpen = (event, menuItem, index) => {
@@ -63,6 +69,12 @@ class ContextMenu extends Component {
         }));
     };
 
+    hasDimensions() {
+        if (this.props.items) {
+            this.props.onHasDimensions({ target: this }, this.props.menu);
+        }
+    }
+
     render() {
         const {
             items,
@@ -70,6 +82,7 @@ class ContextMenu extends Component {
             theme,
             className,
             onSubmenuOpen,
+            onHasDimensions,
             menu,
             exiting,
             enableTransitions,

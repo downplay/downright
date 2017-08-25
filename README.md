@@ -4,7 +4,7 @@ A lightweight (~25k minified) right-click context menu HOC for React Web, with c
 
 <img src="docs/coverImage.png" width="359" title="What it looks like">
 
-## Latest version: 0.5.1
+## Latest version: 0.6.1
 
 ### *BREAKING CHANGES* in 0.6.0:
 
@@ -19,7 +19,7 @@ import bemClassNames from "downright/themes/bem";  // Theme object for BEM theme
 
 ### About this version
 
-0.5.x marks a move to largely stable releases possibly even usable in production!
+0.5.x marked a move to largely stable releases possibly even usable in production. 0.6.x continues this with more fixes and a brand new theme!
 
 Features:
 
@@ -300,6 +300,13 @@ Then navigate to `http://127.0.0.1:3311/`
 The dev server is hot module enabled so tweak at will.
 
 ## Version History
+
+### 0.6.1
+
+#### Bugfixes
+
+- Stop submenus going off the bottom/edge of the screen
+- Reposition/resize all menus on window resize
 
 ### 0.6.0
 

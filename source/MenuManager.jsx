@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import ReactDOM from "react-dom";
+import invariant from "invariant";
 
 import MenuContainer from "./container/MenuContainer";
 import ContextMenu from "./container/ContextMenu";
@@ -100,7 +101,9 @@ export default class MenuManager extends Component {
             key: newMenuKey,
             items: null,
             parent: menu,
-            position
+            position,
+            width: 0,
+            height: 0
         };
         this.openMenu(newMenu);
 
@@ -109,8 +112,20 @@ export default class MenuManager extends Component {
         this.updateMenu(newMenuKey, m => ({ ...m, items }));
     };
 
+    handleHasDimensions = (event, menu) => {
+        const node = ReactDOM.findDOMNode(event.target);
+        invariant(node, "No DOM node found in ContextMenu!");
+        const dims = node.getBoundingClientRect();
+        if (menu.width !== dims.width || menu.height !== dims.height) {
+            this.updateMenu(menu.key, m => ({
+                ...m,
+                width: dims.width,
+                height: dims.height
+            }));
+        }
+    };
+
     openMenu(menu) {
-        // TODO: Immutable state changes here get a bit messy, could clean this up a bit
         const newMenu = {
             ...menu,
             key: menu.key || `root${this.state.menuIndex}`
@@ -225,7 +240,14 @@ export default class MenuManager extends Component {
         return (
             <div ref={this.storeOuterRef} onClick={this.onOuterClick}>
                 {Object.values(this.state.menus).map(menu => {
-                    const { key, exiting, position, ...menuOthers } = menu;
+                    const {
+                        key,
+                        exiting,
+                        position,
+                        width,
+                        height,
+                        ...menuOthers
+                    } = menu;
                     // TODO: Binding the functions in here is bad and will cause re-renders.
                     // As is creating the style object above. Need to handle all these things better.
                     // Maybe just store on menu object.
@@ -234,11 +256,14 @@ export default class MenuManager extends Component {
                             key={key}
                             onTransitionEnd={() => this.onTransitionEnd(key)}
                             position={position}
+                            width={width}
+                            height={height}
                             theme={theme}
                         >
                             <ContextMenu
                                 onMenuClick={() => this.onMenuClick(key)}
                                 onSubmenuOpen={this.onSubmenuOpen}
+                                onHasDimensions={this.handleHasDimensions}
                                 menu={menu}
                                 theme={theme}
                                 exiting={exiting}

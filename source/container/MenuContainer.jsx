@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import { themed } from "downstyle";
-import invariant from "invariant";
+
 import ContainerElement from "../display/ContainerElement";
 import themeShape from "../tool/themeShape";
 
@@ -19,7 +18,9 @@ class MenuContainer extends Component {
             x: PropTypes.number.isRequired,
             y: PropTypes.number.isRequired
         }).isRequired,
-        theme: themeShape.isRequired
+        theme: themeShape.isRequired,
+        width: PropTypes.number.isRequired,
+        height: PropTypes.number.isRequired
     };
 
     state = {
@@ -28,61 +29,64 @@ class MenuContainer extends Component {
 
     componentDidMount() {
         this.checkPositionAndTransitions();
+        window.addEventListener("resize", this.checkPositionAndTransitions);
     }
 
     componentWillReceiveProps(nextProps) {
         if (this.props.theme !== nextProps.theme) {
             this.Container = null;
         }
+        if (
+            nextProps.width !== this.props.width ||
+            nextProps.height !== this.props.height
+        ) {
+            this.checkPositionAndTransitions(nextProps.width, nextProps.height);
+        }
     }
 
-    componentDidUpdate() {
-        // TODO: Caused stack overflow. Should really check things on update tho.
-        // Should also check window.resize
-        // this.checkPositionAndTransitions();
+    componentWillUnmount() {
+        window.removeEventListener("resize", this.checkPositionAndTransitions);
     }
 
-    checkPositionAndTransitions() {
-        const node = ReactDOM.findDOMNode(this);
-        invariant(node, "No DOM node found in MenuContainer!");
-        const dims = node.getBoundingClientRect();
+    checkPositionAndTransitions = (
+        width = this.props.width,
+        height = this.props.height
+    ) => {
         let style = this.state.style;
-
         // Move menu so it doesn't go out of bounds
         const translate = {
             x: this.props.position.x,
             y: this.props.position.y
         };
-        if (
-            this.props.position.x + dims.width >
-            window.innerWidth - SCROLLBAR_WIDTH_OFFSET
-        ) {
-            translate.x = Math.floor(
-                Math.max(
-                    0,
-                    window.innerWidth - SCROLLBAR_WIDTH_OFFSET - dims.width
-                )
-            );
-        }
-        if (this.props.position.y + dims.height > window.innerHeight) {
-            translate.y = Math.floor(
-                Math.max(0, window.innerHeight - dims.height)
-            );
-        }
-        // Create vertical scrollbar if menu too tall
-        if (
-            dims.height > window.innerHeight &&
-            style.height > window.innerHeight
-        ) {
-            style = {
-                ...style,
-                height: window.innerHeight
-            };
-        } else if ("height" in style) {
-            style = {
-                ...style,
-                height: undefined
-            };
+        if (height && width) {
+            if (
+                this.props.position.x + width >
+                window.innerWidth - SCROLLBAR_WIDTH_OFFSET
+            ) {
+                translate.x = Math.floor(
+                    Math.max(
+                        0,
+                        window.innerWidth - SCROLLBAR_WIDTH_OFFSET - width
+                    )
+                );
+            }
+            if (this.props.position.y + height > window.innerHeight) {
+                translate.y = Math.floor(
+                    Math.max(0, window.innerHeight - height)
+                );
+            }
+            // Create vertical scrollbar if menu too tall
+            if (height > window.innerHeight) {
+                style = {
+                    ...style,
+                    height: window.innerHeight
+                };
+            } else if ("height" in style) {
+                style = {
+                    ...style,
+                    height: undefined
+                };
+            }
         }
         // Update style in state if needed
         const transform = `translate(${translate.x}px, ${translate.y}px)`;
@@ -92,7 +96,7 @@ class MenuContainer extends Component {
         if (style !== this.state.style) {
             this.setState({ style });
         }
-    }
+    };
 
     render() {
         const { theme, children, position, ...others } = this.props;

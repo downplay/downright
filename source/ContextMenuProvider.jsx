@@ -148,6 +148,8 @@ class ContextMenuProvider extends Component {
         // should be able to cancel the transition rather than open a whole new menu.
         const newMenu = {
             position,
+            width: 0,
+            height: 0,
             items: this.buildMenu
         };
         invariant(
