@@ -221,7 +221,7 @@ class ContextMenuProvider extends Component {
             }
             if (item.length === 2) {
                 if (typeof item[1] === "string") {
-                    return { type: "link", content: item[0], to: item[1] };
+                    return { type: "link", content: item[0], href: item[1] };
                 }
                 if (typeof item[1] === "function") {
                     return {

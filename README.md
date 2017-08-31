@@ -1,25 +1,14 @@
 # Downright
 
-A lightweight (~25k minified) right-click context menu HOC for React Web, with completely customisable theming and transitions.
+A lightweight (~25k minified) right-click context menu HOC for React Web, featuring transitions, and granularly customisable theming.
 
 <img src="docs/coverImage.png" width="359" title="What it looks like">
 
 ## Latest version: 0.6.1
 
-### *BREAKING CHANGES* in 0.6.0:
-
-* Package structure has changed. There is no more dist folder. Themes are imported from:
-
-`js
-import "downright/themes/default.css";             // CSS file with default (hashed) naming
-import classNames from "downright/themes/default"; // Theme object for default theme
-import "downright/themes/bem.css";                 // CSS file with BEM naming
-import bemClassNames from "downright/themes/bem";  // Theme object for BEM theme
-`
+Latest: Removed dependency on `react-router-dom`. *Breaking change*. See changelog and docs for more details.
 
 ### About this version
-
-0.5.x marked a move to largely stable releases possibly even usable in production. 0.6.x continues this with more fixes and a brand new theme!
 
 Features:
 
@@ -28,7 +17,7 @@ Features:
 * Supports any type of menu item: label, button, link, separator, and any custom element
 * CSS transitions and submenus - any depth, with optionally deferred building
 * Light-weight - 25k for the core, plus 5k for the default theme (minified sizes) - for a well featured and extremely flexible menu component
-* Low-dependency - depends only on standard React packages and very common third party libraries, plus a very tiny theming helper called "*[downstyle](https://github.com/downplay/downstyle)*"
+* Low-dependency - depends only on standard React packages and very common (and tiny) third party libraries, and a *very* tiny theming helper called "*[downstyle](https://github.com/downplay/downstyle)*"
 
 See the end for roadmap / planned features.
 
@@ -49,7 +38,8 @@ import "downright/dist/theme.css";
         ["Home", "/"]                                    // Renders a <Link/>
         ["Fork me on GitHub",
             "https://https://github.com/downplay/downright",
-            target="_blank"]                             // Open a URL in a new window
+            target="_blank"],                             // Open a URL in a new window
+        {type: "button", onClick: handleButtonClick, content: "Item definition" } // Exact definition (button)
     ];
 })
 class MyComponent extends Component {
@@ -188,9 +178,9 @@ Content will be rendered inside the menu. Can be a plain string, or a React node
 
 A handler to be called when the button is clicked. Will be passed the Synthetic Event object provided by React when the button is clicked.
 
-`to: string`
+`href: string`
 
-URL to navigate to when clicking on the link. The Link component from `react-router-dom` will be used.
+URL to navigate to when clicking on a link.
 
 `menu: array|function`
 
@@ -265,7 +255,7 @@ container | `<nav>` | Root container for the menu. This element will be absolute
 menu | `<ul>` | Main menu element
 item | `<li>` | Menu item element, wraps every child item (one of the following eleemnts)
 button | `<button>` | Button item element
-link | `<Link>` (from react-router-dom) | Link item element
+link | `<a>` | Link item element. If you would like to use a `<Link>` component instead, e.g. from `react-router-dom`, see the section on theming for an example.
 label | `<div>` | Label item element
 separator | `<hr>` | Separator item element
 submenu | `<div>` | Submenu item element
@@ -301,6 +291,10 @@ The dev server is hot module enabled so tweak at will.
 
 ## Version History
 
+### Next version
+
+- *Breaking:* Removed peer dependency on `react-router-dom`. Hyperlinks in menus will now be generated as normal `<a>` anchors. See docs for how to use a `<Link>` component from `react-router-dom` or another package for SPA-style links. The property `href` should now be used on menu items to specify a link location. Shorthand definitions are unchanged.
+
 ### 0.6.1
 
 #### Bugfixes
@@ -310,7 +304,7 @@ The dev server is hot module enabled so tweak at will.
 
 ### 0.6.0
 
-#### Improvments and fixes
+#### Improvements and fixes
 
 - Apply transitions on the menu rather than wrapper (`<nav>` vs outer `<div>`) and fix examples
 - Included a new "dark" theme
@@ -409,7 +403,7 @@ First release, basic prototype / proof of concept.
 * Include the ability to generate nav bars / application-style menus as well
 * Support keyboard, full accessibility
 * Proper touch support
-* Ship a couple of themes - e.g. dark, high-contrast
+* Ship a couple of themes - e.g. high-contrast, console
 * Export the menu primitives for ad-hoc use
 * Testing for cross-browser support
 * Remove the outer `<div>` added by the provider

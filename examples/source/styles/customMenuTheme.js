@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import defaultTheme from "downright/themes/default";
+import { Link } from "react-router-dom";
 
 // Set up styled components for our item template
 const Outer = styled.div`
@@ -28,13 +29,19 @@ const Wrapper = styled.div`padding: 5px;`;
 // Two important things when you swap out an element: make sure you render
 // the children (except for separator), and render any other props using the
 // {...others} pattern as follows.
-const Item = ({ children, ...others }) =>
+const Item = ({ children, ...others }) => (
     <Outer {...others}>
         <Bullet />
-        <Wrapper>
-            {children}
-        </Wrapper>
-    </Outer>;
+        <Wrapper>{children}</Wrapper>
+    </Outer>
+);
+
+// Swap in the <Link> from react-router-dom for SPA navigation
+const LinkTemplate = ({ children, href, ...others }) => (
+    <Link to={href} {...others}>
+        {children}
+    </Link>
+);
 
 // Additional inline styles, use a slide transition
 // TODO: Transitions are broken now transitions are applied on the <nav> rather
@@ -67,7 +74,7 @@ const styles = {
 const myTheme = {
     styles,
     // Swap out the 'item' block
-    elements: { item: Item },
+    elements: { item: Item, link: LinkTemplate },
     // Remove the default transition classes completely:
     classNames: { ...defaultTheme.classNames, entered: "", exiting: "" }
 };
