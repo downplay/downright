@@ -16,3 +16,7 @@ or lose the dep.
 ## #5
 
 Reduce overall code to make bundle happier. There are some things that could be combined (e.g. creating menu object in two different places, generally some duping between MenuManager and ContextMenuProvider). Also long lists of props, proptypes, sanitizeprops.
+
+## #6
+
+Change uses to onFoo to handleFoo where appropriate.
