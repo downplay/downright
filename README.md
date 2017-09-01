@@ -4,7 +4,7 @@ A lightweight (~25k minified) right-click context menu HOC for React Web, featur
 
 <img src="docs/coverImage.png" width="359" title="What it looks like">
 
-## Latest version: 0.6.1
+## Latest version: 0.7.0
 
 Latest: Removed dependency on `react-router-dom`. *Breaking change*. See changelog and docs for more details.
 
@@ -291,7 +291,7 @@ The dev server is hot module enabled so tweak at will.
 
 ## Version History
 
-### Next version
+### 0.7.0
 
 - *Breaking:* Removed peer dependency on `react-router-dom`. Hyperlinks in menus will now be generated as normal `<a>` anchors. See docs for how to use a `<Link>` component from `react-router-dom` or another package for SPA-style links. The property `href` should now be used on menu items to specify a link location. Shorthand definitions are unchanged.
 

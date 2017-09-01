@@ -1,7 +1,7 @@
 {
     "name": "downright",
     "description": "Right-click context menu HOC for React.",
-    "version": "0.6.1",
+    "version": "0.7.0",
     "repository": {
         "type": "git",
         "url": "https://github.com/downplay/downright.git"
