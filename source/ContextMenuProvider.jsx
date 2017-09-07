@@ -4,15 +4,20 @@ import ReactDOM from "react-dom";
 import invariant from "invariant";
 import { themed } from "downstyle";
 
-import MenuManager from "./MenuManager";
-
+import MenuManager, { menuManagerContextShape } from "./MenuManager";
 import MenuLayer from "./display/MenuLayer";
-
 import themeShape from "./tool/themeShape";
-
 import defaultTheme from "./themes/default";
 
-class ContextMenuProvider extends Component {
+export const contextMenuContextShape = PropTypes.shape({
+    addMenuItems: PropTypes.func.isRequired,
+    shouldGather: PropTypes.func.isRequired,
+    stopGathering: PropTypes.func.isRequired,
+    reverseOrder: PropTypes.func.isRequired,
+    closeMenu: PropTypes.func.isRequired
+});
+
+export default class ContextMenuProvider extends Component {
     static propTypes = {
         children: PropTypes.oneOfType([PropTypes.node]).isRequired,
         theme: themeShape,
@@ -39,15 +44,8 @@ class ContextMenuProvider extends Component {
     };
 
     static childContextTypes = {
-        contextMenuContext: React.PropTypes.shape({
-            addMenuItems: React.PropTypes.func,
-            closeMenu: React.PropTypes.func
-        }),
-        menuManagerContext: React.PropTypes.shape({
-            registerManager: React.PropTypes.func,
-            unregisterManager: React.PropTypes.func,
-            normalizeMenuItems: React.PropTypes.func
-        })
+        contextMenuContext: contextMenuContextShape,
+        menuManagerContext: menuManagerContextShape
     };
 
     getChildContext() {
@@ -221,7 +219,11 @@ class ContextMenuProvider extends Component {
             }
             if (item.length === 2) {
                 if (typeof item[1] === "string") {
-                    return { type: "link", content: item[0], href: item[1] };
+                    return {
+                        type: "link",
+                        content: item[0],
+                        href: item[1]
+                    };
                 }
                 if (typeof item[1] === "function") {
                     return {
@@ -278,5 +280,3 @@ class ContextMenuProvider extends Component {
         );
     }
 }
-
-export default ContextMenuProvider;

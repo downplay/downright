@@ -6,6 +6,12 @@ import invariant from "invariant";
 import MenuContainer from "./container/MenuContainer";
 import ContextMenu from "./container/ContextMenu";
 
+export const menuManagerContextShape = PropTypes.shape({
+    registerManager: React.PropTypes.func,
+    unregisterManager: React.PropTypes.func,
+    normalizeMenuItems: React.PropTypes.func
+});
+
 // The Manager sits in the DOM layer where we want to render
 // menus, and manages their rendering and positioning
 export default class MenuManager extends Component {
@@ -19,11 +25,7 @@ export default class MenuManager extends Component {
     };
 
     static contextTypes = {
-        menuManagerContext: React.PropTypes.shape({
-            registerManager: React.PropTypes.func,
-            unregisterManager: React.PropTypes.func,
-            normalizeMenuItems: React.PropTypes.func
-        })
+        menuManagerContext: menuManagerContextShape
     };
 
     state = {

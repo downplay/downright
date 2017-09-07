@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import invariant from "invariant";
-import PropTypes from "prop-types";
 import hoistStatics from "hoist-non-react-statics";
+
+import { contextMenuContextShape } from "./ContextMenuProvider";
 
 function makeComponentWrapper(
     buildMenu,
@@ -20,12 +21,7 @@ function makeComponentWrapper(
 
         class ContextMenuConnect extends Component {
             static contextTypes = {
-                contextMenuContext: PropTypes.shape({
-                    addMenuItems: PropTypes.func,
-                    shouldGather: PropTypes.func,
-                    stopGathering: PropTypes.func,
-                    reverseOrder: PropTypes.func
-                })
+                contextMenuContext: contextMenuContextShape
             };
 
             static displayName = `ContextMenuConnect(${displayName})`;
