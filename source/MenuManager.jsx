@@ -55,9 +55,9 @@ export default class MenuManager extends Component {
     }
 
     onTransitionEnd = key => {
-        // TODO: Check if it's actually the transition we were looking for
-        // Could be any old random transition (e.g. item hovers).
-        // TODO: Also push entering/exiting and transition handling down to MenuContainer
+        // TODO: More thorough check if it's actually the transition we were looking for?
+        // Could be any old random transition (e.g. item hovers) but this doesn't matter too
+        // much at the time of exiting anyway.
         const menu = this.state.menus.find(m => m.key === key);
         if (menu && menu.exiting) {
             this.removeMenu(key);

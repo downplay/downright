@@ -10,9 +10,9 @@
 .item.selected {
     background: linear-gradient(to bottom, #000 0%, #333 100%);
 }
-.item.label,
-.item.label:hover,
-.item.label.selected {
+.item-label,
+.item-label:hover,
+.item-label.selected {
     background: #222;
 }
 .element,

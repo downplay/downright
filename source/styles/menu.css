@@ -16,6 +16,8 @@
     font-family: Helvetica, Arial, sans-serif;
     transition: opacity 0.1s linear;
     opacity: 1;
+    margin: 0;
+    padding: 0;
 }
 
 .menu.entered,
@@ -35,9 +37,9 @@
     background: linear-gradient(to bottom, #cccccc 0%, #eeeeee 100%);
 }
 
-.item.label,
-.item.label:hover,
-.item.label.selected {
+.item-label,
+.item-label:hover,
+.item-label.selected {
     background: #e5e5e5;
 }
 

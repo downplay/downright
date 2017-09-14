@@ -129,11 +129,7 @@ class ContextMenuItem extends Component {
 
         switch (this.props.type) {
             case "label":
-                return (
-                    <Element {...others}>
-                        {content}
-                    </Element>
-                );
+                return <Element {...others}>{content}</Element>;
             case "separator":
                 return <Element {...others} />;
             case "submenu":
@@ -160,18 +156,14 @@ class ContextMenuItem extends Component {
 
     render() {
         if (!this.Item) {
-            const names = ["item", this.props.type];
+            const names = ["item", `item-${this.props.type}`];
             this.Item = themed(ItemWrapper, this.props.theme, names, {
                 selected: "selected"
             });
         }
         const Item = this.Item;
         const others = sanitizeProps(this.props);
-        return (
-            <Item {...others}>
-                {this.renderInnerElement()}
-            </Item>
-        );
+        return <Item {...others}>{this.renderInnerElement()}</Item>;
     }
 }
 

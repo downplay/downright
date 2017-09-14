@@ -4,9 +4,12 @@ A lightweight (~25k minified) right-click context menu HOC for React Web, featur
 
 <img src="docs/coverImage.png" width="359" title="What it looks like">
 
-## Latest version: 0.7.0
+## Latest version: 0.7.1
 
-Latest: Removed dependency on `react-router-dom`. *Breaking change*. See changelog and docs for more details.
+Latest: 
+
+- Removed dependency on `react-router-dom`. *Breaking change*. See changelog and docs for more details.
+- *Breaking:* CSS structure changed to fix elements overwriting the parent item template. To target items of a particular element kind it's now `.item-label` instead of `.item.label`. Will only affect customised themes.
 
 ### About this version
 
@@ -259,6 +262,7 @@ link | `<a>` | Link item element. If you would like to use a `<Link>` component 
 label | `<div>` | Label item element
 separator | `<hr>` | Separator item element
 submenu | `<div>` | Submenu item element
+item-[type] | n/a | A utility class, will be also added to item depending on the type of menu item it contains; the following classes are available: `item-button`, `item-link`, `item-label`, `item-separator`, `item-submenu`
 selected | n/a | Currently highlighted menu item, by default the same as the :hover style
 entered | n/a | Applied to menu when it first appears. Used for transitions.
 exiting | n/a | Applied to menu before it leaves. Used for transitions. Menu will wait for transition to end before being removed from DOM.
@@ -290,6 +294,10 @@ Then navigate to `http://127.0.0.1:3311/`
 The dev server is hot module enabled so tweak at will.
 
 ## Version History
+
+### 0.7.1
+
+- *Breaking:* CSS structure changed to fix elements overwriting the parent item template. To target items of a particular element kind it's now `.item-label` instead of `.item.label`. Will only affect customised themes.
 
 ### 0.7.0
 

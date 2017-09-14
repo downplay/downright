@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import defaultTheme from "downright/themes/default";
+
+// Import Link from react-router-dom so we can use it for links
 import { Link } from "react-router-dom";
 
 // Set up styled components for our item template
