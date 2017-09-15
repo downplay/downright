@@ -13,8 +13,7 @@ export const contextMenuContextShape = PropTypes.shape({
     addMenuItems: PropTypes.func.isRequired,
     shouldGather: PropTypes.func.isRequired,
     stopGathering: PropTypes.func.isRequired,
-    reverseOrder: PropTypes.func.isRequired,
-    closeMenu: PropTypes.func.isRequired
+    reverseOrder: PropTypes.func.isRequired
 });
 
 export default class ContextMenuProvider extends Component {
@@ -52,7 +51,6 @@ export default class ContextMenuProvider extends Component {
         return {
             contextMenuContext: {
                 addMenuItems: this.addMenuItems,
-                closeMenu: this.closeMenu,
                 shouldGather: this.shouldGather,
                 stopGathering: this.stopGathering,
                 reverseOrder: this.reverseOrder
