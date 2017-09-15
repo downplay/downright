@@ -4,7 +4,7 @@ A lightweight (~25k minified) right-click context menu HOC for React Web, featur
 
 <img src="docs/coverImage.png" width="359" title="What it looks like">
 
-## Latest version: 0.7.1
+## Latest version: 0.7.2
 
 Latest: 
 
@@ -294,6 +294,10 @@ Then navigate to `http://127.0.0.1:3311/`
 The dev server is hot module enabled so tweak at will.
 
 ## Version History
+
+### 0.7.2
+
+- Fix an error that was showing in the console
 
 ### 0.7.1
 
