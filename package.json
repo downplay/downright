@@ -31,7 +31,9 @@
         "build-theme-dark":
             "cross-env NODE_ENV=production  DOWNRIGHT_BUILD=theme-dark  webpack --config ./build/entry.js",
         "examples": "node examples/entry.js",
-        "examples-watch": "nodemon examples/entry.js"
+        "examples-watch": "nodemon examples/entry.js",
+        "examples-build":
+            "cross-env NODE_ENV=production babel-node ./examples/build/build.js"
     },
     "lint-staged": {
         "*.{js,jsx}": ["eslint", "git add"]
