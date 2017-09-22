@@ -2,11 +2,17 @@
 
 A lightweight (~25kb minified) right-click context menu HOC for React Web, featuring transitions, and granularly customisable theming.
 
-<img src="docs/coverImage.png" width="359" title="What it looks like">
+[See the live examples!](https://downplay.github.io/downright/)
 
-## Latest version: 0.7.2
+[<img src="docs/coverImage.png" width="359" title="What it looks like">](https://downplay.github.io/downright/)
 
-Latest: 
+## Latest version: 0.7.3
+
+Latest:
+
+- Finally published examples page! https://downplay.github.io/downright/
+
+Breaking in 0.7.x branch:
 
 - Removed dependency on `react-router-dom`. *Breaking change*. See changelog and docs for more details.
 - *Breaking:* CSS structure changed to fix elements overwriting the parent item template. To target items of a particular element kind it's now `.item-label` instead of `.item.label`. Will only affect customised themes.
@@ -233,14 +239,15 @@ With any issues loading the styles, see the loader configuration in `/examples/w
 
 To see what classes are available, you can see the default stylesheet in this file, except that every class must be appended with: `downwrite__contextmenu__`
 
-Default styles are here:
+This is the default stylesheet, you can also copy this, customise it, and import yourself using your preferred CSS modules :
 
 https://github.com/downplay/downright/tree/master/source/styles/menu.css
 
 You can see various examples of themes and styling here:
 
-https://github.com/downplay/downright/tree/master/examples/source/examples/Styling.jsx
-https://github.com/downplay/downright/tree/master/examples/source/examples/Styling.css
+* https://downplay.github.io/downright/#/styling
+* https://github.com/downplay/downright/tree/master/examples/source/examples/Styling.jsx
+* https://github.com/downplay/downright/tree/master/examples/source/examples/Styling.css
 
 #### Advanced theming
 
@@ -295,9 +302,10 @@ The dev server is hot module enabled so tweak at will.
 
 ## Version History
 
-### next
+### 0.7.3
 
 - Fix Babel plugin order so components have correct displayName in production build
+- Finally published examples on github pages https://downplay.github.io/downright/
 
 ### 0.7.2
 
