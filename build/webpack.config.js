@@ -86,6 +86,7 @@ const webpackConfig = {
                             ),
                             ignore: "node_modules/**/*",
                             plugins: [
+                                "babel-plugin-add-react-displayname",
                                 "babel-plugin-transform-class-properties",
                                 [
                                     "babel-plugin-transform-runtime",
@@ -96,8 +97,7 @@ const webpackConfig = {
                                     }
                                 ],
                                 "babel-plugin-transform-object-rest-spread",
-                                "babel-plugin-transform-decorators-legacy",
-                                "babel-plugin-add-react-displayname"
+                                "babel-plugin-transform-decorators-legacy"
                             ],
                             presets: [
                                 "babel-preset-react",
