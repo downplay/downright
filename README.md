@@ -1,6 +1,6 @@
 # Downright
 
-A lightweight (~25k minified) right-click context menu HOC for React Web, featuring transitions, and granularly customisable theming.
+A lightweight (~25kb minified) right-click context menu HOC for React Web, featuring transitions, and granularly customisable theming.
 
 <img src="docs/coverImage.png" width="359" title="What it looks like">
 
@@ -294,6 +294,10 @@ Then navigate to `http://127.0.0.1:3311/`
 The dev server is hot module enabled so tweak at will.
 
 ## Version History
+
+### next
+
+- Fix Babel plugin order so components have correct displayName in production build
 
 ### 0.7.2
 
