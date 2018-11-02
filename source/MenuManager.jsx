@@ -7,9 +7,9 @@ import MenuContainer from "./container/MenuContainer";
 import ContextMenu from "./container/ContextMenu";
 
 export const menuManagerContextShape = PropTypes.shape({
-    registerManager: React.PropTypes.func,
-    unregisterManager: React.PropTypes.func,
-    normalizeMenuItems: React.PropTypes.func
+    registerManager: PropTypes.func,
+    unregisterManager: PropTypes.func,
+    normalizeMenuItems: PropTypes.func
 });
 
 // The Manager sits in the DOM layer where we want to render
